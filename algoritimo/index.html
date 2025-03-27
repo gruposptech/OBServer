@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Financeira</title>
+</head>
+
+<body>
+
+  <h1>Simulador Financeiro</h1>
+  <h3>Veja os benefícios de contratar os nosso serviço:</h3>
+  <br>
+
+  <p><b>Olá, qual o nome da sua empresa?</b></p>
+  <input type="text" id="inp_name">
+  <p><b>Quantos minutos seu serviço ficou parado(Downtime) ano passado?</b></p>
+  <input type="text" id="inp_parado">
+  <p><b>Qual a quantidade de rack's na sua empresa?</b></p>
+  <input type="text" id="inp_numRacks">
+  <p><b>Qual a quantidade de servidores por hack?</b></p>
+  <input type="text" name="" id="inp_server">
+  <br><br>
+
+  <button onclick="calc()">Benefícios!!</button>
+  <br>
+
+  <div id="tela">
+  </div>
+
+  <script>
+    function calc() {
+      // variaveis dos input's do usuario
+      var parado = Number(inp_parado.value)*15000; // oque o cliente deixaria de ganhar, caso nao estivesse com nosso serviço.
+      var nome = inp_name.value // nome da empresa
+      var server = Number(inp_server.value); // numero de servidores em um rack
+      var rack = Number(inp_numRacks.value);// numero de racks
+
+      //calculo do gasto de perder os servidores.
+      var tot_server = rack*server // total de servidores na empresa 
+      var preco_servidor = 80000; // o preço que o cliente gastaria em um servidor queimado
+      var gasto_tot_server = tot_server * preco_servidor
+      
+      //calc da instalação
+      var preco_sensor_por_rack = 1800;// oque o cliente irá pagar pela instalação de 6 sensores em um rack.
+      var custo_instalacao = rack * preco_sensor_por_rack; // valor pago pelo cliente pela instalação.
+
+      //calc da mensalidade e anuidade
+      var tot_ano = gasto_tot_server*0.5 // gasto anual
+      var mensal = tot_ano /12; // gasto mensal
+
+      // calc da economia
+      var economia = gasto_tot_server - tot_ano; // economia em um ano
+
+
+      tela.innerHTML = `
+      A empresa <b>${nome}</b> deixou de ganhar até <u>R$${parado}</u> por ter ficado <u>${Number(inp_parado.value)}</u> minutos em downtime(tempo com servidores parado).
+      <br><br>
+      a <b>${nome}</b> irá investir <u>R$${custo_instalacao}</u> com a instalação dos sensores. Assinando nosso serviço por <u>R$${mensal}/mês</u> a <b>${nome}</b> economizará <u>R$${economia}</u> em um ano.<br><br>
+      porque a <b>${nome}</b> paga <u>R$${tot_ano}/ano</u> para nao ter um gasto de <u>R$${gasto_tot_server}</u> com as reposições dos servidores
+
+
+      <br><br>
+      <p> <h3>Você sabia? </h3>
+
+      Interrupções de serviço (custando até R$ 15.000 por minuto em setores como e-commerce). <br><br>
+      
+      Redução da vida útil de hardware, gerando gastos com substituições prematuras (ex: servidores custam R$ 80.000+). <br><br>
+      
+      Falhas não detectadas, já que 60% das empresas ainda usam métodos manuais ou reativos (ABRADI, 2023). </p>
+      <br>
+      <p><u><b>Nós da Observer resolvemos o seu problema!!</b></u></p>
+      <br>
+      `
+    }
+  </script>
+</body>
+</html>
