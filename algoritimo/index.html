@@ -4,75 +4,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora Financeira</title>
+  <title>ObServer Calculadora Financeira</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/159/159604.png" type="image/png">
 </head>
 
 <body>
-
-  <h1>Simulador Financeiro</h1>
-  <h3>Veja os benefícios de contratar os nosso serviço:</h3>
-  <br>
+  <h1>ObServer Calculadora Financeira</h1>
+  <h3>Veja os benefícios de contratar nosso serviço:</h3>
 
   <p><b>Olá, qual o nome da sua empresa?</b></p>
   <input type="text" id="inp_name">
-  <p><b>Quantos minutos seu serviço ficou parado(Downtime) ano passado?</b></p>
+  <p><b>Quantas horas seu serviço ficou parado (Downtime) no ano passado?</b></p>
   <input type="text" id="inp_parado">
-  <p><b>Qual a quantidade de rack's na sua empresa?</b></p>
+  <p><b>Qual a quantidade de racks na sua empresa?</b></p>
   <input type="text" id="inp_numRacks">
-  <p><b>Qual a quantidade de servidores por hack?</b></p>
-  <input type="text" name="" id="inp_server">
+  <p><b>Qual a quantidade de servidores por rack?</b></p>
+  <input type="text" id="inp_server">
+  <br><br>
+  <button onclick="calc()">Benefícios!!</button>
   <br><br>
 
-  <button onclick="calc()">Benefícios!!</button>
-  <br>
-
-  <div id="tela">
-  </div>
+  <div id="tela"></div>
 
   <script>
     function calc() {
-      // variaveis dos input's do usuario
-      var parado = Number(inp_parado.value)*15000; // oque o cliente deixaria de ganhar, caso nao estivesse com nosso serviço.
-      var nome = inp_name.value // nome da empresa
-      var server = Number(inp_server.value); // numero de servidores em um rack
-      var rack = Number(inp_numRacks.value);// numero de racks
+      var nome = inp_name.value;
+      var parado = Number(inp_parado.value);
+      var rack = Number(inp_numRacks.value);
+      var server = Number(inp_server.value);
 
-      //calculo do gasto de perder os servidores.
-      var tot_server = rack*server // total de servidores na empresa 
-      var preco_servidor = 80000; // o preço que o cliente gastaria em um servidor queimado
-      var gasto_tot_server = tot_server * preco_servidor
-      
-      //calc da instalação
-      var preco_sensor_por_rack = 1800;// oque o cliente irá pagar pela instalação de 6 sensores em um rack.
-      var custo_instalacao = rack * preco_sensor_por_rack; // valor pago pelo cliente pela instalação.
+      if (nome == "" || inp_parado.value == "" || inp_numRacks.value == "" || inp_server.value == "") {
+        alert("Favor, preencha todos os campos.");
+      } else {
+        if (parado < 0 || rack < 0 || server < 0) {
+          alert("Valores negativos não são permitidos.");
+        } else {
+          var minutosParado = parado * 60; // como a gente mudou pra horas coloquei vezes 60
+          var perdaFinanceira = minutosParado * 15000 * 60; // dado que chumbamos direto, multipliquei por 60 pois mudamos o conceito pra pegar a hora agora
+          var tot_server = rack * server; // calculo 
+          var preco_servidor = 80000; //estimativa do grupo anterior, precisamos rever a fonte
+          var gasto_tot_server = tot_server * preco_servidor; //calculo de resultado
+          var preco_sensor_por_rack = 1800; //da onde eles tiraram esse valor?
+          var custo_instalacao = rack * preco_sensor_por_rack;
+          var tot_ano = gasto_tot_server * 0.5; // da onde veio essa estimativa
+          var mensal = tot_ano / 12; // vezes 12 pra saber o ano
+          var economia = gasto_tot_server - tot_ano; 
 
-      //calc da mensalidade e anuidade
-      var tot_ano = gasto_tot_server*0.5 // gasto anual
-      var mensal = tot_ano /12; // gasto mensal
-
-      // calc da economia
-      var economia = gasto_tot_server - tot_ano; // economia em um ano
-
-
-      tela.innerHTML = `
-      A empresa <b>${nome}</b> deixou de ganhar até <u>R$${parado}</u> por ter ficado <u>${Number(inp_parado.value)}</u> minutos em downtime(tempo com servidores parado).
-      <br><br>
-      a <b>${nome}</b> irá investir <u>R$${custo_instalacao}</u> com a instalação dos sensores. Assinando nosso serviço por <u>R$${mensal}/mês</u> a <b>${nome}</b> economizará <u>R$${economia}</u> em um ano.<br><br>
-      porque a <b>${nome}</b> paga <u>R$${tot_ano}/ano</u> para nao ter um gasto de <u>R$${gasto_tot_server}</u> com as reposições dos servidores
-
-
-      <br><br>
-      <p> <h3>Você sabia? </h3>
-
-      Interrupções de serviço (custando até R$ 15.000 por minuto em setores como e-commerce). <br><br>
-      
-      Redução da vida útil de hardware, gerando gastos com substituições prematuras (ex: servidores custam R$ 80.000+). <br><br>
-      
-      Falhas não detectadas, já que 60% das empresas ainda usam métodos manuais ou reativos (ABRADI, 2023). </p>
-      <br>
-      <p><u><b>Nós da Observer resolvemos o seu problema!!</b></u></p>
-      <br>
-      `
+          tela.innerHTML = `
+          A empresa <b>${nome}</b> deixou de ganhar até <u>R$${perdaFinanceira.toFixed(2)}</u> por ter ficado <u>${parado}</u> horas em downtime.<br><br>
+          A <b>${nome}</b> investirá <u>R$${custo_instalacao.toFixed(2)}</u> na instalação dos sensores. Assinando nosso serviço por <u>R$${mensal.toFixed(2)}/mês</u>, economizará <u>R$${economia.toFixed(2)}</u> em um ano.<br><br>
+          Pois paga <u>R$${tot_ano.toFixed(2)}/ano</u> para evitar um gasto de <u>R$${gasto_tot_server.toFixed(2)}</u> com reposições de servidores.
+          <br><br>
+          <h3>Você sabia?</h3>
+          Interrupções de serviço podem custar até R$ 15.000 por minuto (especialmente no e-commerce).<br><br>
+          A vida útil dos servidores pode ser reduzida sem monitoramento adequado, gerando gastos desnecessários.<br><br>
+          60% das empresas ainda utilizam métodos manuais ou reativos para identificar falhas (ABRADI, 2023).<br><br>
+          <p><u><b>Nós da Observer resolvemos o seu problema!!</b></u></p>
+          `;
+        }
+      }
     }
   </script>
 </body>
