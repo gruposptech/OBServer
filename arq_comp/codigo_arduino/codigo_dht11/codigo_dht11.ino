@@ -1,7 +1,7 @@
 #include "DHT.h" // Inclui a biblioteca do DHT11
 
 #define  TIPO_SENSOR DHT11 // Define que o sensor que está sendo utilizado é o DTH11
-const int PINO_SENSOR_DHT11 = A0; // Define uma variavel que atribui o pino sensor na porta analágica A0
+const int PINO_SENSOR_DHT11 = A5; // Define uma variavel que atribui o pino sensor na porta analágica A0
 
 DHT sensorDHT(PINO_SENSOR_DHT11, TIPO_SENSOR); // Define que o sensor está na porta A0
 
@@ -20,12 +20,9 @@ void loop() {
   }
   else
   {
-    Serial.print("Umidade: "); // Imprime umidade
     Serial.print(umidade);// Imprime valor da umidade
-    Serial.print(" % ");// Imprime %
-    Serial.print("Temperatura: "); // Imprime temperatura:
-    Serial.print(temperatura);// Imprime valor de temperatura
-    Serial.println(" ºC");// Imprime Cº
+    Serial.print(";");// Imprime %
+    Serial.println(temperatura);// Imprime valor de temperatura
   }
 
   delay(1000); // cria um delay de 1000ms
