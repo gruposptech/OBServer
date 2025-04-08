@@ -7,28 +7,28 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-   <h1><p><b>Cadastrar</b></p></h1>
+   <h1><b>Cadastro</b></h1>
 
-   <h2><p>Nome da Empresa</p></h2>
-   <input type="text" class="campo-nome">
+   <h2>Nome da Empresa</h2>
+   <input type="text" class="campo-nome" id="iptNome">
 
-   <h2><p>CNPJ</p></h2>
-   <input type="text" class="campo-cnpj">
+   <h2>CNPJ</h2>
+   <input type="text" class="campo-cnpj" id="iptCNPJ">
 
-   <h2><p>E-mail</p></h2>
-   <input type="text" class="campo-email">
+   <h2>E-mail</h2>
+   <input type="text" class="campo-email" id="iptEmail">
 
-   <h2><p>Telefone</p></h2>
-   <input type="text" class="campo-telefone">
-
-   <h2><p>Código de Confirmação</p></h2>
-   <input type="text" class="campo-codigo">
-
-   <h2><p>Senha</p></h2>
-   <input type="text" class="campo-senha">
-
-   <h2><p>Confirmação de senha</p></h2>
-   <input type="text" class="campo-confirm">
+   <h2>Telefone</h2>
+   <input type="text" class="campo-telefone" id="iptTelefone">
+ 
+   <h2>Senha</h2>
+   <input type="password" class="campo-senha" id="iptSenha">
+   
+   <h2>Confirmação de senha</h2>
+   <input type="password" class="campo-confirm" id="iptConfirmacaoSenha">
+   
+   <h2>Código de Confirmação</h2>
+   <input type="text" class="campo-codigo" id="iptCodigo">
 
    <h3><a href="login.html">Já possuo cadastro</a></h3>
 
@@ -36,3 +36,30 @@
 
 </body>
 </html>
+<script>
+    var nome = '';
+    var cnpj = '';
+    var email = '';
+    var telefone = '';
+    var senha = '';
+    var confirmacaoSenha = '';
+    var codigo = '';
+
+    function cadastro () {
+        nome = iptNome.value;
+        cnpj = iptCNPJ.value;
+        email = iptEmail.value;
+        telefone = iptTelefone.value;
+        senha = iptSenha.value;
+        confirmacaoSenha = iptConfirmacaoSenha.value;
+        codigo = iptCodigo.value;
+
+        if (nome == '' || cnpj == '' || email == '' || telefone == '' || senha == '' || confirmacaoSenha == '' || codigo == '' ) {
+            alert('Todos os campos precisam ser preenchidos!');
+        } else if (senha != confirmacaoSenha) {
+            alert('Senhas não coincidem.');
+        } else {
+            alert('Cadastro realizado! Seja bem-vindo(a)!')
+        }
+    }
+</script>
