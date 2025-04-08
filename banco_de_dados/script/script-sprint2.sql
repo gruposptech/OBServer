@@ -7,7 +7,8 @@ CREATE TABLE cliente (
     cnpjEmpresa CHAR(14) NOT NULL,            
     emailEmpresa VARCHAR(100) NOT NULL,                    
     telefoneEmpresa CHAR(11) NOT NULL,                
-    senhaEmpresa VARCHAR(20) NOT NULL                     
+    senhaEmpresa VARCHAR(20) NOT NULL,
+    codigoCadastro VARCHAR(5) NOT NULL UNIQUE
 );
 
 CREATE TABLE parametros (
@@ -25,7 +26,7 @@ CREATE TABLE sensor (
     dataInstalacaoSensor DATE,
     statusSensor VARCHAR(10),
 	fkCliente INT,
-    fkParametros INT,
+    fkParametros INT DEFAULT 1,
     CONSTRAINT chkStatus
 		CHECK (statusSensor IN ('Ativo', 'Inativo', 'Manutenção')),
 	CONSTRAINT fkSensorCliente
@@ -62,10 +63,10 @@ INSERT INTO parametros (tempMinIdeal, tempMaxIdeal, umidadeMinIdeal, umidadeMaxI
 	(18.0, 27.0, 40, 55);
 
 
-INSERT INTO cliente (nomeEmpresa, cnpjEmpresa, emailEmpresa, telefoneEmpresa, senhaEmpresa) VALUES
-	('Ifood', '12345678000101', 'ifood@empresa.com', '11987654321', 'ifood#2024'),
-    ('Unimed', '98765432000123', 'unimed@empresa.com', '11998765432', 'unimed@@med'),
-    ('Itaú', '45678901000134', 'itauunibanco@empresa.com', '11912345678', 'iT4u@banc0');
+INSERT INTO cliente (nomeEmpresa, cnpjEmpresa, emailEmpresa, telefoneEmpresa, senhaEmpresa, codigoCadastro) VALUES
+	('Ifood', '12345678000101', 'ifood@empresa.com', '11987654321', 'ifood#2024', 'Ax#0U'),
+    ('Unimed', '98765432000123', 'unimed@empresa.com', '11998765432', 'unimed@@med', 'Pb%3A'),
+    ('Itaú', '45678901000134', 'itauunibanco@empresa.com', '11912345678', 'iT4u@banc0', 'Je*7C');
 
 INSERT INTO sensor (nomeSensor, localizacaoSensor, statusSensor, fkCliente) VALUES
 	('Sensor A1', 'Sala A corredor 1', 'Ativo', 1),
@@ -76,26 +77,31 @@ INSERT INTO sensor (nomeSensor, localizacaoSensor, statusSensor, fkCliente) VALU
     ('Sensor H4', 'Sala 4', 'Manutenção', 3);
     
 INSERT INTO leitura(umidade, temperatura, fkSensor) VALUES
-	(30, 19, 1),
-    (30, 28, 2),
-	(45, 20, 5);
+	(30, 19.0, 1),
+    (30, 28.0, 2),
+	(45, 20.0, 5);
 
 INSERT INTO alerta (dataHoraAlerta, statusAlerta, fkLeitura) VALUES
     ('2025-04-02 11:00:00', 'Pendente', 1),
     ('2025-05-02 12:00:00', 'Pendente', 2);
     
+INSERT INTO alerta (dataHoraAlerta, statusAlerta, fkLeitura) VALUES
+	('2025-06-30 13:45:00', 'Pendente', 3);
+    
+
 SELECT 
         s.nomeSensor 'Nome do Sensor',
         s.localizacaoSensor 'Localização do Sensor',
-        l.umidade 'Umidade atingida',
-        l.temperatura 'Temperatura atingida',
-        l.dataHoraLeitura 'Data e hora da leitura',
-        a.statusAlerta 'Status do alerta',
+        ifnull(l.umidade, 'Dentro dos padrões') 'Umidade atingida',
+        ifnull(l.temperatura, 'Dentro dos padrões') 'Temperatura atingida',
+        ifnull(a.dataHoraAlerta, 'Sem alerta') 'Data e hora do alerta',
+        ifnull(a.statusAlerta, 'Sem alerta') 'Status do alerta',
         CASE
         WHEN (l.umidade > p.umidadeMaxIdeal OR l.umidade < p.umidadeMinIdeal) AND (l.temperatura > p.tempMaxIdeal OR l.temperatura < p.tempMinIdeal) THEN 'Temperatura e Umidade'
+        WHEN l.umidade > p.umidadeMaxIdeal OR l.umidade < p.umidadeMinIdeal THEN 'Umidade'
+        WHEN l.temperatura > p.tempMaxIdeal OR l.temperatura < p.tempMinIdeal THEN 'Temperatura'
         ELSE 'Sem problemas.' END 'Tipo do alerta'
         FROM sensor s
-			JOIN parametros p ON p.idParams = s.fkParametros
+			JOIN parametros p ON s.fkParametros = p.idParams
 				JOIN leitura l ON l.fkSensor = s.idSensor
 					JOIN alerta a ON a.fkLeitura = l.idLeitura;
-	
