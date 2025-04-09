@@ -1,0 +1,105 @@
+:root {
+    --cor_preto: #000000;
+    --cor_branco: #ffffff;
+    --cor_decoration: #0cc0df;
+    --cor_decoration_escuro: #0e1427;
+  }
+  
+  body {
+    margin: 0;
+    background-color: var(--cor_decoration_escuro);
+    font-family: "Poppins", sans-serif;
+    color: var(--cor_branco);
+  }
+  
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .header-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    background-color: var(--cor_decoration);
+    padding: 0.5rem;
+    border-radius: 2rem;
+    margin: 1rem;
+  }
+  
+  .tabs div {
+    background-color: var(--cor_decoration);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    color: var(--cor_preto);
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--cor_decoration);
+    padding: 0.3rem 1rem;
+    border-radius: 2rem;
+    font-weight: bold;
+  }
+  
+  .engrenagem {
+    font-size: 1.5rem;
+    margin-left: 1rem;
+  }
+  
+  .content {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+  }
+  
+  .grafico {
+    width: 70%;
+    height: 300px;
+    background-color: #111;
+  }
+  
+  .sidebar {
+    width: 25%;
+  }
+  
+  .sensores {
+    margin-top: 1rem;
+  }
+  
+  .sensor {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.3rem 0;
+  }
+  
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: green;
+  }
+  
+  .temperaturas {
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
