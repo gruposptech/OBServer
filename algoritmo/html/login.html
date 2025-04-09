@@ -6,20 +6,17 @@
     <title>Login</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
-<body>
-    <h1><b>Entrar</b></h1>
-
-    <h2>CNPJ</h2>
-    <input type="text" class="login-cnpj" id="iptCnpj">
-
-    <h2>Senha</h2>
-    <input type="password" class="login-senha" id="iptSenha"> <br> <bra>
-
-    <button onclick="login()">Entrar</button>
-
-    <h3>Esqueceu a Senha?</h3> <br> 
-
-    <h2><a href="cadastro.html">Criar cadastro</a></h2>
+<body class="corpo">
+    <div class="container-login">
+        <h1 class="titulo">Entrar</h1>
+        <h2 class="subtitulo">CNPJ</h2>
+        <input type="text" class="input login-cnpj" id="iptCnpj">
+        <h2 class="subtitulo">Senha</h2>
+        <input type="password" class="input login-senha" id="iptSenha"> <br> <bra>
+        <button onclick="login()" class="botao">ENTRAR</button>
+        <h3 class="esqueceu-a-senha">Esqueceu a Senha?</h3> <br>
+        <button class="botao botao-cadastro"><a href="cadastro.html" class="criar-cadastro">Criar cadastro</a></button>
+    </div>
 </body>
 </html>
 <script>
@@ -31,8 +28,8 @@
         senha = iptSenha.value;
 
         if (cnpj == '' || senha == '') {
-            alert('Todos os campos precisam estar preenchidos!')
-        } else if (cnpj == 'Ifood' && senha == 'ifood#2024') {
+            alert('Todos os campos precisam estar preenchidos!') 
+        } else if (cnpj.toLowerCase() == 'ifood' && senha.toLowerCase() == 'ifood#2024') {
             alert('Seja bem-vindo(a)!')
             // window.location.href = 'dashboard.html';
         } else {
