@@ -46,20 +46,30 @@
     var codigo = '';
 
     function cadastro () {
-        nome = iptNome.value;
-        cnpj = iptCNPJ.value;
-        email = iptEmail.value;
-        telefone = iptTelefone.value;
-        senha = iptSenha.value;
-        confirmacaoSenha = iptConfirmacaoSenha.value;
-        codigo = iptCodigo.value;
+        nome = iptNome.value.toLowerCase();
+        cnpj = iptCNPJ.value.toLowerCase();
+        email = iptEmail.value.toLowerCase();
+        telefone = iptTelefone.value.toLowerCase();
+        senha = iptSenha.value.toLowerCase();
+        confirmacaoSenha = iptConfirmacaoSenha.value.toLowerCase();
+        codigo = iptCodigo.value.toLowerCase();
 
         if (nome == '' || cnpj == '' || email == '' || telefone == '' || senha == '' || confirmacaoSenha == '' || codigo == '' ) {
             alert('Todos os campos precisam ser preenchidos!');
         } else if (senha != confirmacaoSenha) {
             alert('Senhas não coincidem.');
+        } else if (cnpj.length != 14) {
+            alert('CNPJ inválido!')
+        } else if (telefone.length != 11) {
+            alert('Telefone inválido!')
+        } else if (senha.length < 5) {
+            alert('A senha precisa ter pelo menos 5 dígitos!')
+        } else if (codigo.length > 5 || codigo.length < 5) {
+            alert('Código inválido!')
+        } else if (!email.includes("@")) {
+            alert('Email inválido!')
         } else {
             alert('Cadastro realizado! Seja bem-vindo(a)!')
         }
-    }
+    } 
 </script>

@@ -27,12 +27,12 @@
     var senha = '';
 
     function login () { 
-        cnpj = iptCnpj.value;
-        senha = iptSenha.value;
+        cnpj = iptCnpj.value.toLowerCase();
+        senha = iptSenha.value.toLowerCase();
 
         if (cnpj == '' || senha == '') {
             alert('Todos os campos precisam estar preenchidos!') 
-        } else if (cnpj.toLowerCase() == 'ifood' && senha.toLowerCase() == 'ifood#2024') {
+        } else if (cnpj == 'ifood' && senha == 'ifood#2024') {
             alert('Seja bem-vindo(a)!')
             // window.location.href = 'dashboard.html';
         } else {
