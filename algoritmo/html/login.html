@@ -4,19 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/cadastro_e_login.css">
 </head>
 <body class="corpo">
-    <div class="container-login">
-        <h1 class="titulo">Entrar</h1>
-        <h2 class="subtitulo">CNPJ</h2>
-        <input type="text" class="input login-cnpj" id="iptCnpj">
-        <h2 class="subtitulo">Senha</h2>
-        <input type="password" class="input login-senha" id="iptSenha"> <br> <bra>
-        <button onclick="login()" class="botao">ENTRAR</button>
-        <h3 class="esqueceu-a-senha">Esqueceu a Senha?</h3> <br>
-        <button class="botao botao-cadastro"><a href="cadastro.html" class="criar-cadastro">Criar cadastro</a></button>
+    <header class="linha-cima"></header>
+    <div class="containerAll">
+        <div class="container-login">
+            <h1 class="titulo">Entrar</h1>
+            <span class="linha-fina"></span>
+            <input type="text" class="input login-cnpj" id="iptCnpj" placeholder="CNPJ">
+            <input type="password" class="input login-senha" id="iptSenha" placeholder="SENHA"> <br> <bra>
+            <button onclick="login()" class="botao">ENTRAR</button>
+            <h3 class="esqueceu-a-senha">Esqueceu a Senha?</h3> <br>
+            <button class="botao botao-cadastro"><a href="cadastro.html" class="criar-cadastro">Criar cadastro</a></button>
+        </div>
     </div>
+    <footer class="linha-baixo"></footer>
 </body>
 </html>
 <script>
