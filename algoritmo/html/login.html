@@ -9,6 +9,9 @@
 <body class="corpo">
     <header class="linha-cima"></header>
     <div class="containerAll">
+        <div class="containerImagem">
+            <img src="../img/logo.png" class="imagem-logo">
+        </div>
         <div class="container-login">
             <h1 class="titulo">Entrar</h1>
             <span class="linha-fina"></span>
@@ -29,7 +32,6 @@
     function login () { 
         cnpj = iptCnpj.value.toLowerCase();
         senha = iptSenha.value.toLowerCase();
-
         if (cnpj == '' || senha == '') {
             alert('Todos os campos precisam estar preenchidos!') 
         } else if (cnpj == 'ifood' && senha == 'ifood#2024') {
