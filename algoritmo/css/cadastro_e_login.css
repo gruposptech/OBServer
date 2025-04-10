@@ -19,15 +19,28 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    gap:    0;
 }
 
-.container-login    {
+.containerAllCadastro {
+    margin-top: 3%;
+}
+
+.container-login{
     color: var(--cor_branco);
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 400px;
     margin-top: 80px;
+}
+
+.container-cadastro {
+    color: var(--cor_branco);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
 }
 
 .input {
@@ -43,10 +56,10 @@
     color: #b6c5c797;
     font-weight: bold;
     font-size: 15px;
-    
+    text-align: center;
 }
 
-.login-senha {
+.label-senha {
     margin-top: 20px;
 }
 
@@ -61,8 +74,8 @@
 }
 
 .botao {
-    margin-left: 45px;
-    margin-top: 20px;
+    margin-left: 30px;
+    /* margin-top: 20px; */
     border: none;
     padding: 12px 25px;
     background-color: var(--cor_decoration);
@@ -71,6 +84,13 @@
     font-size: 20px;
 }
 
+/* .botao-cadastro {
+    padding: 6px 15px;
+    margin-left: 30px;
+    margin-top: 0;
+    font-size: 15px;
+} */
+
 .botao a {
     color: var(--cor_branco);
     text-decoration: none;
@@ -78,15 +98,12 @@
 
 .esqueceu-a-senha {
     font-size: 17px;
-    margin-left: 40px;
+    margin-left: 25px;
     margin-bottom: 0;
     margin-top: 10px;
+    text-align: center;
 }
 
-.botao-cadastro {
-    margin-left: 20px;
-    margin-top: 0;
-}
 
 .linha-fina {
     width: 55px;
@@ -96,7 +113,7 @@
 }
 
 .linha-cima {
-    margin-top: 50px;
+    margin-top: 30px;
     border-bottom: 4px solid var(--cor_decoration);
 }
 
@@ -110,4 +127,47 @@
     width: 400px;
     margin-right: 100px;
     margin-top: 100px;
+}
+
+.imagem-logo-cadastro {
+    margin-right: 150px;
+}
+
+.label {
+    margin-top: 5px;
+}
+
+.label-nome {
+    margin-top: 10px;
+}
+
+.sou-cadastrado {
+    text-decoration: none;
+    color: white;
+}
+
+.botao-criar-conta {
+    margin-left: 0;
+    margin-top: 0;
+}
+
+.botao-criar-conta:hover {
+    cursor: pointer;
+}
+
+.linha-baixo-cadastro, .linha-cima-cadastro{
+    margin-top: 20px;
+}
+
+.linha-fina-cadastro {
+    margin: 0;
+}
+
+.container-cadastro-direita {
+    width: 300px;
+    margin-top: 150px;
+}
+
+.sou-cadastrado:hover, .esqueceu-a-senha:hover {
+    text-decoration: underline;
 }

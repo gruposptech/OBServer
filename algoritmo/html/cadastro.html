@@ -4,36 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/cadastro_e_login.css">
 </head>
-<body>
-   <h1><b>Cadastro</b></h1>
+<body class="corpo">
+    <hr size="4px" color="#0cc0df" class="linha-cima-cadastro"></hr>
+   <div class="containerAll containerAllCadastro">
+        <div class="containerImagem">
+            <img src="../img/logo.png" class="imagem-logo-cadastro">
+        </div>
+        <div class="container-cadastro">
+           <h1 class="titulo">Cadastro</h1>
+           <span class="linha-fina linha-fina-cadastro"></span>
 
-   <h2>Nome da Empresa</h2>
-   <input type="text" class="campo-nome" id="iptNome">
-
-   <h2>CNPJ</h2>
-   <input type="text" class="campo-cnpj" id="iptCNPJ">
-
-   <h2>E-mail</h2>
-   <input type="text" class="campo-email" id="iptEmail">
-
-   <h2>Telefone</h2>
-   <input type="text" class="campo-telefone" id="iptTelefone">
- 
-   <h2>Senha</h2>
-   <input type="password" class="campo-senha" id="iptSenha">
-   
-   <h2>Confirmação de senha</h2>
-   <input type="password" class="campo-confirm" id="iptConfirmacaoSenha">
-   
-   <h2>Código de Confirmação</h2>
-   <input type="text" class="campo-codigo" id="iptCodigo">
-
-   <h3><a href="login.html">Já possuo cadastro</a></h3>
-
-   <button onclick="cadastro()">CRIAR</button>
-
+           <label for="iptNome" class="label label-nome">Nome</label>
+           <input type="text" class="input campo-nome" id="iptNome" placeholder="">
+           <label for="iptCNPJ" class="label">CNPJ</label>
+           <input type="text" class="input campo-cnpj" id="iptCNPJ" placeholder="XX.XXX.XXX/0001-XX">
+           <label for="iptEmail" class="label">Email</label>
+           <input type="text" class="input campo-email" id="iptEmail" placeholder="">
+           <label for="iptTelefone" class="label">Telefone</label>
+           <input type="text" class="input campo-telefone" id="iptTelefone" placeholder="(xx)x xxxx-xxxx">
+           <label for="iptSenha" class="label">Senha</label>
+           <input type="password" class="input campo-senha" id="iptSenha" placeholder="">
+           <label for="iptConfirmacaoSenha" class="label">Confirme a senha</label>
+           <input type="password" class="input campo-confirm" id="iptConfirmacaoSenha" placeholder="">
+           <label for="iptCodigo" class="label">Código de confirmação</label>
+           <input type="text" class="input campo-codigo" id="iptCodigo" placeholder="">
+            <h3><a href="login.html" class="sou-cadastrado">Já possuo cadastro</a></h3>
+            <button onclick="cadastro()" class="botao botao-criar-conta">CRIAR</button>
+        </div>
+    </div>
+    <hr size="4px" color="#0cc0df" class="linha-baixo-cadastro"></hr>
 </body>
 </html>
 <script>
