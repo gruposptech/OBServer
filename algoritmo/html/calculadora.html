@@ -40,10 +40,10 @@
         if (parado < 0 || rack < 0 || server < 0) {
           alert("Valores negativos não são permitidos.");
         } else {
-          var minutosParado = parado * 60; // como a gente mudou pra horas coloquei vezes 60
-          var perdaFinanceira = minutosParado * 15000 * 60; // dado que chumbamos direto, multipliquei por 60 pois mudamos o conceito pra pegar a hora agora
+          var minutosParado = parado; // como a gente mudou pra horas coloquei vezes 60
+          var perdaFinanceira = minutosParado * 53000 * 60; // dado que chumbamos direto, multipliquei por 60 pois mudamos o conceito pra pegar a hora agora
           var tot_server = rack * server; // calculo 
-          var preco_servidor = 80000; //estimativa do grupo anterior, precisamos rever a fonte
+          var preco_servidor = 50000; //estimativa do grupo anterior, precisamos rever a fonte
           var gasto_tot_server = tot_server * preco_servidor; //calculo de resultado
           var preco_sensor_por_rack = 1800; //da onde eles tiraram esse valor?
           var custo_instalacao = rack * preco_sensor_por_rack;
@@ -57,7 +57,7 @@
           Pois paga <u>R$${tot_ano.toFixed(2)}/ano</u> para evitar um gasto de <u>R$${gasto_tot_server.toFixed(2)}</u> com reposições de servidores.
           <br><br>
           <h3>Você sabia?</h3>
-          Interrupções de serviço podem custar até R$ 900.000 por hora (especialmente no e-commerce).<br><br>
+          Interrupções de serviço podem custar até R$ 3.180.000 por hora (especialmente no e-commerce).<br><br>
           A vida útil dos servidores pode ser reduzida sem monitoramento adequado, gerando gastos desnecessários.<br><br>
           60% das empresas ainda utilizam métodos manuais ou reativos para identificar falhas (ABRADI, 2023).<br><br>
           <p><u><b>Nós da Observer resolvemos o seu problema!!</b></u></p>
