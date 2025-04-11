@@ -15,7 +15,6 @@ const serial = async (
     valorestemperatura,
     valoresumidade,
 ) => {
-
     // conexão com o banco de dados MySQL
     let poolBancoDados = mysql.createPool(
         {
