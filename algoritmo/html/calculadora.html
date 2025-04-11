@@ -29,28 +29,37 @@
 
   <script>
     function calc() {
-      var nome = inp_name.value;
-      var parado = Number(inp_parado.value);
-      var rack = Number(inp_numRacks.value);
-      var server = Number(inp_server.value);
-
-      if (nome == "" || inp_parado.value == "" || inp_numRacks.value == "" || inp_server.value == "") {
+      var campos = [inp_name, inp_parado, inp_numRacks, inp_server];
+      var camposVazios = false;
+  
+      for (var i = 0; i < campos.length; i++) {
+        if (campos[i].value == "") {
+          camposVazios = true;
+        }
+      }
+  
+      if (camposVazios) {
         alert("Favor, preencha todos os campos.");
       } else {
+        var nome = inp_name.value;
+        var parado = Number(inp_parado.value);
+        var rack = Number(inp_numRacks.value);
+        var server = Number(inp_server.value);
+  
         if (parado < 0 || rack < 0 || server < 0) {
           alert("Valores negativos não são permitidos.");
         } else {
-          var minutosParado = parado; // como a gente mudou pra horas coloquei vezes 60
-          var perdaFinanceira = minutosParado * 53000 * 60; // dado que chumbamos direto, multipliquei por 60 pois mudamos o conceito pra pegar a hora agora
-          var tot_server = rack * server; // calculo 
-          var preco_servidor = 50000; //estimativa do grupo anterior, precisamos rever a fonte
-          var gasto_tot_server = tot_server * preco_servidor; //calculo de resultado
-          var preco_sensor_por_rack = 1800; //da onde eles tiraram esse valor?
+          var minutosParado = parado;
+          var perdaFinanceira = minutosParado * 53000 * 60;
+          var tot_server = rack * server;
+          var preco_servidor = 50000;
+          var gasto_tot_server = tot_server * preco_servidor;
+          var preco_sensor_por_rack = 1800;
           var custo_instalacao = rack * preco_sensor_por_rack;
-          var tot_ano = gasto_tot_server * 0.5; // da onde veio essa estimativa
-          var mensal = tot_ano / 12; // vezes 12 pra saber o ano
-          var economia = gasto_tot_server - tot_ano; 
-
+          var tot_ano = gasto_tot_server * 0.5;
+          var mensal = tot_ano / 12;
+          var economia = gasto_tot_server - tot_ano;
+  
           tela.innerHTML = `
           A empresa <b>${nome}</b> deixou de ganhar até <u>R$${perdaFinanceira.toFixed(2)}</u> por ter ficado <u>${parado}</u> horas em downtime.<br><br>
           A <b>${nome}</b> investirá <u>R$${custo_instalacao.toFixed(2)}</u> na instalação dos sensores. Assinando nosso serviço por <u>R$${mensal.toFixed(2)}/mês</u>, economizará <u>R$${economia.toFixed(2)}</u> em um ano.<br><br>
@@ -67,5 +76,6 @@
       }
     }
   </script>
+  
 </body>
 </html>
