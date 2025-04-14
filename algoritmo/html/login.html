@@ -19,7 +19,7 @@
             <input type="text" class="input login-cnpj" id="iptCnpj" placeholder="XX.XXX.XXX/0001-XX">
             <label for="iptSenha" class="label-senha">Senha</label>
             <input type="password" class="input login-senha" id="iptSenha" placeholder=""> <br> <bra>
-            <button onclick="login()" class="botao">Entrar</button>
+            <button onclick="login()" class="botao botao-entrar" id="botao-entrar">Entrar</button>
             <button class="botao botao-cadastro"><a href="cadastro.html" class="criar-cadastro">Criar cadastro</a></button>
             <h3 class="esqueceu-a-senha">Esqueceu a Senha?</h3> <br>
         </div>
@@ -34,11 +34,11 @@
     function login () { 
         cnpj = iptCnpj.value.toLowerCase();
         senha = iptSenha.value.toLowerCase();
+            
         if (cnpj == '' || senha == '') {
             alert('Todos os campos precisam estar preenchidos!') 
         } else if (cnpj == '12345678000101' && senha == 'ifood#2024') {
-            alert('Seja bem-vindo(a)!')
-            // window.location.href = 'dashboard.html';
+            window.location.href = 'dashboard.html';
         } else {
             alert('Login e/ou senha inválidos!')
         }

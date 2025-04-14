@@ -29,16 +29,7 @@
 
   <script>
     function calc() {
-      var campos = [inp_name, inp_parado, inp_numRacks, inp_server];
-      var camposVazios = false;
-  
-      for (var i = 0; i < campos.length; i++) {
-        if (campos[i].value == "") {
-          camposVazios = true;
-        }
-      }
-  
-      if (camposVazios) {
+      if (inp_name.value == '' || inp_parado.value == '' || inp_numRacks.value == '' || inp_server.value == '') {
         alert("Favor, preencha todos os campos.");
       } else {
         var nome = inp_name.value;

@@ -20,6 +20,7 @@
     justify-content: center;
     align-items: center;
     gap:    0;
+    margin-top: 100px;
 }
 
 .containerAllCadastro {
@@ -75,7 +76,6 @@
 
 .botao {
     margin-left: 30px;
-    /* margin-top: 20px; */
     border: none;
     padding: 12px 25px;
     background-color: var(--cor_decoration);
@@ -84,12 +84,6 @@
     font-size: 20px;
 }
 
-/* .botao-cadastro {
-    padding: 6px 15px;
-    margin-left: 30px;
-    margin-top: 0;
-    font-size: 15px;
-} */
 
 .botao a {
     color: var(--cor_branco);
@@ -102,6 +96,7 @@
     margin-bottom: 0;
     margin-top: 10px;
     text-align: center;
+    cursor: pointer;
 }
 
 
@@ -119,7 +114,7 @@
 
 .linha-baixo {
     border-top: 4px solid var(--cor_decoration);
-    margin-top: 150px;
+    margin-top: 200px;
 
 }
 
@@ -151,12 +146,12 @@
     margin-top: 0;
 }
 
-.botao-criar-conta:hover {
+.botao-criar-conta:hover, .criar-cadastro:hover, .botao-entrar {
     cursor: pointer;
 }
 
 .linha-baixo-cadastro, .linha-cima-cadastro{
-    margin-top: 20px;
+    margin-top: 50px;
 }
 
 .linha-fina-cadastro {
@@ -171,3 +166,4 @@
 .sou-cadastrado:hover, .esqueceu-a-senha:hover {
     text-decoration: underline;
 }
+

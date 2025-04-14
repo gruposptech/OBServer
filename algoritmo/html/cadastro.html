@@ -45,8 +45,9 @@
     var senha = '';
     var confirmacaoSenha = '';
     var codigo = '';
+    var todosIguais = true;
 
-    function cadastro () {
+    function cadastro () {  
         nome = iptNome.value.toLowerCase();
         cnpj = iptCNPJ.value.toLowerCase();
         email = iptEmail.value.toLowerCase();
@@ -69,8 +70,19 @@
             alert('Código inválido!')
         } else if (!email.includes("@")) {
             alert('Email inválido!')
+        } else if (todosIguais) {
+            for (let i = 0; i < cnpj.length; i++) {
+                if (cnpj[i] != cnpj[0]) {
+                    todosIguais = false;
+                    break;
+                }
+            }
+            if (todosIguais) {
+                alert('Todos os números não podem ser iguais!')
+            }
         } else {
-            alert('Cadastro realizado! Seja bem-vindo(a)!')
+            alert('Cadastro realizado! Seja bem-vindo(a)!');
+            window.location.href = 'login.html';
         }
     } 
 </script>
