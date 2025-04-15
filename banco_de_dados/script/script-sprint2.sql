@@ -53,7 +53,6 @@ CREATE TABLE leitura (
 CREATE TABLE alerta (
 	idAlerta INT PRIMARY KEY AUTO_INCREMENT,
     tipoAlerta VARCHAR(21),
-    dataHoraAlerta DATETIME NOT NULL,
     statusAlerta CHAR(9) NOT NULL,
     fkLeitura INT, 
     fkSensor INT,
@@ -84,31 +83,3 @@ INSERT INTO sensor (nomeSensor, statusSensor, fkRack) VALUES
     ('Sensor B2', 'Inativo', 2),
     ('Sensor H3', 'Inativo', 3),
     ('Sensor H4','Manutenção', 3);
-    
-INSERT INTO leitura(umidade, temperatura, fkSensor) VALUES
-	(30, 19.0, 1),
-    (30, 28.0, 2),
-	(45, 20.0, 5);
-    
-
-INSERT INTO alerta (dataHoraAlerta, statusAlerta, fkLeitura) VALUES
-    ('2025-04-02 11:00:00', 'Pendente', 1),
-    ('2025-05-02 12:00:00', 'Pendente', 2),
-	('2025-06-30 13:45:00', 'Pendente', 3);
-    
-
-SELECT 
-        s.nomeSensor 'Nome do Sensor',
-        ifnull(l.umidade, 'Dentro dos padrões') 'Umidade atingida',
-        ifnull(l.temperatura, 'Dentro dos padrões') 'Temperatura atingida',
-        ifnull(a.dataHoraAlerta, 'Sem alerta') 'Data e hora do alerta',
-        ifnull(a.statusAlerta, 'Sem alerta') 'Status do alerta',
-        CASE
-        WHEN (l.umidade > p.umidadeMaxIdeal OR l.umidade < p.umidadeMinIdeal) AND (l.temperatura > p.tempMaxIdeal OR l.temperatura < p.tempMinIdeal) THEN 'Temperatura e Umidade'
-        WHEN l.umidade > p.umidadeMaxIdeal OR l.umidade < p.umidadeMinIdeal THEN 'Umidade'
-        WHEN l.temperatura > p.tempMaxIdeal OR l.temperatura < p.tempMinIdeal THEN 'Temperatura'
-        ELSE 'Sem problemas.' END 'Tipo do alerta'
-        FROM sensor s
-			JOIN parametros p ON s.fkParametros = p.idParams
-				JOIN leitura l ON l.fkSensor = s.idSensor
-					JOIN alerta a ON a.fkLeitura = l.idLeitura;
