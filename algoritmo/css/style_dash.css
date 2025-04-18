@@ -1,110 +1,284 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'); 
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-:root {
-    --cor_preto: #000000;
-    --cor_branco: #ffffff;
-    --cor_decoration: #0cc0df;
-    --cor_decoration_escuro: #0e1427;
-  }
-  
-  body {
+* {
     margin: 0;
-    background-color: var(--cor_decoration_escuro);
-    font-family: "Lato", sans-serif;
-    color: var(--cor_branco);
-  }
-  
-  header {
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.container-painel {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.barra-lateral {
+    width: 270px;
+    background-color: #0f1a2f;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border-right: 2px solid #673ab7;
+}
+
+.secao-logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    max-width: 150px;
+}
+
+.secao-ifood {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo-redondo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.nome-empresa {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.email-empresa {
+    color: #ccc;
+    font-size: 14px;
+}
+
+.secao-filtro {
+    margin-bottom: 25px;
+}
+
+.titulo-filtro {
+    font-size: 16px;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #444;
+}
+
+.opcao-filtro {
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
+    gap: 10px;
+}
+
+.botao-sair {
+    margin-top: auto;
+    background-color: #4BACC6;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.conteudo-principal {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.cabecalho {
+    display: flex;
     justify-content: space-between;
-    padding: 1rem;
-  }
-  
-  .logo {
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.cabecalho h1 {
+    font-size: 24px;
+    color: #333;
+}
+
+.data-hora {
+    color: #666;
+}
+
+.cartoes-status {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.cartao-status {
+    background-color: #0f1a2f;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.cartao-status h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.valor {
+    font-size: 24px;
+    font-weight: bold;
     display: flex;
     align-items: center;
-    gap: 1rem;
-  }
-  
-  .header-right {
-    display: flex;
-    align-items: center;
-  }
-  
-  .tabs {
+    justify-content: center;
+    gap: 10px;
+}
+
+.container-graficos {
+    background-color: white;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
     display: flex;
     justify-content: center;
-    gap: 1rem;
-    background-color: var(--cor_decoration);
-    padding: 0.5rem;
-    border-radius: 2rem;
-    margin: 1rem;
-  }
-  
-  .tabs div {
-    background-color: var(--cor_decoration);
-    padding: 0.5rem 1rem;
-    border-radius: 2rem;
-    color: var(--cor_preto);
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .status {
-    display: flex;
     align-items: center;
-    gap: 0.5rem;
-    background-color: var(--cor_decoration);
-    padding: 0.3rem 1rem;
-    border-radius: 2rem;
-    font-weight: bold;
-  }
-  
-  .engrenagem {
-    font-size: 1.5rem;
-    margin-left: 1rem;
-  }
-  
-  .content {
-    display: flex;
-    justify-content: space-between;
-    padding: 1rem;
-  }
-  
-  .grafico {
-    width: 70%;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+}
+
+.grafico-wrapper {
+    position: relative;
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     height: 300px;
-    background-color: #111;
-  }
-  
-  .sidebar {
-    width: 25%;
-  }
-  
-  .sensores {
-    margin-top: 1rem;
-  }
-  
-  .sensor {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin: 0.3rem 0;
-  }
-  
-  .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: green;
-  }
-  
-  .temperaturas {
+}
+
+.grafico-wrapper h2 {
     text-align: center;
-    margin-top: 1rem;
-  }
-  
-  .linha-cima {
-    border-bottom: 4px solid var(--cor_decoration);
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 18px;
+}
+
+.legenda {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.item-legenda {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.item-legenda p {
+    
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+.item-legenda small {
+    height: 30px;
+    color: #666;
+    display: block;
+}
+
+.icone-status {
+    width: 24px;
+    height: 24px;
+}
+
+.icone-sensor {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 10px;
+    filter: invert(1);
+}
+
+.secao-alertas {
+    width: 300px;
+    background-color: #0f1a2f;
+    padding: 20px;
+    border-left: 1px solid #1a2942;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.secao-alertas h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.item-alerta {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    border-bottom: 1px solid #1a2942;
+    align-items: flex-start;
+}
+
+.conteudo-alerta {
+    flex: 1;
+}
+
+.hora-alerta {
+    color: #ccc;
+    font-size: 14px;
+
+}
+
+.local-alerta {
+    font-weight: bold;
+    margin: 5px 0;
+    color: white;
+}
+
+.tipo-alerta {
+    color: #ccc;
+}
+
+.valor-alerta {
+    font-weight: bold;
+    color: #F44336;
+}
+
+.botao-historico {
+    width: 100%;
+    padding: 10px;
+    background-color: #4BACC6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.sensores-inativos {
+    background-color: #0f1a2f;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sensores-inativos h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
 }
