@@ -189,12 +189,15 @@
     flex-direction: column;
     align-items: center;
     gap: 2px;
+    width: 5cm;
+   
 }
 
 .item-legenda p {
     margin: 0;
     font-weight: bold;
     font-size: 12px;
+    width: 19px;
 }
 
 .item-legenda small {
@@ -202,6 +205,8 @@
     display: block;
     font-size: 10px;
     line-height: 1;
+    background-color: #0cc0df;
+    height: 110px;
 }
 
 .icone-status {
@@ -233,6 +238,14 @@
 }
 
 .item-alerta {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    border-bottom: 1px solid #1a2942;
+    align-items: flex-start;
+    text-decoration: line-through;
+}
+.item-alerta2 {
     display: flex;
     gap: 15px;
     padding: 15px;
