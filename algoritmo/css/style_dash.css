@@ -139,46 +139,48 @@
 }
 
 .container-graficos {
-    background-color: white;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 20px;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 100%;  
     flex-direction: column;
-    gap: 20px;
-    overflow-y: auto;
-    height: 550px;
-    
+    gap: 15px;
+    margin-bottom: 10px;
+    flex: 1;
+    min-height: 0;
 }
 
+.grafico-wrapper canvas {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
 .grafico-wrapper {
-    position: relative;
+    flex: 1;
     background-color: white;
-    padding: 15px;
+    padding: 12px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    height: 150px;
-    width: 400px;
-    
+    display: flex;
+    flex-direction: column;
+    min-height: 0;  
 }
 
 .grafico-wrapper h2 {
+    width: 100%;  
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     color: #333;
-    font-size: 18px;
-    width: 10px;
-   
+    font-size: 14px;
 }
 
 .legenda {
     display: flex;
     justify-content: center;
-    gap: 30px;
-    margin-bottom: 20px;
-   
+    gap: 15px;
+    padding: 5px;
+    border-radius: 8px;
+    margin-top: 0;
+    height: 50px;
 }
 
 .item-legenda {
@@ -186,28 +188,25 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
-    
+    gap: 2px;
 }
 
-
 .item-legenda p {
-    
-    margin: 5px 0;
+    margin: 0;
     font-weight: bold;
+    font-size: 12px;
 }
 
 .item-legenda small {
-    height: 30px;
     color: #666;
     display: block;
-    
+    font-size: 10px;
+    line-height: 1;
 }
 
 .icone-status {
     width: 24px;
     height: 24px;
-    
 }
 
 .icone-sensor {
@@ -215,7 +214,6 @@
     height: 32px;
     margin-bottom: 10px;
     filter: invert(1);
-    
 }
 
 .secao-alertas {
@@ -232,7 +230,6 @@
     text-align: center;
     margin-bottom: 20px;
     color: white;
-    
 }
 
 .item-alerta {
@@ -241,44 +238,30 @@
     padding: 15px;
     border-bottom: 1px solid #1a2942;
     align-items: flex-start;
-    
 }
 
-.item-alerta2 {
-    display: flex;
-    gap: 15px;
-    padding: 15px;
-    border-bottom: 1px solid #1a2942;
-    align-items: flex-start;
-    text-decoration: line-through;
-}
 .conteudo-alerta {
     flex: 1;
-    
 }
 
 .hora-alerta {
     color: #ccc;
     font-size: 14px;
-    
 }
 
 .local-alerta {
     font-weight: bold;
     margin: 5px 0;
     color: white;
-    
 }
 
 .tipo-alerta {
     color: #ccc;
-
 }
 
 .valor-alerta {
     font-weight: bold;
     color: #F44336;
-    
 }
 
 .botao-historico {
@@ -302,11 +285,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    
 }
 
 .sensores-inativos h3 {
     font-size: 16px;
     margin-bottom: 10px;
-    
 }

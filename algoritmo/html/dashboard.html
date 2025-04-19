@@ -16,7 +16,7 @@
             </div>
 
             <div class="secao-ifood">
-                <img src="https://lh5.googleusercontent.com/proxy/gMMa2JKZWuXyZld5Agza9Kk_La4MAKqVCSL0NTT5TJ3h_AzqPSVVJhX2WNUzVmsOe1nPrNxoWMk_2wMiDIHxGlB3z_f3ZuI1E8ghoHaeAkjAPP5IkZnPLmXqwoLaZmey_sJnnEpH54Q" alt="Logo iFOOD" class="logo-redondo">
+                <img src="https://i.pinimg.com/736x/15/28/40/152840a623436d49ebc85093d4e7572c.jpg" alt="Logo iFOOD" class="logo-redondo">
                 <h2 class="nome-empresa">IFOOD</h2>
                 <p class="email-empresa">ifood@empresa.com</p>
             </div>
@@ -54,7 +54,6 @@
             </div>
 
             <button class="botao-sair">Sair</button>
-            <img src="" alt="">
         </div>
         <div class="conteudo-principal">
             <div class="cabecalho">
@@ -81,7 +80,6 @@
                 <div class="grafico-wrapper">
                     <h2>TEMPERATURA MÉDIA</h2>
                     <canvas id="grafico-temperatura"></canvas>
-                    
                 </div>
                 <div class="grafico-wrapper">
                     <h2>UMIDADE MÉDIA</h2>
@@ -90,7 +88,7 @@
             </div>
 
             <div class="legenda">
-                <div class="item-legenda" >
+                <div class="item-legenda">
                     <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="OK" class="icone-status">
                     <p>OK</p>
                     <small>Temperatura: 18°C a 27°C<br>Umidade: 40% a 60%</small>
@@ -116,15 +114,13 @@
             </div>
 
             <h2>ALERTAS</h2>
-
-            <div class="item-alerta2">
+            <div class="item-alerta">
                 <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Alert" class="icone-status">
-                <div class="conteudo-alerta" >
+                <div class="conteudo-alerta">
                     <div class="hora-alerta">22/04/2025 - 12h00</div>
                     <div class="local-alerta">Sala 01 - Rack 19 - Sensor A</div>
                     <div class="tipo-alerta">Alerta de Temperatura</div>
                     <div class="valor-alerta">T: 29,0°</div>
-                    
                 </div>
             </div>
             <div class="item-alerta">
@@ -140,108 +136,183 @@
         </div>
     </div>
 
-<!-- copiei o grafico chart pra dentro do html direto -->
-
-    <script>
-        const ctxTemp = document.getElementById('grafico-temperatura');
-        new Chart(ctxTemp, {
-            type: 'line',
-            data: {
-                labels: ['06h', '08h', '10h', '12h', '14h', '16h', '18h'],
-                datasets: [{
-                    label: '',
-                    data: [18, 20, 23, 27, 25, 23, 20],
-                    backgroundColor: '#0cc0df',
-                    borderColor: 'black',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    datalabels: {
-                        align: 'top',
-                        anchor: 'end',
-                        color: 'black',
-                        font: {
-                            weight: 'bold'
-                        },
-                        formatter: Math.round
-                    }
-                },
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Horário do dia'
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: false,
-                            text: 'Temperatura (°C)'
-                        },
-                        ticks: {
-                            stepSize: 10
-                        }
-                    }
+<!-- Apenas o script dos gráficos foi atualizado abaixo -->
+<script>
+    const ctxTemp = document.getElementById('grafico-temperatura');
+    new Chart(ctxTemp, {
+        type: 'line',
+        data: {
+            labels: ['06h', '08h', '10h', '12h', '14h', '16h', '18h'],
+            datasets: [{
+                label: '',
+                data: [18, 20, 23, 27, 25, 23, 20],
+                backgroundColor: 'transparent',
+                tension: 0.4,
+                pointBackgroundColor: '#0cc0df',
+                borderColor: '#0cc0df'
+            }]
+        },
+        options: {
+            layout: {
+                padding: {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    right: 10
                 }
             },
-            plugins: [ChartDataLabels]
-        });
-
-        const ctxUmid = document.getElementById('grafico-umidade');
-        new Chart(ctxUmid, {
-            type: 'line',
-            data: {
-                labels: ['06h', '08h', '10h', '12h', '14h', '16h', '18h'],
-                datasets: [{
-                    label: '',
-                    data: [42, 43, 43, 45, 46, 44, 43],
-                    backgroundColor: '#0cc0df',
-                    borderColor: 'black',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    datalabels: {
-                        align: 'top',
-                        anchor: 'end',
-                        color: 'black',
-                        font: {
-                            weight: 'bold'
-                        },
-                        formatter: Math.round
-                    }
+            plugins: {
+                legend: {
+                    display: false
                 },
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Horário do dia'
-                        }
+                datalabels: {
+                    align: 'top',
+                    anchor: 'end',
+                    color: '#000',
+                    font: {
+                        weight: 'bold',
+                        size: 12
                     },
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Umidade (%)'
-                        },
-                        ticks: {
-                            stepSize: 20
-                        }
-                    }
+                    formatter: Math.round
                 }
             },
-            plugins: [ChartDataLabels]
-        });
-    </script>
-</body>
-</html>
+            interaction: {
+                mode: 'index'
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Horário do dia',
+                        color: '#000',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    },
+                    ticks: {
+                        color: '#000',
+                        font: {
+                            size: 12
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0,0,0,0.05)'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Temperatura (°C)',
+                        color: '#000',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    },
+                    ticks: {
+                        stepSize: 15,
+                        color: '#000',
+                        font: {
+                            size: 12
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0,0,0,0.05)'
+                    }
+                }
+            }
+        },
+        plugins: [ChartDataLabels]
+    });
+
+    const ctxUmid = document.getElementById('grafico-umidade');
+    new Chart(ctxUmid, {
+        type: 'line',
+        data: {
+            labels: ['06h', '08h', '10h', '12h', '14h', '16h', '18h'],
+            datasets: [{
+                label: '',
+                data: [42, 43, 43, 44, 45, 45, 44],
+                backgroundColor: 'transparent',
+                tension: 0.4,
+                pointBackgroundColor: '#0cc0df',
+                borderColor: '#0cc0df'
+            }]
+        },
+        options: {
+            layout: {
+                padding: {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    right: 10
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                datalabels: {
+                    align: 'top',
+                    anchor: 'end',
+                    color: '#000',
+                    font: {
+                        weight: 'bold',
+                        size: 12
+                    },
+                    formatter: Math.round
+                }
+            },
+            interaction: {
+                mode: 'index'
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Horário do dia',
+                        color: '#000',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    },
+                    ticks: {
+                        color: '#000',
+                        font: {
+                            size: 12
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0,0,0,0.05)'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Umidade (%)',
+                        color: '#000',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    },
+                    ticks: {
+                        stepSize: 20,
+                        color: '#000',
+                        font: {
+                            size: 12
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0,0,0,0.05)'
+                    }
+                }
+            }
+        },
+        plugins: [ChartDataLabels]
+    });
+</script>
