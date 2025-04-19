@@ -79,11 +79,11 @@
             <div class="container-graficos">
                 <div class="grafico-wrapper">
                     <h2>TEMPERATURA MÉDIA</h2>
-                    <canvas id="grafico-temperatura"></canvas>
+                    <canvas id="grafico-temperatura" width="1000" height="250"></canvas>
                 </div>
                 <div class="grafico-wrapper">
                     <h2>UMIDADE MÉDIA</h2>
-                    <canvas id="grafico-umidade"></canvas>
+                    <canvas id="grafico-umidade" width="1000" height="250"></canvas>
                 </div>
             </div>
 
@@ -202,6 +202,8 @@
                 },
                 y: {
                     beginAtZero: true,
+                    min: 0,
+                    max: 40,
                     title: {
                         display: true,
                         text: 'Temperatura (°C)',
@@ -212,7 +214,7 @@
                         }
                     },
                     ticks: {
-                        stepSize: 15,
+                        stepSize: 10,
                         color: '#000',
                         font: {
                             size: 12
@@ -291,6 +293,8 @@
                 },
                 y: {
                     beginAtZero: true,
+                    min: 0,
+                    max: 70,
                     title: {
                         display: true,
                         text: 'Umidade (%)',
@@ -301,7 +305,7 @@
                         }
                     },
                     ticks: {
-                        stepSize: 20,
+                        stepSize: 10,
                         color: '#000',
                         font: {
                             size: 12
