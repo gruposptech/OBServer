@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Observer: Home</title>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="inicio.css">
+</head>
+
+<body>
+  <div class="container_menu">
+    <div class="logo"> <img src="logo.png" alt="Logo da Observer" width="100%">
+    </div>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#calc">Simulador</a></li>
+      <li><a href="#sobrenos">Sobre Nós</a></li>
+      <li><a href="#servico">Serviço</a></li>
+      <li><a href="#fale">Fale Conosco</a></li>
+      <span>
+        <li><a href="">| <i class='bx bxs-user-circle'></i> Painel do Cliente</a></li>
+      </span>
+    </ul>
+  </div>
+
+  <div class="divcontainer_inicio" id="home">
+    <div class="div_filho">
+        <h1>BEM-VINDO À </h1><br>
+        <span>OBSERVER</span>
+        <p>Oferecemos soluções de monitoramento ambiental<br>
+            para data centers, controlando temperatura e umidade<br>
+            em tempo real com sensores (DHT11).</p>
+    </div>
+    <div class="div_filho_img">
+   </div>
+</div>
+
+
+ </div>  
+
+  <div class="container_calculadora" id="calc">
+    <h3>TESTE NOSSO SIMULADOR FINANCEIRO</h3>
+    <h5>Avalia-se em nosso simulador</h5>
+    <div class="calculadora">
+
+      <div class="input">
+        <div class="quadro E"></div>
+        <p><b>Olá, qual o nome da sua empresa?</b></p>
+        <input type="text" id="inp_name" placeholder="insira aqui">
+      </div>
+
+
+      <div class="input">
+        <div class="quadro R"></div>
+        <p><b>Quantas horas seu serviço ficou parado (Downtime) no ano passado?</b></p>
+        <input type="text" id="inp_parado" placeholder="insira aqui">
+      </div>
+
+
+
+      <div class="input">
+        <div class="quadro E"></div>
+        <p><b>Qual a quantidade de racks na sua empresa?</b></p>
+        <input type="text" id="inp_numRacks" placeholder="insira aqui">
+      </div>
+
+      <div class="input">
+        <p><b>Qual a quantidade de servidores por rack?</b></p>
+        <input type="text" id="inp_server" placeholder="insira aqui">
+      </div>
+
+
+      <button class="btn_calc" onclick="calc()">Benefícios</button>
+
+      <div id="tela"></div>
+    </div>
+  </div>
+
+  <div class="container_sobrenos" id="sobrenos">
+    <div class="sobrenos_text">
+      <span>SOBRE NÓS</span>
+      <p>A Observer é um projeto inovador voltado para o desenvolvimento de uma empresa especializada no monitoramento
+        inteligente de datacenters — ambientes altamente sensíveis onde são armazenados e processados dados essenciais
+        para o funcionamento de sistemas empresariais, governamentais e tecnológicos.</p>
+      <p>Nosso principal objetivo é garantir o funcionamento seguro, contínuo e eficiente desses espaços, por meio do
+        controle em tempo real da temperatura e da umidade, fatores essenciais para o bom desempenho dos servidores.</p>
+      <p>Utilizando o sensor DHT11, conseguimos prevenir problemas como superaquecimento, falhas nos equipamentos e
+        outros riscos que comprometem o desempenho dos sistemas.</p>
+      <p>Trabalhamos com foco em tecnologia, segurança e inovação, desenvolvendo ferramentas simples e
+        eficazes para otimizar o desempenho dos datacenters. Nosso compromisso é oferecer soluções confiáveis que
+        assegurem o pleno funcionamento dos sistemas com máxima segurança.</p>
+    </div>
+    </div>
+
+    <div class = container_mvp>
+      <div class = card_mvp>
+        <div class = icon_mvp>
+          <i class='bx bx-bullseye'></i>
+          <H3>MISSÃO</H3>
+        </div>
+        <div class = content_mvp>
+          <p>Garantir o funcionamento seguro e eficiente de datacenters por meio do monitoramento  de temperatura e umidade, ajudando empresas a protegerem seus dados e equipamentos com soluções acessíveis e confiáveis.</p>
+        </div>
+      </div>    
+
+      <div class = card_mvp>
+        <div class = icon_mvp>
+          <i class='bx bx-show-alt'></i>
+          <h3>VISÃO</h3>
+        </div>
+        <div class = content_mvp>
+          <p>Ser referência no mercado de monitoramento de temperatura e umidade para datacenters, reconhecida pela inovação, simplicidade e qualidade de suas soluções tecnológicas.</p>
+        </div>
+      </div>    
+
+      <div class = card_mvp>
+        <div class = icon_mvp>
+   
+        <i class='bx bx-diamond' ></i>
+        <h3>VALORES</h3>
+        </div>
+        <div class = content_mvp>
+          <p><span>Segurança:</span> Cuidar dos dados e equipamentos com atenção e responsabilidade.</p>
+          <p><span>Inovação:</span> Usar tecnologia moderna para melhorar cada vez mais nossos serviços.</p>
+          <p><span>Segurança:</span> Simplicidade: Criar soluções fáceis de usar e entender.</p>
+          <p><span>Compromisso:</span> Estar sempre ao lado do cliente, buscando os melhores resultados.</p>
+        </div>
+      </div>    
+    </div>
+  
+    <div class="divcontainer_servico" id="servico">
+      <div class="div_filho_servico">
+          <h1>SERVIÇOS</h1>
+          <p>Somos especialistas na vigilânicia 
+             das condições físicas do ambiente de
+             data center.<br>
+             O monitoramento de temperatura e 
+             umidade é essencial para manter a 
+             integridade dos equipamentos e
+             garantir a eficiência operacional.<br>
+             Utilizamos sensores de alta precisão 
+             para fornecer dados em tempo real,
+             permitindo que você tome decisões 
+             e evite falhas críticas.<br> 
+             Nossa equipe está pronta para ajudar 
+             na implementação e manutenção do 
+             sistema de monitormamento.</p>
+      </div>
+      <div class="div_filho_servico_img">
+      </div>
+ </div>
+
+ <div class="div_container_pai_fale" id="fale">
+  <div class="div_filho_fale">
+      <h6>FALE CONOSCO</h6>
+      <span>0000-00090000</span>
+      <p>Horário de atendimento: das 8:00 às 20:00<br>
+      <i class='bx bxl-whatsapp'></i>(11) 00000-0000<br>
+      <i class='bx bx-envelope' ></i> fale_conosco@observer.com.br</p>
+  </div>
+  <div class="div_container_pai_dados">
+      <div class="div_filho_dados">
+      <p>Seu Nome:</p>
+      <span><input type="text" name="nome" id="nome"  placeholder="Nome completo"></span><br><br>
+       <p>E-mail:</p>
+      <span><input type="text" name="email" id="email" placeholder="email completo"></span><br><br>
+      <p>Mensagem:</p>
+      <span><textarea type="text" name="mensagem" id="mensagem" rows="8" cols="300" placeholder="Mensagem"></textarea></span><br>
+
+      <button ondblclick="enviar()" class="enviar">ENVIAR</button>
+      
+    </div>
+</div> 
+ </div>
+
+  <footer>
+    <div class="container_rodape">
+      <div class="logo"> <img src="logo.png" alt="Logo da Observer" width="100%">
+      </div>
+      <div class="menu_rodape">
+        <ul>
+          <span>Menu</span>
+          <li><a href="">Home</a></li>
+          <li><a href="">Simulador</a></li>
+          <li><a href="">Fale Conosco</a></li>
+        </ul>
+
+        <ul>
+          <span>Termos</span>
+          <li><a href="">Política de Privacidade</a></li>
+          <li><a href="">Termos e Condições</a></li>
+        </ul>
+
+        <ul>
+          <span>Empresa</span>
+          <li><a href="">Sobre Nós</a></li>
+          <li><a href="">Serviço</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="linha_rodape">
+      <p> Rua Haddock Lobo, 595 - Cerqueira César, São Paulo - SP, 01414-001</p>
+    </div>
+  </footer>
+</body>
+
+<script>
+  function calc() {
+    if (inp_name.value == '' || inp_parado.value == '' || inp_numRacks.value == '' || inp_server.value == '') {
+      alert("Favor, preencha todos os campos.");
+    } else {
+      var nome = inp_name.value;
+      var parado = Number(inp_parado.value);
+      var rack = Number(inp_numRacks.value);
+      var server = Number(inp_server.value);
+
+      if (parado < 0 || rack < 0 || server < 0) {
+        alert("Valores negativos não são permitidos.");
+      } else {
+        var minutosParado = parado;
+        var perdaFinanceira = minutosParado * 53000 * 60;
+        var tot_server = rack * server;
+        var preco_servidor = 50000;
+        var gasto_tot_server = tot_server * preco_servidor;
+        var preco_sensor_por_rack = 1800;
+        var custo_instalacao = rack * preco_sensor_por_rack;
+        var tot_ano = gasto_tot_server * 0.5;
+        var mensal = tot_ano / 12;
+        var economia = gasto_tot_server - tot_ano;
+
+        tela.innerHTML = `
+        A empresa <b>${nome}</b> deixou de ganhar até <u>R$${perdaFinanceira.toFixed(2)}</u> por ter ficado <u>${parado}</u> horas em downtime.<br><br>
+        A <b>${nome}</b> investirá <u>R$${custo_instalacao.toFixed(2)}</u> na instalação dos sensores. Assinando nosso serviço por <u>R$${mensal.toFixed(2)}/mês</u>, economizará <u>R$${economia.toFixed(2)}</u> em um ano.<br><br>
+        Pois paga <u>R$${tot_ano.toFixed(2)}/ano</u> para evitar um gasto de <u>R$${gasto_tot_server.toFixed(2)}</u> com reposições de servidores.
+        <br><br>
+        <b>Você sabia?</b>
+        <br>
+        Interrupções de serviço podem custar até R$ 3.180.000 por hora (especialmente no e-commerce).<br><br>
+        A vida útil dos servidores pode ser reduzida sem monitoramento adequado, gerando gastos desnecessários.<br><br>
+        60% das empresas ainda utilizam métodos manuais ou reativos para identificar falhas (ABRADI, 2023).<br><br>
+        <p><u><b>Nós da Observer resolvemos o seu problema!!</b></u></p>
+        `;
+        tela.style.display = "block";
+        tela.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }
+</script>
+
+</html>
