@@ -70,6 +70,10 @@ body {
   border-bottom: none;
 }
 
+.barra-separacao  {
+  color: white;
+}
+
 .divcontainer_inicio {
   display: flex;
   width: 100%;
@@ -145,8 +149,9 @@ body {
 }
 
 .input p {
-  font-size: 13px;
-  margin-bottom: 10px;
+  font-size: 17px;
+  margin-bottom: 20px;
+  margin-top: 20px;
   color: var(--cor_branco);
 }
 
@@ -194,7 +199,7 @@ body {
 }
 
 .btn_calc:hover {
-  background-color: var(--cor_decoration_escuro);
+  background-color: #49d8f1;
 }
 
 #tela {
@@ -207,6 +212,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   display: none;
+  padding: 30px;
 }
 
 #tela b {
@@ -369,6 +375,7 @@ footer {
   align-items: center;
   gap: 40px;
   flex-wrap: wrap;
+  margin-bottom: 30px;
 }
 
 .container_rodape .logo {
@@ -503,4 +510,8 @@ footer {
 
 .enviar:hover {
   background-color: var(--cor_decoration);
+}
+
+.bxs-user-circle {
+  margin-left: 20px;
 }

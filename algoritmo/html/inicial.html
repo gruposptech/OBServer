@@ -6,21 +6,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Observer: Home</title>
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-  <link rel="stylesheet" href="inicio.css">
+  <link rel="stylesheet" href="../css/inicio.css">
 </head>
 
 <body>
   <div class="container_menu">
-    <div class="logo"> <img src="logo.png" alt="Logo da Observer" width="100%">
+    <div class="logo"> <img src="../img/logo.png" alt="Logo da Observer" width="70%">
     </div>
     <ul>
       <li><a href="#home">Home</a></li>
       <li><a href="#calc">Simulador</a></li>
       <li><a href="#sobrenos">Sobre Nós</a></li>
-      <li><a href="#servico">Serviço</a></li>
+      <li><a href="#servico">Serviços</a></li>
       <li><a href="#fale">Fale Conosco</a></li>
+      <span class="barra-separacao">|</span>
       <span>
-        <li><a href="">| <i class='bx bxs-user-circle'></i> Painel do Cliente</a></li>
+        <li><a class="painel-cliente" href="login.html"><i class='bx bxs-user-circle'></i> Painel do Cliente</a></li>
       </span>
     </ul>
   </div>
@@ -42,37 +43,25 @@
 
   <div class="container_calculadora" id="calc">
     <h3>TESTE NOSSO SIMULADOR FINANCEIRO</h3>
-    <h5>Avalia-se em nosso simulador</h5>
+    <h5>Avalie-se em nosso simulador</h5>
     <div class="calculadora">
 
       <div class="input">
         <div class="quadro E"></div>
         <p><b>Olá, qual o nome da sua empresa?</b></p>
-        <input type="text" id="inp_name" placeholder="insira aqui">
-      </div>
-
-
-      <div class="input">
+        <input type="text" id="inp_name" placeholder="INSIRA AQUI">
         <div class="quadro R"></div>
         <p><b>Quantas horas seu serviço ficou parado (Downtime) no ano passado?</b></p>
-        <input type="text" id="inp_parado" placeholder="insira aqui">
-      </div>
-
-
-
-      <div class="input">
+        <input type="text" id="inp_parado" placeholder="INSIRA AQUI">
         <div class="quadro E"></div>
         <p><b>Qual a quantidade de racks na sua empresa?</b></p>
-        <input type="text" id="inp_numRacks" placeholder="insira aqui">
-      </div>
-
-      <div class="input">
+        <input type="text" id="inp_numRacks" placeholder="INSIRA AQUI">
+    
         <p><b>Qual a quantidade de servidores por rack?</b></p>
-        <input type="text" id="inp_server" placeholder="insira aqui">
+        <input type="text" id="inp_server" placeholder="INSIRA AQUI">
+        <br><br>
+        <button class="btn_calc" onclick="calc()">Benefícios</button>
       </div>
-
-
-      <button class="btn_calc" onclick="calc()">Benefícios</button>
 
       <div id="tela"></div>
     </div>
@@ -177,7 +166,7 @@
 
   <footer>
     <div class="container_rodape">
-      <div class="logo"> <img src="logo.png" alt="Logo da Observer" width="100%">
+      <div class="logo"> <img src="/img/logo.png" alt="Logo da Observer" width="50%">
       </div>
       <div class="menu_rodape">
         <ul>
@@ -231,9 +220,9 @@
         var economia = gasto_tot_server - tot_ano;
 
         tela.innerHTML = `
-        A empresa <b>${nome}</b> deixou de ganhar até <u>R$${perdaFinanceira.toFixed(2)}</u> por ter ficado <u>${parado}</u> horas em downtime.<br><br>
-        A <b>${nome}</b> investirá <u>R$${custo_instalacao.toFixed(2)}</u> na instalação dos sensores. Assinando nosso serviço por <u>R$${mensal.toFixed(2)}/mês</u>, economizará <u>R$${economia.toFixed(2)}</u> em um ano.<br><br>
-        Pois paga <u>R$${tot_ano.toFixed(2)}/ano</u> para evitar um gasto de <u>R$${gasto_tot_server.toFixed(2)}</u> com reposições de servidores.
+        A empresa <b>${nome}</b> deixou de ganhar até <u>${perdaFinanceira.toLocaleString('pt-BR', {style:"currency", currency: 'BRL'})}</u> por ter ficado <u>${parado}</u> horas em downtime.<br><br>
+        A <b>${nome}</b> investirá <u>${custo_instalacao.toLocaleString('pt-BR', {style:"currency", currency: 'BRL'})}</u> na instalação dos sensores. Assinando nosso serviço por <u>${mensal.toLocaleString('pt-BR', {style:"currency", currency: 'BRL'})}/mês</u>, economizará <u>${economia.toLocaleString('pt-BR', {style:"currency", currency: 'BRL'})}</u> em um ano.<br><br>
+        Pois paga <u>${tot_ano.toLocaleString('pt-BR', {style:"currency", currency: 'BRL'})}/ano</u> para evitar um gasto de <u>${gasto_tot_server.toLocaleString('pt-BR', {style:"currency", currency: 'BRL'})}</u> com reposições de servidores.
         <br><br>
         <b>Você sabia?</b>
         <br>
