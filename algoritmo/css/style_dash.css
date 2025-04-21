@@ -81,7 +81,7 @@
     padding: 10px;
     border-radius: 4px;
     cursor: pointer;
-    margin-bottom: 20px;
+    margin-bottom: 1px;
 }
 
 .conteudo-principal {
@@ -318,8 +318,13 @@
 .engrenagem{
     width: 229px;
     height: 30px;
-    font-size: 16px;
+    font-size: 13px;
     line-height: 40px; 
     text-align: center;
     display: inline-block;
+}
+
+.txt-btn-sair {
+    text-decoration: none;
+    color: white;
 }
