@@ -41,16 +41,23 @@
 
             <div class="secao-filtro">
                 <h3 class="titulo-filtro">Localização:</h3>
+
+                <!-- 
+                    quando um input está marcado, ele aciona a função trocaTitulo()
+                    o parâmetro this serve para conseguirmos acessar os parametros do input dentro dessa função,
+                    como id, name, class, etc   
+                -->
+
                 <div class="opcao-filtro">
-                    <input type="checkbox" id="sala-1" name="sala-1" checked>
+                    <input type="checkbox" id="sala-1" name="sala-1" checked class="checkbox-sala" onchange="trocaTitulo(this)">
                     <label for="sala-1">Datacenter Principal</label>
                 </div>
                 <div class="opcao-filtro">
-                    <input type="checkbox" id="sala-2" name="sala-2">
+                    <input type="checkbox" id="sala-2" name="sala-2" class="checkbox-sala" onchange="trocaTitulo(this)">
                     <label for="sala-2">Sala de Backup</label>
                 </div>
                 <div class="opcao-filtro">
-                    <input type="checkbox" id="sala-3" name="sala-3">
+                    <input type="checkbox" id="sala-3" name="sala-3" class="checkbox-sala" onchange="trocaTitulo(this)">
                     <label for="sala-3">Sala de Servidores A</label>
                 </div>
             </div>
@@ -61,7 +68,7 @@
 
         <div class="conteudo-principal">
             <div class="cabecalho">
-                <h1>Monitoramento de Temperatura e Umidade - Datacenter Principal</h1>
+                <h1>Monitoramento de Temperatura e Umidade - <span id="nome-sala-titulo"></span></h1>
                 <div class="data-hora" id="data-hora"></div>
             </div>
 
