@@ -22,7 +22,6 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
-    border-right: 2px solid #673ab7;
 }
 
 .secao-logo {
@@ -90,6 +89,12 @@
     border-radius: 4px;
     cursor: pointer;
     margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.botao-sair:hover {
+    background-color: red;
+    transform: scale(1.03);
 }
 
 /* Main Content */
@@ -315,31 +320,52 @@
     margin-bottom: 10px;
 }
 
-.secao-niveis .container-itens-niveis {
+.container-itens-niveis {
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
     gap: 10px;
 }
 
 .item-nivel {
-    flex: 1;
     background-color: #22344e;
     border-radius: 6px;
     padding: 6px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     border: none;
+    height: 70px;
 }
 
-.item-nivel p {
-    margin: 5px 0 3px;
-    font-size: 11px;
+.item-nivel-icone-titulo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-right: 5%;
 }
 
-.item-nivel small {
-    font-size: 9px;
-    line-height: 1.1;
+.item-nivel-icone-titulo img {
+    height: 20px;
+    width: 20px;
+}
+
+.item-nivel-titulo {
+    font-weight: bold;
+    font-size: 0.7rem;
+    margin-top: 10px;
+}
+
+.item-nivel-titulo-emergencia {
+    font-size: 0.6rem;
+}
+
+.item-nivel-descricao {
+    text-align: center;
+    width: 200px;
+    font-weight: bold;
+    font-size: 0.8rem;
 }
 
 
@@ -359,6 +385,12 @@
     border-radius: 4px;
     margin-top: auto;
     cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.botao-historico:hover {
+    transform: scale(1.03);
+    background-color: #3A8BA1;
 }
 
 /* Icons */
