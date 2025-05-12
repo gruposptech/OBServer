@@ -8,9 +8,8 @@ function exibeDataHora() {
     const data = new Date();
 
     // inserindo a data e hora formatadas para o nosso local (pt-BR) na div que selecionei
-    divDataHora.innerHTML = `${data.toLocaleDateString(
-      "pt-BR"
-    )} - ${data.toLocaleTimeString("pt-BR")}`;
+    divDataHora.innerHTML = `${data.toLocaleDateString("pt-BR"
+)} - ${data.toLocaleTimeString("pt-BR")}`;
   }, 1000);
 }
 
