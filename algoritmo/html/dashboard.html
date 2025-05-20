@@ -61,6 +61,14 @@
                     <input type="checkbox" id="sala-3" name="sala-3" class="checkbox-sala" onchange="trocaTitulo(this)">
                     <label for="sala-3">Sala de Servidores A</label>
                 </div>
+                 <div class="opcao-filtro">
+                    <input type="checkbox" id="sala-4" name="sala-4" class="checkbox-sala" onchange="trocaTitulo(this)">
+                    <label for="sala-3">Sala de Servidores B</label>
+                </div>
+                 <div class="opcao-filtro">
+                    <input type="checkbox" id="sala-5" name="sala-5" class="checkbox-sala" onchange="trocaTitulo(this)">
+                    <label for="sala-3">Sala de Servidores C</label>
+                </div>
             </div>
             <br>
 
@@ -107,6 +115,7 @@
                     </h3>
                     <div class="valor">há 5 segundos</div>
                 </div>
+                
                 <div class="cartao-status">
                     <h3>
                         Sensores Inativos
@@ -163,6 +172,16 @@
                     </div>
                 </div>
                 <div class="item-alerta">
+                    <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Atenção" class="icone-status">
+                    <div class="conteudo-alerta">
+                        <div class="hora-alerta">22/04/2025 - 17h00</div>
+                        <div class="local-alerta">Datacenter Principal - Rack 08 - Sensor B</div>
+                        <div class="tipo-alerta">Alerta de Temperatura</div>
+                        <div class="valor-alerta">T: 28,5°</div>
+                        <button class="botao-acao" onclick="registrarAcao(this)">Alterar Status</button>
+                    </div>
+                </div>
+                    <div class="item-alerta">
                     <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Atenção" class="icone-status">
                     <div class="conteudo-alerta">
                         <div class="hora-alerta">22/04/2025 - 17h00</div>
