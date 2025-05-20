@@ -1,88 +1,371 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro</title>
-    <link rel="stylesheet" href="../css/cadastro_e_login.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OBServer: Cadastro</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+
+        :root {
+            --cor_preto: #000000;
+            --cor_branco: #ffffff;
+            --cor_decoration: #0cc0df;
+            --cor_decoration_escuro: #0e1427;
+        }
+
+
+        body {
+            font-family: "Outfit", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--cor_decoration_escuro);
+        }
+
+        .titulo {
+            font-weight: 800;
+            color: var(--cor_branco);
+            margin-bottom: 0;
+            font-size: 25px;
+            text-align: center;
+            font-size: 2.2em;
+        }
+
+        .container_cadastro {
+            width: 50vw;
+            height: 80vh;
+            margin: auto;
+            background: #fff;
+            padding: 30px 60px;
+        }
+
+        .linha_progresso {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .linha_progresso::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            right: 10px;
+            height: 4px;
+            background: #ccc;
+            transform: translateY(-50%);
+        }
+
+        .linha_cor {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            height: 4px;
+            background: var(--cor_decoration);
+            transform: translateY(-50%);
+            transition: width 0.3s ease;
+        }
+
+        .bolinha {
+            width: 20px;
+            height: 20px;
+            background: #ccc;
+            position: relative;
+        }
+
+        form{
+            text-align: center;
+            width: 100%;
+        }
+
+        .input {
+            width: 80%;
+            padding: 8px;
+            margin-bottom: 12px;
+            border: 1px solid var(--cor_decoration);
+            outline: none;
+
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        .secoes_form {
+            display: none;
+        }
+
+        .btn_nav {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .btn_nav button {
+            background-color: var(--cor_decoration_escuro);
+            color: var(--cor_branco);
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 20px;
+           font-family: "Outfit", sans-serif;
+        }
+
+        .btn_nav button:hover {
+            background-color: var(--cor_decoration);
+        }
+
+.btn_func{
+                background-color: var(--cor_decoration_escuro);
+            color: var(--cor_branco);
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 20px;
+           font-family: "Outfit", sans-serif;
+}
+   
+        .btn_func:hover {
+            background-color: var(--cor_decoration);
+        }
+
+        #final_sec{
+          text-align: center;
+                      margin: 25% 0;
+        }
+
+        
+        #final_sec h2{
+            font-size: 1.6em;
+            color: var(--cor_decoration);
+        }
+
+        #final_sec p{
+         font-size: 1.2em;
+        }
+    </style>
 </head>
-<body class="corpo">
-    <hr size="4px" color="#0cc0df" class="linha-cima-cadastro"></hr>
-   <div class="containerAll containerAllCadastro">
-        <div class="containerImagem">
-            <img src="../img/logo.png" class="imagem-logo-cadastro">
+
+<body>
+    <h1 class="titulo">CADASTRO</h1>
+    <section class="container_cadastro">
+        <div class="linha_progresso">
+            <div class="linha_cor" id="barra_progresso"></div>
+            <div class="bolinha" id="etapa_empresa"></div>
+            <div class="bolinha" id="etapa_cliente"></div>
+            <div class="bolinha" id="etapa_final"></div>
         </div>
-        <div class="container-cadastro">
-           <h1 class="titulo">Cadastro</h1>
-           <span class="linha-fina linha-fina-cadastro"></span>
 
-           <label for="iptNome" class="label label-nome">Nome</label>
-           <input type="text" class="input campo-nome" id="iptNome" placeholder="">
-           <label for="iptCNPJ" class="label">CNPJ</label>
-           <input type="text" class="input campo-cnpj" id="iptCNPJ" placeholder="XX.XXX.XXX/0001-XX">
-           <label for="iptEmail" class="label">Email</label>
-           <input type="text" class="input campo-email" id="iptEmail" placeholder="">
-           <label for="iptTelefone" class="label">Telefone</label>
-           <input type="text" class="input campo-telefone" id="iptTelefone" placeholder="(xx)x xxxx-xxxx">
-           <label for="iptSenha" class="label">Senha</label>
-           <input type="password" class="input campo-senha" id="iptSenha" placeholder="">
-           <label for="iptConfirmacaoSenha" class="label">Confirme a senha</label>
-           <input type="password" class="input campo-confirm" id="iptConfirmacaoSenha" placeholder="">
-           <label for="iptCodigo" class="label">Código de confirmação</label>
-           <input type="text" class="input campo-codigo" id="iptCodigo" placeholder="">
-            <h3><a href="login.html" class="sou-cadastrado">Já possuo cadastro</a></h3>
-            <button onclick="cadastro()" class="botao botao-criar-conta">CRIAR</button>
+        <div class="container_formulario">
+            <form id="formulario">
+                <div class="secoes_form" id="empresa_sec">
+                    <label class="label">Nome da Empresa:</label><br>
+                    <input type="text" class="input" id="iptNomeEmpresa"><br>
+
+                    <label class="label">CNPJ:</label><br>
+                    <input type="text" class="input" id="iptCNPJ"><br>
+
+                    <label class="label">Email:</label><br>
+                    <input type="text" class="input" id="iptEmail"><br>
+
+                    <label class="label">Telefone:</label><br>
+                    <input type="text" class="input" id="iptTelefone"><br>
+
+                    <label class="label">Senha:</label><br>
+                    <input type="password" class="input" id="iptSenha"><br>
+
+                    <label class="label">Confirme a senha:</label><br>
+                    <input type="password" class="input" id="iptConfirmacaoSenha"><br>
+
+                    <label class="label">Código de confirmação:</label><br>
+                    <input type="text" class="input" id="iptCodigo">
+                </div>
+
+                <div class="secoes_form" id="funcionario_sec">
+                    <label class="label">Nome do Usuário:</label><br>
+                    <input type="text" class="input" id="iptNomeUser"><br>
+
+                    <label class="label">Email:</label><br>
+                    <input type="text" class="input" id="iptEmailUser"><br>
+
+                    <label class="label">Senha:</label><br>
+                    <input type="password" class="input" id="iptSenhaUser"><br>
+
+                    <label class="label">Confirme a senha:</label><br>
+                    <input type="password" class="input" id="iptConfirmacaoSenhaUser"><br>
+
+                    <label class="label">Cargo:</label><br>
+                    <input type="text" class="input" id="iptCargo"><br>
+                    <button type="button" class="btn_func" onclick="adicionarFuncionario()">Adicionar Funcionário</button>
+                </div>
+
+                <div class="secoes_form" id="final_sec">
+                    <h2>Cadastro Concluído!!</h2>
+                    <p> Acesse novamente pelo login para ter acesso ao seu painel</p>
+                </div>
+
+                <div class="btn_nav" id="btn">
+                    <button  type="button" onclick="voltar()">Anterior</button>
+                    <button type="button" onclick="avancar()">Próximo</button>
+                </div>
+            </form>
         </div>
-    </div>
-    <hr size="4px" color="#0cc0df" class="linha-baixo-cadastro"></hr>
-</body>
-</html>
-<script>
-    var nome = '';
-    var cnpj = '';
-    var email = '';
-    var telefone = '';
-    var senha = '';
-    var confirmacaoSenha = '';
-    var codigo = '';
-    var todosIguais = true;
+    </section><script>
+    var etapa = 1;
 
-    function cadastro () {  
-        nome = iptNome.value.toLowerCase();
-        cnpj = iptCNPJ.value.toLowerCase();
-        email = iptEmail.value.toLowerCase();
-        telefone = iptTelefone.value.toLowerCase();
-        senha = iptSenha.value.toLowerCase();
-        confirmacaoSenha = iptConfirmacaoSenha.value.toLowerCase();
-        codigo = iptCodigo.value.toLowerCase();
+    function mostrar() {
+        document.getElementById("empresa_sec").style.display = "none";
+        document.getElementById("funcionario_sec").style.display = "none";
+        document.getElementById("final_sec").style.display = "none";
 
-        if (nome == '' || cnpj == '' || email == '' || telefone == '' || senha == '' || confirmacaoSenha == '' || codigo == '' ) {
-            alert('Todos os campos precisam ser preenchidos!');
-        } else if (senha != confirmacaoSenha) {
-            alert('Senhas não coincidem.');
-        } else if (cnpj.length != 14) {
-            alert('CNPJ inválido!')
-        } else if (telefone.length != 11) {
-            alert('Telefone inválido!')
-        } else if (senha.length < 5) {
-            alert('A senha precisa ter pelo menos 5 dígitos!')
-        } else if (codigo.length > 5 || codigo.length < 5 || codigo != 'ab3de') {
-            alert('Código inválido!')
-        } else if (!email.includes("@")) {
-            alert('Email inválido!')
-        } else if (todosIguais) {
-            for (let i = 0; i < cnpj.length; i++) {
+        document.getElementById("etapa_empresa").style.background = "#ccc";
+        document.getElementById("etapa_cliente").style.background = "#ccc";
+        document.getElementById("etapa_final").style.background = "#ccc";
+
+        var barra = document.getElementById("barra_progresso");
+
+        if (etapa == 1) {
+            document.getElementById("empresa_sec").style.display = "block";
+            document.getElementById("etapa_empresa").style.background = "#0cc0df";
+            barra.style.width = "0%";
+        }
+
+        if (etapa == 2) {
+            var nome = iptNomeEmpresa.value.toLowerCase();
+            var cnpj = iptCNPJ.value.toLowerCase();
+            var email = iptEmail.value.toLowerCase();
+            var telefone = iptTelefone.value.toLowerCase();
+            var senha = iptSenha.value.toLowerCase();
+            var confirmacaoSenha = iptConfirmacaoSenha.value.toLowerCase();
+            var codigo = iptCodigo.value.toLowerCase();
+            var valido_empresa = true;
+            var todosIguais = true;
+
+            if (nome == '' || cnpj == '' || email == '' || telefone == '' || senha == '' || confirmacaoSenha == '' || codigo == '') {
+                alert('Todos os campos da empresa precisam ser preenchidos!');
+                valido_empresa = false;
+            }
+
+            if (senha != confirmacaoSenha) {
+                alert('Senhas da empresa não coincidem.');
+                valido_empresa = false;
+            }
+
+            if (cnpj.length != 14) {
+                alert('CNPJ inválido!');
+                valido_empresa = false;
+            }
+
+            if (telefone.length != 11) {
+                alert('Telefone inválido!');
+                valido_empresa = false;
+            }
+
+            if (senha.length < 5) {
+                alert('A senha da empresa precisa ter pelo menos 5 dígitos!');
+                valido_empresa = false;
+            }
+
+            if (codigo.length != 5 || codigo != 'ab3de') {
+                alert('Código inválido!');
+                valido_empresa = false;
+            }
+
+            if (!email.includes("@")) {
+                alert('Email da empresa inválido!');
+                valido_empresa = false;
+            }
+
+            for (var i = 0; i < cnpj.length; i++) {
                 if (cnpj[i] != cnpj[0]) {
                     todosIguais = false;
-                    break;
                 }
             }
+
             if (todosIguais) {
-                alert('Todos os números não podem ser iguais!')
+                alert('Todos os números do CNPJ não podem ser iguais!');
+                valido_empresa = false;
             }
-        } else {
-            alert('Cadastro realizado! Seja bem-vindo(a)!');
-            window.location.href = 'login.html';
+
+            if (valido_empresa) {
+                document.getElementById("funcionario_sec").style.display = "block";
+                document.getElementById("etapa_empresa").style.background = "#0cc0df";
+                document.getElementById("etapa_cliente").style.background = "#0cc0df";
+                barra.style.width = "50%";
+            } else {
+                etapa = 1;
+                mostrar();
+            }
         }
-    } 
+
+        if (etapa == 3) {
+            var nomeUser = iptNomeUser.value.toLowerCase();
+            var emailUser = iptEmailUser.value.toLowerCase();
+            var senhaUser = iptSenhaUser.value.toLowerCase();
+            var confirmacaoSenhaUser = iptConfirmacaoSenhaUser.value.toLowerCase();
+            var cargo = iptCargo.value.toLowerCase();
+            var valido_funcionario = true;
+
+            if (nomeUser == '' || emailUser == '' || senhaUser == '' || confirmacaoSenhaUser == '' || cargo == '') {
+                alert('Todos os campos do funcionário precisam ser preenchidos!');
+                valido_funcionario = false;
+            }
+
+            if (!emailUser.includes("@")) {
+                alert('Email do funcionário inválido!');
+                valido_funcionario = false;
+            }
+
+            if (senhaUser != confirmacaoSenhaUser) {
+                alert('Senhas do funcionário não coincidem!');
+                valido_funcionario = false;
+            }
+
+            if (senhaUser.length < 5) {
+                alert('A senha do funcionário precisa ter no mínimo 5 caracteres!');
+                valido_funcionario = false;
+            }
+
+            if (valido_funcionario) {
+                document.getElementById("final_sec").style.display = "block";
+                document.getElementById("etapa_empresa").style.background = "#0cc0df";
+                document.getElementById("etapa_cliente").style.background = "#0cc0df";
+                document.getElementById("etapa_final").style.background = "#0cc0df";
+                document.getElementById("btn").style.display = "none";
+                barra.style.width = "98%";
+            } else {
+                etapa = 2;
+                mostrar();
+            }
+        }
+    }
+
+    function avancar() {
+        etapa = etapa + 1;
+        if (etapa > 3) etapa = 3;
+        mostrar();
+    }
+
+    function voltar() {
+        etapa = etapa - 1;
+        if (etapa < 1) etapa = 1;
+        document.getElementById("btn").style.display = "block";
+        mostrar();
+    }
+
+    mostrar();
 </script>
+
+
+</body>
+
+</html>
