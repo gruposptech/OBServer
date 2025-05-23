@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>OBServer: Cadastro</title>
+		<link rel="stylesheet" href="../css/cadastro.css" />
+	</head>
+
+	<body>
+		<h1 class="titulo">CADASTRO</h1>
+		<section class="container_cadastro">
+			<div class="linha_progresso">
+				<div class="linha_cor" id="barra_progresso"></div>
+				<div class="bolinha" id="etapa_empresa"></div>
+				<div class="bolinha" id="etapa_cliente"></div>
+				<div class="bolinha" id="etapa_final"></div>
+			</div>
+
+			<div class="container_formulario">
+				<form id="formulario">
+					<div class="secoes_form" id="empresa_sec">
+						<label class="label">Nome da Empresa:</label><br />
+						<input type="text" class="input" id="iptNomeEmpresa" /><br />
+
+						<label class="label">CNPJ:</label><br />
+						<input type="text" class="input" id="iptCNPJ" /><br />
+
+						<label class="label">Email:</label><br />
+						<input type="text" class="input" id="iptEmail" /><br />
+
+						<label class="label">Telefone:</label><br />
+						<input type="text" class="input" id="iptTelefone" /><br />
+
+						<label class="label">Senha:</label><br />
+						<input type="password" class="input" id="iptSenha" /><br />
+
+						<label class="label">Confirme a senha:</label><br />
+						<input type="password" class="input" id="iptConfirmacaoSenha" /><br />
+
+						<label class="label">Código de confirmação:</label><br />
+						<input type="text" class="input" id="iptCodigo" />
+					</div>
+
+					<div class="secoes_form" id="funcionario_sec">
+						<label class="label">Nome do Usuário:</label><br />
+						<input type="text" class="input" id="iptNomeUser" /><br />
+
+						<label class="label">Email:</label><br />
+						<input type="text" class="input" id="iptEmailUser" /><br />
+
+						<label class="label">Senha:</label><br />
+						<input type="password" class="input" id="iptSenhaUser" /><br />
+
+						<label class="label">Confirme a senha:</label><br />
+						<input type="password" class="input" id="iptConfirmacaoSenhaUser" /><br />
+
+						<label class="label">Cargo:</label><br />
+						<input type="text" class="input" id="iptCargo" /><br />
+						<button type="button" class="btn_func" onclick="adicionarFuncionario()">Adicionar Funcionário</button>
+					</div>
+
+					<div class="secoes_form" id="final_sec">
+						<h2>Cadastro Concluído!!</h2>
+						<p>Acesse novamente pelo login para ter acesso ao seu painel</p>
+					</div>
+
+					<div class="btn_nav" id="btn">
+						<button type="button" onclick="voltar()">Anterior</button>
+						<button type="button" onclick="avancar()">Próximo</button>
+					</div>
+				</form>
+			</div>
+		</section>
+		<script>
+			var etapa = 1;
+
+			function mostrar() {
+				document.getElementById('empresa_sec').style.display = 'none';
+				document.getElementById('funcionario_sec').style.display = 'none';
+				document.getElementById('final_sec').style.display = 'none';
+
+				document.getElementById('etapa_empresa').style.background = '#ccc';
+				document.getElementById('etapa_cliente').style.background = '#ccc';
+				document.getElementById('etapa_final').style.background = '#ccc';
+
+				var barra = document.getElementById('barra_progresso');
+
+				if (etapa == 1) {
+					document.getElementById('empresa_sec').style.display = 'block';
+					document.getElementById('etapa_empresa').style.background = '#0cc0df';
+					barra.style.width = '0%';
+				}
+
+				if (etapa == 2) {
+					var nome = iptNomeEmpresa.value.toLowerCase();
+					var cnpj = iptCNPJ.value.toLowerCase();
+					var email = iptEmail.value.toLowerCase();
+					var telefone = iptTelefone.value.toLowerCase();
+					var senha = iptSenha.value.toLowerCase();
+					var confirmacaoSenha = iptConfirmacaoSenha.value.toLowerCase();
+					var codigo = iptCodigo.value.toLowerCase();
+					var valido_empresa = true;
+					var todosIguais = true;
+
+					if (nome == '' || cnpj == '' || email == '' || telefone == '' || senha == '' || confirmacaoSenha == '' || codigo == '') {
+						alert('Todos os campos da empresa precisam ser preenchidos!');
+						valido_empresa = false;
+					} else {
+						if (senha != confirmacaoSenha) {
+							alert('Senhas da empresa não coincidem.');
+							valido_empresa = false;
+						} else if (cnpj.length != 14) {
+							alert('CNPJ inválido!');
+							valido_empresa = false;
+						} else if (telefone.length != 11) {
+							alert('Telefone inválido!');
+							valido_empresa = false;
+						} else if (senha.length < 5) {
+							alert('A senha da empresa precisa ter pelo menos 5 dígitos!');
+							valido_empresa = false;
+						} else if (codigo.length != 5 || codigo != 'ab3de') {
+							alert('Código inválido!');
+							valido_empresa = false;
+						} else if (!email.includes('@')) {
+							alert('Email da empresa inválido!');
+							valido_empresa = false;
+						} else if (todosIguais) {
+							for (var i = 0; i < cnpj.length; i++) {
+								if (cnpj[i] != cnpj[0]) {
+									todosIguais = false;
+									console.log('não são todos iguais');
+									break;
+								}
+							}
+							if (todosIguais) {
+								alert('Todos os números do CNPJ não podem ser iguais!');
+								valido_empresa = false;
+							}
+						}
+
+						// Enviando o valor da nova input
+						fetch('/usuarios/cadastrar', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json',
+							},
+							body: JSON.stringify({
+								// crie um atributo que recebe o valor recuperado aqui
+								// Agora vá para o arquivo routes/usuario.js
+								nomeServer: nome,
+								cnpjServer: cnpj,
+								emailServer: email,
+								telefoneServer: telefone,
+								senhaServer: senha,
+								codigoServer: codigo
+							}),
+						})
+							.then(function (resposta) {
+								console.log('resposta: ', resposta);
+
+								if (resposta.ok) {
+									console.log('REDIRECIONANDO PARA A TELA DE LOGIN')
+									setTimeout(() => {
+										window.location = 'login.html';
+									}, '3000');
+								} else {
+									throw 'Houve um erro ao tentar realizar o cadastro!';
+								}
+							})
+							.catch(function (resposta) {
+								console.log(`#ERRO: ${resposta}`);
+							});
+					}
+
+					if (valido_empresa) {
+						document.getElementById('funcionario_sec').style.display = 'block';
+						document.getElementById('etapa_empresa').style.background = '#0cc0df';
+						document.getElementById('etapa_cliente').style.background = '#0cc0df';
+						barra.style.width = '50%';
+					} else {
+						etapa = 1;
+						mostrar();
+					}
+				}
+
+				if (etapa == 3) {
+					var nomeUser = iptNomeUser.value.toLowerCase();
+					var emailUser = iptEmailUser.value.toLowerCase();
+					var senhaUser = iptSenhaUser.value.toLowerCase();
+					var confirmacaoSenhaUser = iptConfirmacaoSenhaUser.value.toLowerCase();
+					var cargo = iptCargo.value.toLowerCase();
+					var valido_funcionario = true;
+
+					if (nomeUser == '' || emailUser == '' || senhaUser == '' || confirmacaoSenhaUser == '' || cargo == '') {
+						alert('Todos os campos do funcionário precisam ser preenchidos!');
+						valido_funcionario = false;
+					} else {
+						if (!emailUser.includes('@')) {
+							alert('Email do funcionário inválido!');
+							valido_funcionario = false;
+						} else if (senhaUser != confirmacaoSenhaUser) {
+							alert('Senhas do funcionário não coincidem!');
+							valido_funcionario = false;
+						} else if (senhaUser.length < 5) {
+							alert('A senha do funcionário precisa ter no mínimo 5 caracteres!');
+							valido_funcionario = false;
+						}
+					}
+
+					if (valido_funcionario) {
+						document.getElementById('final_sec').style.display = 'block';
+						document.getElementById('etapa_empresa').style.background = '#0cc0df';
+						document.getElementById('etapa_cliente').style.background = '#0cc0df';
+						document.getElementById('etapa_final').style.background = '#0cc0df';
+						document.getElementById('btn').style.display = 'none';
+						barra.style.width = '98%';
+					} else {
+						etapa = 2;
+						mostrar();
+					}
+				}
+			}
+
+			function avancar() {
+				etapa = etapa + 1;
+				if (etapa > 3) etapa = 3;
+				mostrar();
+			}
+
+			function voltar() {
+				etapa = etapa - 1;
+				if (etapa < 1) etapa = 1;
+				document.getElementById('btn').style.display = 'block';
+				mostrar();
+			}
+
+			mostrar();
+		</script>
+	</body>
+</html>

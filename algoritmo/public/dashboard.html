@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Monitoramento Observer</title>
+    <link rel="stylesheet" href="../css/style_dash.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</head>
+
+<body>
+    <div class="container-painel">
+        <div class="barra-lateral">
+            <div class="secao-logo">
+                <img src="../img/logo.png" alt="Logo Observer" class="logo">
+            </div>
+            <div class="secao-usuario">
+                <img src="../img/bill.jfif" alt="Foto do Usuário" class="foto-usuario">
+                <h2 class="nome-usuario">João Silva</h2>
+                <p class="cargo-usuario">Analista de Infraestrutura</p>
+                <p class="email-usuario">joao.silva@empresa.com</p>
+            </div>
+
+            <div class="secao-filtro">
+                <h3 class="titulo-filtro">Período de Análise:</h3>
+                <div class="opcao-filtro">
+                    <input type="radio" id="tempo-real" name="radio-periodo" checked>
+                    <label for="tempo-real">Dados recentes</label>
+                </div>
+                <div class="opcao-filtro">
+                    <input type="radio" id="7-dias" name="radio-periodo">
+                    <label for="7-dias">7 dias</label>
+                </div>
+                <div class="opcao-filtro">
+                    <input type="radio" id="15-dias" name="radio-periodo">
+                    <label for="15-dias">15 dias</label>
+                </div>
+            </div>
+
+            <div class="secao-filtro">
+                <h3 class="titulo-filtro">Localização:</h3>
+
+                <!-- 
+                    quando um input está marcado, ele aciona a função trocaTitulo()
+                    o parâmetro this serve para conseguirmos acessar os parametros do input dentro dessa função,
+                    como id, name, class, etc   
+                -->
+
+                <div class="opcao-filtro">
+                    <input type="checkbox" id="sala-1" name="sala-1" checked class="checkbox-sala"
+                        onchange="trocaTitulo(this)">
+                    <label for="sala-1">Datacenter Principal</label>
+                </div>
+                <div class="opcao-filtro">
+                    <input type="checkbox" id="sala-2" name="sala-2" class="checkbox-sala" onchange="trocaTitulo(this)">
+                    <label for="sala-2">Sala de Backup</label>
+                </div>
+                <div class="opcao-filtro">
+                    <input type="checkbox" id="sala-3" name="sala-3" class="checkbox-sala" onchange="trocaTitulo(this)">
+                    <label for="sala-3">Sala de Servidores A</label>
+                </div>
+                 <div class="opcao-filtro">
+                    <input type="checkbox" id="sala-4" name="sala-4" class="checkbox-sala" onchange="trocaTitulo(this)">
+                    <label for="sala-3">Sala de Servidores B</label>
+                </div>
+                 <div class="opcao-filtro">
+                    <input type="checkbox" id="sala-5" name="sala-5" class="checkbox-sala" onchange="trocaTitulo(this)">
+                    <label for="sala-3">Sala de Servidores C</label>
+                </div>
+            </div>
+            <br>
+
+            <button class="botao-sair">Sair</button>
+        </div>
+
+        <div class="conteudo-principal">
+            <div class="cabecalho">
+                <h1>Monitoramento de Temperatura e Umidade - <span id="nome-sala-titulo"></span></h1>
+                <div class="data-hora" id="data-hora"></div>
+            </div>
+
+            <div class="cartoes-status">
+                <div class="cartao-status">
+                    <h3>
+                        Temperatura média
+                        <span class="tooltip">ⓘ
+                            <span class="tooltip-text">A temperatura média é calculada com base em leituras horárias dos
+                                sensores DHT11, considerando o intervalo das últimas 24 horas para representar variações
+                                térmicas ambientais de forma contínua.</span>
+                        </span>
+                    </h3>
+                    <div class="valor">23°C <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="OK"
+                            class="icone-status"></div>
+                </div>
+                <div class="cartao-status">
+                    <h3>
+                        Umidade média
+                        <span class="tooltip">ⓘ
+                            <span class="tooltip-text">A umidade média é obtida a partir da média aritmética das
+                                leituras dos sensores instalados, desconsiderando valores extremos fora da faixa
+                                aceitável para garantir maior confiabilidade na análise ambiental.</span>
+                        </span>
+                    </h3>
+                    <div class="valor">44% <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="OK"
+                            class="icone-status"></div>
+                </div>
+                <div class="cartao-status">
+                    <h3>
+                        Última Atualização
+                        <span class="tooltip">ⓘ
+                            <span class="tooltip-text">Tempo desde a última leitura dos sensores.</span>
+                        </span>
+                    </h3>
+                    <div class="valor">há 5 segundos</div>
+                </div>
+                
+                <div class="cartao-status">
+                    <h3>
+                        Sensores Inativos
+                        <span class="tooltip">ⓘ
+                            <span class="tooltip-text">
+                                <p>Sensor 1 - 3º andar do prédio Alfa, Rua das Tecnologias,
+                                    123, está inativo. Responsável: João Silva (TI Infraestrutura).</p>
+                                <p>Sensor 2 - laboratório ambiental no subsolo do Bloco B, Avenida Inovações, 456, não
+                                    está enviando dados. Responsável: Carla Mendes (Engenharia de Manutenção).
+                                </p>
+                            </span>
+                        </span>
+                    </h3>
+                    <div class="valor">2/60</div>
+                </div>
+            </div>
+
+
+            <div class="container-graficos">
+                <div class="grafico-wrapper">
+                    <h2>TEMPERATURA MÉDIA (°C)</h2>
+                    <canvas id="grafico-temperatura" width="1000" height="250"
+                        style="display: block; margin-left: auto; margin-right: auto;"></canvas>
+                </div>
+                <div class="grafico-wrapper">
+                    <h2>UMIDADE MÉDIA (%)</h2>
+                    <canvas id="grafico-umidade" width="1000" height="250"
+                        style="display: block; margin-left: auto; margin-right: auto;"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="secao-alertas">
+            <h2>ALERTAS ATIVOS</h2>
+            <div class="lista-alertas">
+                <div class="item-alerta">
+                    <img src="https://cdn-icons-png.flaticon.com/512/753/753345.png" alt="Emergência"
+                        class="icone-status">
+                    <div class="conteudo-alerta">
+                        <div class="hora-alerta">22/04/2025 - 17h30</div>
+                        <div class="local-alerta">Datacenter Principal - Rack 05 - Sensor C</div>
+                        <div class="tipo-alerta">Alerta de Temperatura</div>
+                        <div class="valor-alerta">T: 31,2°</div>
+                        <button class="botao-acao" onclick="registrarAcao(this)">Alterar Status</button>
+                    </div>
+                </div>
+                <div class="item-alerta">
+                    <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Atenção" class="icone-status">
+                    <div class="conteudo-alerta">
+                        <div class="hora-alerta">22/04/2025 - 17h15</div>
+                        <div class="local-alerta">Datacenter Principal - Rack 02 - Sensor A</div>
+                        <div class="tipo-alerta">Alerta de Umidade</div>
+                        <div class="valor-alerta">U: 38%</div>
+                        <button class="botao-acao" onclick="registrarAcao(this)">Alterar Status</button>
+                    </div>
+                </div>
+                <div class="item-alerta">
+                    <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Atenção" class="icone-status">
+                    <div class="conteudo-alerta">
+                        <div class="hora-alerta">22/04/2025 - 17h00</div>
+                        <div class="local-alerta">Datacenter Principal - Rack 08 - Sensor B</div>
+                        <div class="tipo-alerta">Alerta de Temperatura</div>
+                        <div class="valor-alerta">T: 28,5°</div>
+                        <button class="botao-acao" onclick="registrarAcao(this)">Alterar Status</button>
+                    </div>
+                </div>
+                    <div class="item-alerta">
+                    <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Atenção" class="icone-status">
+                    <div class="conteudo-alerta">
+                        <div class="hora-alerta">22/04/2025 - 17h00</div>
+                        <div class="local-alerta">Datacenter Principal - Rack 08 - Sensor B</div>
+                        <div class="tipo-alerta">Alerta de Temperatura</div>
+                        <div class="valor-alerta">T: 28,5°</div>
+                        <button class="botao-acao" onclick="registrarAcao(this)">Alterar Status</button>
+                    </div>
+                </div>
+            </div>
+            <button class="botao-historico">Histórico de Alertas</button>
+            <div class="secao-niveis">
+                <h2>LEGENDA <br>NÍVEIS DE MONITORAMENTO</h2>
+                <div class="container-itens-niveis">
+                    <div class="item-nivel">
+                        <div class="item-nivel-icone-titulo">
+                            <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="Normal"
+                                class="icone-status">
+                            <p class="item-nivel-titulo">Normal</p>
+                        </div>
+                        <p class="item-nivel-descricao">Temperatura: 18°C a 27°C<br><br>Umidade: 40% a 60%</p>
+                    </div>
+                    <div class="item-nivel">
+                        <div class="item-nivel-icone-titulo">
+                            <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Atenção"
+                                class="icone-status">
+                            <p class="item-nivel-titulo">Atenção</p>
+                        </div>
+                        <p class="item-nivel-descricao">Temperatura: <br>&lt;17.9°C ou &gt;27.1°C</p><!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Monitoramento Observer</title>
+    <link rel="stylesheet" href="../css/style_dash.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</head>
+
+<body>
+    <div class="container-painel">
+        <div class="barra-lateral">
+            <div class="secao-logo">
+                <img src="../img/logo.png" alt="Logo Observer" class="logo">
+            </div>
+            <div class="secao-usuario">
+                <img src="../img/bill.jfif" alt="Foto do Usuário" class="foto-usuario">
+                <h2 class="nome-usuario">João Silva</h2>
+                <p class="cargo-usuario">Analista de Infraestrutura</p>
+                <p class="email-usuario">joao.silva@empresa.com</p>
+            </div>
+
+            <div class="secao-filtro">
+                <h3 class="titulo-filtro">Período de Análise:</h3>
+                <div class="opcao-filtro">
+                    <input type="radio" id="tempo-real" name="radio-periodo" checked>
+                    <label for="tempo-real">Tempo real</label>
+                </div>
+                <div class="opcao-filtro">
+                    <input type="radio" id="7-dias" name="radio-periodo">
+                    <label for="7-dias">7 dias</label>
+                </div>
+                <div class="opcao-filtro">
+                    <input type="radio" id="15-dias" name="radio-periodo">
+                    <label for="15-dias">15 dias</label>
+                </div>
+            </div>
+
+            <div class="secao-filtro">
+                <h3 class="titulo-filtro">Localização:</h3>
+
+                <!-- 
+                    quando um input está marcado, ele aciona a função trocaTitulo()
+                    o parâmetro this serve para conseguirmos acessar os parametros do input dentro dessa função,
+                    como id, name, class, etc   
+                -->
+
+                <div class="opcao-filtro">
+                    <input type="checkbox" id="sala-1" name="sala-1" checked class="checkbox-sala"
+                        onchange="trocaTitulo(this)">
+                    <label for="sala-1">Datacenter Principal</label>
+                </div>
+                <div class="opcao-filtro">
+                    <input type="checkbox" id="sala-2" name="sala-2" class="checkbox-sala" onchange="trocaTitulo(this)">
+                    <label for="sala-2">Sala de Backup</label>
+                </div>
+                <div class="opcao-filtro">
+                    <input type="checkbox" id="sala-3" name="sala-3" class="checkbox-sala" onchange="trocaTitulo(this)">
+                    <label for="sala-3">Sala de Servidores A</label>
+                </div>
+                 <div class="opcao-filtro">
+                    <input type="checkbox" id="sala-4" name="sala-4" class="checkbox-sala" onchange="trocaTitulo(this)">
+                    <label for="sala-3">Sala de Servidores B</label>
+                </div>
+                 <div class="opcao-filtro">
+                    <input type="checkbox" id="sala-5" name="sala-5" class="checkbox-sala" onchange="trocaTitulo(this)">
+                    <label for="sala-3">Sala de Servidores C</label>
+                </div>
+            </div>
+            <br>
+
+            <button class="botao-sair">Sair</button>
+        </div>
+
+        <div class="conteudo-principal">
+            <div class="cabecalho">
+                <h1>Monitoramento de Temperatura e Umidade - <span id="nome-sala-titulo"></span></h1>
+                <div class="data-hora" id="data-hora"></div>
+            </div>
+
+            <div class="cartoes-status">
+                <div class="cartao-status">
+                    <h3>
+                        Temperatura média
+                        <span class="tooltip">ⓘ
+                            <span class="tooltip-text">A temperatura média é calculada com base em leituras horárias dos
+                                sensores DHT11, considerando o intervalo das últimas 24 horas para representar variações
+                                térmicas ambientais de forma contínua.</span>
+                        </span>
+                    </h3>
+                    <div class="valor">23°C <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="OK"
+                            class="icone-status"></div>
+                </div>
+                <div class="cartao-status">
+                    <h3>
+                        Umidade média
+                        <span class="tooltip">ⓘ
+                            <span class="tooltip-text">A umidade média é obtida a partir da média aritmética das
+                                leituras dos sensores instalados, desconsiderando valores extremos fora da faixa
+                                aceitável para garantir maior confiabilidade na análise ambiental.</span>
+                        </span>
+                    </h3>
+                    <div class="valor">44% <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="OK"
+                            class="icone-status"></div>
+                </div>
+                <div class="cartao-status">
+                    <h3>
+                        Última Atualização
+                        <span class="tooltip">ⓘ
+                            <span class="tooltip-text">Tempo desde a última leitura dos sensores.</span>
+                        </span>
+                    </h3>
+                    <div class="valor">há 5 segundos</div>
+                </div>
+                
+                <div class="cartao-status">
+                    <h3>
+                        Sensores Inativos
+                        <span class="tooltip">ⓘ
+                            <span class="tooltip-text">
+                                <p>Sensor 1 - 3º andar do prédio Alfa, Rua das Tecnologias,
+                                    123, está inativo. Responsável: João Silva (TI Infraestrutura).</p>
+                                <p>Sensor 2 - laboratório ambiental no subsolo do Bloco B, Avenida Inovações, 456, não
+                                    está enviando dados. Responsável: Carla Mendes (Engenharia de Manutenção).
+                                </p>
+                            </span>
+                        </span>
+                    </h3>
+                    <div class="valor">2/60</div>
+                </div>
+            </div>
+
+
+            <div class="container-graficos">
+                <div class="grafico-wrapper">
+                    <h2>TEMPERATURA MÉDIA (°C)</h2>
+                    <canvas id="grafico-temperatura" width="1000" height="250"
+                        style="display: block; margin-left: auto; margin-right: auto;"></canvas>
+                </div>
+                <div class="grafico-wrapper">
+                    <h2>UMIDADE MÉDIA (%)</h2>
+                    <canvas id="grafico-umidade" width="1000" height="250"
+                        style="display: block; margin-left: auto; margin-right: auto;"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="secao-alertas">
+            <h2>ALERTAS ATIVOS</h2>
+            <div class="lista-alertas">
+                <div class="item-alerta">
+                    <img src="https://cdn-icons-png.flaticon.com/512/753/753345.png" alt="Emergência"
+                        class="icone-status">
+                    <div class="conteudo-alerta">
+                        <div class="hora-alerta">22/04/2025 - 17h30</div>
+                        <div class="local-alerta">Datacenter Principal - Rack 05 - Sensor C</div>
+                        <div class="tipo-alerta">Alerta de Temperatura</div>
+                        <div class="valor-alerta">T: 31,2°</div>
+                        <button class="botao-acao" onclick="registrarAcao(this)">Alterar Status</button>
+                    </div>
+                </div>
+                <div class="item-alerta">
+                    <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Atenção" class="icone-status">
+                    <div class="conteudo-alerta">
+                        <div class="hora-alerta">22/04/2025 - 17h15</div>
+                        <div class="local-alerta">Datacenter Principal - Rack 02 - Sensor A</div>
+                        <div class="tipo-alerta">Alerta de Umidade</div>
+                        <div class="valor-alerta">U: 38%</div>
+                        <button class="botao-acao" onclick="registrarAcao(this)">Alterar Status</button>
+                    </div>
+                </div>
+                <div class="item-alerta">
+                    <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Atenção" class="icone-status">
+                    <div class="conteudo-alerta">
+                        <div class="hora-alerta">22/04/2025 - 17h00</div>
+                        <div class="local-alerta">Datacenter Principal - Rack 08 - Sensor B</div>
+                        <div class="tipo-alerta">Alerta de Temperatura</div>
+                        <div class="valor-alerta">T: 28,5°</div>
+                        <button class="botao-acao" onclick="registrarAcao(this)">Alterar Status</button>
+                    </div>
+                </div>
+                    <div class="item-alerta">
+                    <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Atenção" class="icone-status">
+                    <div class="conteudo-alerta">
+                        <div class="hora-alerta">22/04/2025 - 17h00</div>
+                        <div class="local-alerta">Datacenter Principal - Rack 08 - Sensor B</div>
+                        <div class="tipo-alerta">Alerta de Temperatura</div>
+                        <div class="valor-alerta">T: 28,5°</div>
+                        <button class="botao-acao" onclick="registrarAcao(this)">Alterar Status</button>
+                    </div>
+                </div>
+            </div>
+            <button class="botao-historico">Histórico de Alertas</button>
+            <div class="secao-niveis">
+                <h2>LEGENDA <br>NÍVEIS DE MONITORAMENTO</h2>
+                <div class="container-itens-niveis">
+                    <div class="item-nivel">
+                        <div class="item-nivel-icone-titulo">
+                            <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="Normal"
+                                class="icone-status">
+                            <p class="item-nivel-titulo">Normal</p>
+                        </div>
+                        <p class="item-nivel-descricao">Temperatura: 18°C a 27°C<br><br>Umidade: 40% a 60%</p>
+                    </div>
+                    <div class="item-nivel">
+                        <div class="item-nivel-icone-titulo">
+                            <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Atenção"
+                                class="icone-status">
+                            <p class="item-nivel-titulo">Atenção</p>
+                        </div>
+                        <p class="item-nivel-descricao">Temperatura: <br>&lt;17.9°C ou &gt;27.1°C</p>
+                    </div>
+                    <div class="item-nivel">
+                        <div class="item-nivel-icone-titulo">
+                            <img src="https://cdn-icons-png.flaticon.com/512/753/753345.png" alt="Emergência"
+                                class="icone-status">
+                            <p class="item-nivel-titulo item-nivel-titulo-emergencia">Emergência</p>
+                        </div>
+                        <p class="item-nivel-descricao">Temperatura:<br> &lt;15°C ou &gt;30°C<br><br>Umidade: &lt;40% ou
+                            &gt;60%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../js/graficos.js"></script>
+<script src="../js/dashboard.js"></script>
+                    <div class="item-nivel">
+                        <div class="item-nivel-icone-titulo">
+                            <img src="https://cdn-icons-png.flaticon.com/512/753/753345.png" alt="Emergência"
+                                class="icone-status">
+                            <p class="item-nivel-titulo item-nivel-titulo-emergencia">Emergência</p>
+                        </div>
+                        <p class="item-nivel-descricao">Temperatura:<br> &lt;15°C ou &gt;30°C<br><br>Umidade: &lt;40% ou
+                            &gt;60%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../js/graficos.js"></script>
+<script src="../js/dashboard.js"></script>
