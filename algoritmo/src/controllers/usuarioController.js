@@ -86,8 +86,23 @@ function pegarCodigosUsados(req, res) {
 		});
 }
 
+function pegarIdEmpresa(req, res) {
+	var cnpjEmpresa = req.params.cnpjEmpresa;
+
+	usuarioModel
+		.pegarIdEmpresa(cnpjEmpresa)
+		.then((resultado) => {
+			res.status(200).json(resultado);
+		})
+		.catch((erro) => {
+			console.log(erro);
+			res.status(500).json(erro.sqlMessage);
+		});
+}
+
 module.exports = {
 	autenticar,
 	cadastrar,
 	pegarCodigosUsados,
+	pegarIdEmpresa,
 };

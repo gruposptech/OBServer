@@ -43,8 +43,17 @@ function pegarCodigosUsados() {
 	return database.executar(instrucaoSql);
 }
 
+function pegarIdEmpresa(cnpjEmpresa) {
+	var instrucaoSql = `
+	SELECT idEmpresa FROM empresa WHERE cnpjEmpresa = ${cnpjEmpresa}
+	`;
+	console.log('Executando a instrução SQL: \n' + instrucaoSql);
+	return database.executar(instrucaoSql);
+}
+
 module.exports = {
 	autenticar,
 	cadastrar,
 	pegarCodigosUsados,
+	pegarIdEmpresa,
 };

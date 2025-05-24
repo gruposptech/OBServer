@@ -141,7 +141,8 @@ form {
   font-size: 1.2em;
 }
 
-.txtError {
+.txtError,
+.txtErrorFunc {
   color: red;
   font-weight: bold;
 }

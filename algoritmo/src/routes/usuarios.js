@@ -16,4 +16,7 @@ router.get('/pegarCodigosUsados', function (req, res) {
 	usuarioController.pegarCodigosUsados(req, res);
 });
 
+router.get('/pegarIdEmpresa/:cnpjEmpresa', function (req, res) {
+	usuarioController.pegarIdEmpresa(req, res);
+});
 module.exports = router;

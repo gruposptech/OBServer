@@ -16,15 +16,17 @@ var HOST_APP = process.env.APP_HOST;
 var app = express();
 var indexRouter = require('./src/routes/index');
 var usuarioRouter = require('./src/routes/usuarios');
+var funcionarioRouter = require('./src/routes/funcionario');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public'), {index: 'inicial.html'}));
+app.use(express.static(path.join(__dirname, 'public'), { index: 'inicial.html' }));
 
 app.use(cors());
 
 app.use('/', indexRouter);
 app.use('/usuarios', usuarioRouter);
+app.use('/funcionario', funcionarioRouter);
 
 app.listen(PORTA_APP, function () {
 	console.log(` 

@@ -61,6 +61,9 @@
 
 						<label class="label">Cargo:</label><br />
 						<input type="text" class="input" id="iptCargo" /><br />
+						<div class="outputErrorFunc">
+							<p class="txtErrorFunc" id="txtErrorFunc"></p>
+						</div>
 						<button type="button" class="btn_func" onclick="adicionarFuncionario()">Adicionar Funcionário</button>
 					</div>
 
@@ -77,8 +80,66 @@
 			</div>
 		</section>
 		<script>
-			var codigos = ['ab3de', 'ch4fx', 'kl3po'];
+			var codigos = [
+				'ab3de', //usado
+				'ch4fx', //usado
+				'kl3po', //usado
+				'uy0iu', //usado
+				'nt6zj', 
+				'kg5aq',
+				'qx4df',
+				'mv0ej',
+				'ji6fn',
+				'tr9xg',
+				'bn7sj',
+				'ea2yi',
+				'uf3ze',
+				'hd4mt',
+				'cj1os',
+				'wo2lb',
+				'mk0pc',
+				'gv9ul',
+				'xy6vn',
+				'dr7we',
+				'pl8yz',
+				'so1ft',
+				'ib5gx',
+				'az6ch',
+				'qe9rm',
+				'vy0sa',
+				'nz3kt',
+				'tx4hv',
+				'lj2oq',
+				'rp8bw',
+				'fc0me',
+				'wm5xz',
+				'dk1yn',
+				'hb7ju',
+				'sg4lr',
+				'ak6nw',
+				'jo3pz',
+				'uy2dc',
+				'zm9fg',
+				'nc7vs',
+				'xl0qb',
+				'pe4tz',
+				'gv5ih',
+				'bf3xa',
+				'ow2sk',
+				'ru1jp',
+				'dm6ne',
+				'tz9ol',
+				'yi0kc',
+				'cb8xf',
+				'hl4gv',
+				'aq7md',
+				'vn5zr',
+				'ks3wb',
+			];
 			var etapa = 1;
+			var txtError = document.getElementById('txtError');
+			var txtErrorFunc = document.getElementById('txtErrorFunc');
+			var txtError;
 
 			function mostrar() {
 				document.getElementById('empresa_sec').style.display = 'none';
@@ -90,7 +151,6 @@
 				document.getElementById('etapa_final').style.background = '#ccc';
 
 				var barra = document.getElementById('barra_progresso');
-				var txtError = document.getElementById('txtError');
 
 				if (etapa == 1) {
 					document.getElementById('empresa_sec').style.display = 'block';
@@ -124,8 +184,6 @@
 										for (var i = 0; i < resposta.length; i++) {
 											if (resposta[i].codigoCadastro == codigo) {
 												codigoUsado = true;
-												console.log('ESSA PORRA DE CÓDIGO JÁ FOI USADA');
-												console.log('VAR CODIGO USADO:', codigoUsado);
 												break;
 											}
 										}
@@ -187,7 +245,22 @@
 													console.log('resposta: ', resposta);
 
 													if (resposta.ok) {
-														console.log('Cadastro da empresa realizado com sucesso!')
+														console.log('Cadastro da empresa realizado com sucesso!');
+
+														fetch(`usuarios/pegarIdEmpresa/${cnpj}`, { cache: 'no-store' })
+															.then(function (response) {
+																if (response.ok) {
+																	response.json().then(function (resposta) {
+																		console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+																		sessionStorage.ID_EMPRESA = resposta[0].idEmpresa;
+																	});
+																} else {
+																	console.error('Nenhum dado encontrado ou erro na API');
+																}
+															})
+															.catch((error) => {
+																console.log(`#ERRO: ${resposta}`);
+															});
 													} else {
 														throw 'Houve um erro ao tentar realizar o cadastro!';
 													}
@@ -231,6 +304,9 @@
 						} else if (senhaUser.length < 5) {
 							alert('A senha do funcionário precisa ter no mínimo 5 caracteres!');
 							valido_funcionario = false;
+						} else if (cargo.length < 3) {
+							alert('O cargo do funcionário precisa ter pelo menos 3 caracteres!');
+							valido_funcionario = false;
 						}
 					}
 
@@ -246,6 +322,49 @@
 						mostrar();
 					}
 				}
+			}
+
+			function adicionarFuncionario() {
+				var nomeUser = iptNomeUser.value.toLowerCase();
+				var emailUser = iptEmailUser.value.toLowerCase();
+				var senhaUser = iptSenhaUser.value.toLowerCase();
+				var cargoUser = iptCargo.value.toLowerCase();
+				var idEmpresa = sessionStorage.ID_EMPRESA;
+
+				fetch(`/funcionario/cadastrar/${idEmpresa}`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						// crie um atributo que recebe o valor recuperado aqui
+						// Agora vá para o arquivo routes/usuario.js
+						nomeUserServer: nomeUser,
+						emailUserServer: emailUser,
+						senhaUserServer: senhaUser,
+						cargoUserServer: cargoUser,
+					}),
+				})
+					.then(function (resposta) {
+						console.log('resposta: ', resposta);
+
+						if (resposta.ok) {
+							console.log('Cadastro do usuario realizado com sucesso!');
+
+							txtErrorFunc.style.color = '#0cc0df';
+							txtErrorFunc.innerHTML = 'Funcionário adicionado com sucesso!';
+							iptNomeUser.value = '';
+							iptEmailUser.value = '';
+							iptSenhaUser.value = '';
+							iptConfirmacaoSenhaUser.value = '';
+							iptCargo.value = '';
+						} else {
+							throw 'Houve um erro ao tentar realizar o cadastro do usuário!';
+						}
+					})
+					.catch(function (resposta) {
+						console.log(`#ERRO: ${resposta}`);
+					});
 			}
 
 			function avancar() {
