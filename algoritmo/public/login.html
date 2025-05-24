@@ -74,8 +74,8 @@
 		})
 			.then((resposta) => {
 				if (resposta.ok) {
-                    console.log(resposta);
-                    document.getElementById('errorDiv').style.display = 'none';
+					console.log(resposta);
+					document.getElementById('errorDiv').style.display = 'none';
 
 					resposta.json().then((json) => {
 						console.log(json);
