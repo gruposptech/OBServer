@@ -140,3 +140,8 @@ form {
 #final_sec p {
   font-size: 1.2em;
 }
+
+.txtError {
+  color: red;
+  font-weight: bold;
+}
