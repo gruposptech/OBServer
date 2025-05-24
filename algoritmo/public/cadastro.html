@@ -68,8 +68,9 @@
 					</div>
 
 					<div class="secoes_form" id="final_sec">
-						<h2>Cadastro Concluído!!</h2>
-						<p>Acesse novamente pelo login para ter acesso ao seu painel</p>
+						<h2>Cadastro Concluído!</h2>
+						<p>Faça login para ter acesso ao seu painel</p>
+						<button class="buttonReturnLogin" id="btnReturnLogin" onclick="voltarParaLogin()">Voltar para o login</button>
 					</div>
 
 					<div class="btn_nav" id="btn">
@@ -143,6 +144,7 @@
 
 			var botaoAnterior = document.getElementById('buttonAnterior');
 			var botaoProximo = document.getElementById('buttonProximo');
+			var botaoLogin = document.getElementById('btnReturnLogin');
 
 			function etapas() {
 				document.getElementById('empresa_sec').style.display = 'none';
@@ -153,6 +155,7 @@
 				document.getElementById('etapa_cliente').style.background = '#ccc';
 				document.getElementById('etapa_final').style.background = '#ccc';
 
+				// cadastro da empresa
 				if (etapa == 1) {
 					document.getElementById('empresa_sec').style.display = 'block';
 					document.getElementById('etapa_empresa').style.background = '#0cc0df';
@@ -280,12 +283,12 @@
 					});
 				}
 
+				// cadastro do funcionario
 				if (etapa == 2) {
 					document.getElementById('funcionario_sec').style.display = 'block';
 					document.getElementById('etapa_empresa').style.background = '#0cc0df';
 					document.getElementById('etapa_cliente').style.background = '#0cc0df';
 					barra.style.width = '50%';
-					var temUsuarioCadastrado = false;
 
 					botaoProximo.addEventListener('click', () => {
 						fetch(`/usuarios/temUsuarioCadastrado/${sessionStorage.ID_EMPRESA}`, { cache: 'no-store' })
@@ -293,8 +296,10 @@
 								if (response.ok) {
 									response.json().then(function (resposta) {
 										console.log(`Dados recebidos SE TEM USUARIO CADASTRADO: ${JSON.stringify(resposta)}`);
-										if (resposta.qtdFuncionarios != 0) {
-											temUsuarioCadastrado = true;
+										if (resposta[0].qtdFuncionarios != 0) {
+											avancar();
+										} else {
+											txtErrorFunc.innerHTML = 'Você precisa de pelo menos 1 usuário cadastrado!';
 										}
 									});
 								} else {
@@ -304,18 +309,13 @@
 							.catch((error) => {
 								console.log(`#ERRO: ${resposta}`);
 							});
-
-						if (temUsuarioCadastrado) {
-							avancar();
-						} else {
-							txtErrorFunc.innerHTML = 'Você precisa de pelo menos 1 usuário cadastrado!';
-						}
 					});
 					botaoAnterior.addEventListener('click', () => {
 						voltar();
 					});
 				}
 
+				// tela final
 				if (etapa == 3) {
 					document.getElementById('final_sec').style.display = 'block';
 					document.getElementById('etapa_empresa').style.background = '#0cc0df';
@@ -405,7 +405,14 @@
 				etapas();
 			}
 
-			window.onload = etapas();
+			function voltarParaLogin() {
+				console.log('FUNÇÃO VOLTARPARALOGIN FOI CHAMADA!');
+				window.location.href = 'index.html';
+			}
+
+			window.onload = () => {
+				etapas();
+			};
 		</script>
 	</body>
 </html>

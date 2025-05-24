@@ -93,7 +93,8 @@ form {
   margin-top: 10px;
 }
 
-.btn_nav button {
+.btn_nav button,
+.buttonReturnLogin {
   background-color: var(--cor_decoration_escuro);
   color: var(--cor_branco);
   padding: 12px 30px;
