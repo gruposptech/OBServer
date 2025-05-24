@@ -16,10 +16,11 @@
 					<img src="../img/logo.png" alt="Logo Observer" class="logo" />
 				</div>
 				<div class="secao-usuario">
-					<img src="../img/bill.jfif" alt="Foto do Usuário" class="foto-usuario" />
-					<h2 class="nome-usuario">João Silva</h2>
-					<p class="cargo-usuario">Analista de Infraestrutura</p>
-					<p class="email-usuario">joao.silva@empresa.com</p>
+					<h2 class="nome-usuario">Olá, <span class="nome-usuario" id="nomeUsuario"></span>!</h2>
+					<p class="cargo-usuario">
+						<span id="cargoUsuario"></span> - <span id="empresaUsuario"></span>
+					</p>
+					<p class="email-usuario" id="emailUsuario"></p>
 				</div>
 
 				<div class="secao-filtro">
@@ -216,3 +217,16 @@
 		<script src="../js/dashboard.js"></script>
 	</body>
 </html>
+<script>
+	window.onload = () => {
+		var nomeUsuario = sessionStorage.NOME_FUNCIONARIO;
+		var cargoUsuario = sessionStorage.CARGO_FUNCIONARIO;
+		var emailUsuario = sessionStorage.EMAIL_FUNCIONARIO;
+		var empresaUsuario = sessionStorage.NOME_EMPRESA;
+
+		document.getElementById('nomeUsuario').innerHTML = nomeUsuario[0].toUpperCase() + nomeUsuario.substr(1);
+		document.getElementById('cargoUsuario').innerHTML = cargoUsuario[0].toUpperCase() + cargoUsuario.substr(1);
+		document.getElementById('emailUsuario').innerHTML = emailUsuario;
+		document.getElementById('empresaUsuario').innerHTML = empresaUsuario[0].toUpperCase() + empresaUsuario.substr(1);
+	};
+</script>
