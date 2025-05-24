@@ -19,4 +19,9 @@ router.get('/pegarCodigosUsados', function (req, res) {
 router.get('/pegarIdEmpresa/:cnpjEmpresa', function (req, res) {
 	usuarioController.pegarIdEmpresa(req, res);
 });
+
+router.get('/temUsuarioCadastrado/:idEmpresa', (req, res) => {
+	usuarioController.temUsuarioCadastrado(req, res);
+});
+
 module.exports = router;

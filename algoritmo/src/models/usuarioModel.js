@@ -51,9 +51,18 @@ function pegarIdEmpresa(cnpjEmpresa) {
 	return database.executar(instrucaoSql);
 }
 
+function temUsuarioCadastrado(idEmpresa) {
+	var instrucaoSql = `
+	SELECT count(idUsuario) qtdFuncionarios FROM empresa JOIN usuario ON idEmpresa = fkEmpresa WHERE idEmpresa = ${idEmpresa}
+	`;
+	console.log('Executando a instrução SQL: \n' + instrucaoSql);
+	return database.executar(instrucaoSql);
+}
+
 module.exports = {
 	autenticar,
 	cadastrar,
 	pegarCodigosUsados,
 	pegarIdEmpresa,
+	temUsuarioCadastrado,
 };
