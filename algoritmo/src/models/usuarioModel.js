@@ -1,13 +1,16 @@
 var database = require('../database/config');
 
-function autenticar(email, senha) {
+function autenticar(cnpj, senha, email) {
 	console.log(
 		"ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ",
-		email,
+		cnpj,
 		senha
 	);
+
 	var instrucaoSql = `
-        SELECT id, nome, email, fk_empresa as empresaId FROM usuario WHERE email = '${email}' AND senha = '${senha}';
+        SELECT idEmpresa, nomeEmpresa, cnpjEmpresa, senhaUsuario, nomeUsuario, emailUsuario, cargo FROM empresa 
+				JOIN usuario ON fkEmpresa = idEmpresa
+				WHERE cnpjEmpresa = '${cnpj}' AND emailUsuario = '${email}' AND senhaUsuario = '${senha}';
     `;
 	console.log('Executando a instrução SQL: \n' + instrucaoSql);
 	return database.executar(instrucaoSql);

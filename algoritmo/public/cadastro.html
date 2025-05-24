@@ -323,6 +323,7 @@
 					document.getElementById('etapa_final').style.background = '#0cc0df';
 					document.getElementById('btn').style.display = 'none';
 					barra.style.width = '98%';
+					sessionStorage.removeItem(ID_EMPRESA);
 					botaoLogin.addEventListener('click', (event) => {
 						event.preventDefault();
 						voltarParaLogin();

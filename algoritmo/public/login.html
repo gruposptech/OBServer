@@ -1,46 +1,107 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="../css/cadastro_e_login.css">
-</head>
-<body class="corpo">
-    <header class="linha-cima"></header>
-    <div class="containerAll">
-        <div class="containerImagem">
-            <img src="../img/logo.png" class="imagem-logo">
-        </div>
-        <div class="container-login">
-            <h1 class="titulo">Entrar</h1>
-            <span class="linha-fina"></span>
-            <label for="iptCnpj">CNPJ</label>
-            <input type="text" class="input login-cnpj" id="iptCnpj" placeholder="XX.XXX.XXX/0001-XX">
-            <label for="iptSenha" class="label-senha">Senha</label>
-            <input type="password" class="input login-senha" id="iptSenha" placeholder=""> <br> <bra>
-            <button onclick="login()" class="botao botao-entrar" id="botao-entrar">Entrar</button>
-            <button class="botao botao-cadastro"><a href="cadastro.html" class="criar-cadastro">Criar cadastro</a></button>
-            <h3 class="esqueceu-a-senha">Esqueceu a Senha?</h3> <br>
-        </div>
-    </div>
-    <footer class="linha-baixo"></footer>
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Login</title>
+		<link rel="stylesheet" href="../css/cadastro_e_login.css" />
+	</head>
+	<body class="corpo">
+		<header class="linha-cima"></header>
+		<div class="containerAll">
+			<div class="containerImagem">
+				<img src="../img/logo.png" class="imagem-logo" />
+			</div>
+			<div class="container-login">
+				<h1 class="titulo">Entrar</h1>
+				<span class="linha-fina"></span>
+				<label for="iptCnpj">CNPJ da empresa</label>
+				<input type="text" class="input login-cnpj" id="iptCnpj" placeholder="XX.XXX.XXX/0001-XX" />
+				<label for="iptEmail" class="label label-email">Email do funcionário</label>
+				<input type="email" class="input login-email" id="iptEmail" />
+				<label for="iptSenha" class="label label-senha">Senha do funcionário</label>
+				<input type="password" class="input login-senha" id="iptSenha" placeholder="" /> <br />
+
+				<button onclick="login()" class="botao botao-entrar" id="botao-entrar">Entrar</button>
+				<button class="botao botao-cadastro"><a href="cadastro.html" class="criar-cadastro">Criar cadastro</a></button>
+				<h3 class="esqueceu-a-senha">Esqueceu a Senha?</h3>
+				<div class="errorDiv" id="errorDiv">
+					<p class="errorMsg" id="errorMsg"></p>
+				</div>
+				<br />
+			</div>
+		</div>
+		<footer class="linha-baixo"></footer>
+	</body>
 </html>
 <script>
-    var cnpj = '';
-    var senha = '';
+	var cnpj = '';
+	var senha = '';
+	var email = '';
 
-    function login () { 
-        cnpj = iptCnpj.value.toLowerCase();
-        senha = iptSenha.value.toLowerCase();
-            
-        if (cnpj == '' || senha == '') {
-            alert('Todos os campos precisam estar preenchidos!') 
-        } else if (cnpj == '12345678000101' && senha == 'ifood#2024') {
-            window.location.href = 'dashboard.html';
-        } else {
-            alert('Login e/ou senha inválidos!')
-        }
-    }
+	function exibirErro(msg) {
+		document.getElementById('errorDiv').style.display = 'block';
+		document.getElementById('errorMsg').innerHTML = msg;
+	}
+
+	function login() {
+		cnpj = iptCnpj.value.toLowerCase();
+		senha = iptSenha.value.toLowerCase();
+		email = iptEmail.value.toLowerCase();
+
+		if (cnpj == '' || senha == '' || email == '') {
+			exibirErro('Todos os campos precisam estar preenchidos!');
+		} else {
+			entrar(cnpj, senha, email);
+		}
+	}
+
+	function entrar(cnpjEmpresa, senhaFuncionario, emailFuncionario) {
+		console.log('CNPJ: ', cnpjEmpresa);
+		console.log('SENHA: ', senhaFuncionario);
+		console.log('EMAIL: ', emailFuncionario);
+
+		fetch('/usuarios/autenticar', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				cnpjServer: cnpjEmpresa,
+				senhaServer: senhaFuncionario,
+				emailServer: emailFuncionario,
+			}),
+		})
+			.then((resposta) => {
+				if (resposta.ok) {
+                    console.log(resposta);
+                    document.getElementById('errorDiv').style.display = 'none';
+
+					resposta.json().then((json) => {
+						console.log(json);
+						console.log(JSON.stringify(json));
+
+						sessionStorage.ID_EMPRESA = json.id;
+						sessionStorage.NOME_EMPRESA = json.nomeEmpresa;
+						sessionStorage.NOME_FUNCIONARIO = json.nomeFuncionario;
+						sessionStorage.EMAIL_FUNCIONARIO = json.emailFuncionario;
+						sessionStorage.CNPJ_EMPRESA = json.cnpj;
+						sessionStorage.CARGO_FUNCIONARIO = json.cargoFuncionario;
+
+						setTimeout(() => {
+							window.location.href = 'dashboard.html';
+						}, 1000);
+					});
+				} else {
+					exibirErro('Login e/ou senha inválidos!');
+					console.log('Houve um erro ao tentar realizar o login!');
+					resposta.text().then((texto) => {
+						console.error(texto);
+					});
+				}
+			})
+			.catch((erro) => {
+				console.log(erro);
+			});
+	}
 </script>
