@@ -70,7 +70,7 @@
 					<div class="secoes_form" id="final_sec">
 						<h2>Cadastro Concluído!</h2>
 						<p>Faça login para ter acesso ao seu painel</p>
-						<button class="buttonReturnLogin" id="btnReturnLogin" onclick="voltarParaLogin()">Voltar para o login</button>
+						<button class="buttonReturnLogin" id="btnReturnLogin">Voltar para o login</button>
 					</div>
 
 					<div class="btn_nav" id="btn">
@@ -323,6 +323,10 @@
 					document.getElementById('etapa_final').style.background = '#0cc0df';
 					document.getElementById('btn').style.display = 'none';
 					barra.style.width = '98%';
+					botaoLogin.addEventListener('click', (event) => {
+						event.preventDefault();
+						voltarParaLogin();
+					});
 				}
 			}
 
@@ -406,8 +410,7 @@
 			}
 
 			function voltarParaLogin() {
-				console.log('FUNÇÃO VOLTARPARALOGIN FOI CHAMADA!');
-				window.location.href = 'index.html';
+				window.location.href = 'login.html';
 			}
 
 			window.onload = () => {
