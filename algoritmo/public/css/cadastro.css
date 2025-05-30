@@ -5,37 +5,46 @@
   --cor_branco: #ffffff;
   --cor_decoration: #0cc0df;
   --cor_decoration_escuro: #0e1427;
+  	--cor-placeholder: #b6c5c7;
 }
+
 
 body {
   font-family: "Outfit", sans-serif;
-  margin: 0;
-  padding: 0;
   background-color: var(--cor_decoration_escuro);
-}
-
-.titulo {
-  font-weight: 800;
-  color: var(--cor_branco);
-  margin-bottom: 0;
-  font-size: 25px;
-  text-align: center;
-  font-size: 2.2em;
+  
 }
 
 .container_cadastro {
-  width: 50vw;
-  height: 80vh;
-  margin: auto;
-  background: #fff;
-  padding: 30px 60px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+  height: auto;
+  background: var(--cor_branco);
+  border-radius: 15px;
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
+.titulo {
+  color: var(--cor_decoration_escuro);
+	font-size: 36px;
+	font-weight: 700;
+	text-align: center;
+  margin-top: 20px; 
+  margin-bottom: 10px;
+}
+
+
 .linha_progresso {
-  width: 100%;
+  width: 90%;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
   position: relative;
 }
 
@@ -68,21 +77,45 @@ body {
 }
 
 form {
-  text-align: center;
-  width: 100%;
-}
+  width: 90%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;}
+
 
 .input {
-  width: 80%;
-  padding: 8px;
-  margin-bottom: 12px;
-  border: 1px solid var(--cor_decoration);
-  outline: none;
+	width: 92%;
+	padding: 12px 20px;
+	margin: 10px;
+	border: 2px solid var(--cor_decoration);
+	border-radius: 30px;
+	color: var(--cor-fundo);
+	font-size: 16px;
+	text-align: center;
+	transition: border 0.3s ease;
+}
+
+.input:focus {
+	border-color: var(--cor_decoration);
+	outline: none;
+}
+
+.input::placeholder {
+	color: var(--cor-placeholder);
+	font-weight: 500;
 }
 
 .label {
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--cor_decoration_escuro);
+  margin-bottom: 5px;
+  margin-left: 50px;
+  text-align: left;
+
 }
+
 
 .secoes_form {
   display: none;
@@ -90,7 +123,7 @@ form {
 
 .btn_nav {
   text-align: center;
-  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .btn_nav button,
@@ -103,7 +136,7 @@ form {
   border: none;
   cursor: pointer;
   transition: 0.3s;
-  margin-top: 20px;
+
   font-family: "Outfit", sans-serif;
 }
 
@@ -146,4 +179,18 @@ form {
 .txtErrorFunc {
   color: red;
   font-weight: bold;
+}
+
+.linha-fina,
+.linha-cima,
+.linha-baixo {
+	width: 100%;
+	border: none;
+	height: 4px;
+	background-color: var(--cor_decoration);
+	margin: 20px 0;
+}
+
+.linha-baixo {
+  margin-top: 30px;
 }
