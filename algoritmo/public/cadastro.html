@@ -52,10 +52,10 @@
 						<label class="label">Nome do Usuário:</label><br />
 						<input type="text" class="input" id="iptNomeUser" /><br />
 
-						<label class="label">Email:</label><br />
+						<label class="label">Email para acesso:</label><br />
 						<input type="text" class="input" id="iptEmailUser" /><br />
 
-						<label class="label">Senha:</label><br />
+						<label class="label">Senha para acesso:</label><br />
 						<input type="password" class="input" id="iptSenhaUser" /><br />
 
 						<label class="label">Confirme a senha:</label><br />
@@ -99,11 +99,11 @@
 		<footer class="linha-baixo"></footer>
 		<script>
 			var codigos = [
-				'ab3de', // usado
-				'ch4fx', // usado
-				'kl3po', // usado
-				'uy0iu', // usado
-				'nt6zj', // usado
+				'ab3de', 
+				'ch4fx', 
+				'kl3po', 
+				'uy0iu', 
+				'nt6zj', 
 				'kg5aq',
 				'qx4df',
 				'mv0ej',
@@ -299,17 +299,16 @@
 						}
 					})
 					.catch((error) => {
-						console.log(`#ERRO: ${resposta}`);
+						console.log(`#ERRO: ${error.message}`);
 					});
 			}
 
 			function proxEtapa3() {
-				console.log('TESTE BOTAO PROXIMOOOOOOOOOOOO');
 				var tempMin = Number(iptTempMin.value);
 				var tempMax = Number(iptTempMax.value);
 				var umidMin = Number(iptUmidMin.value);
 				var umidMax = Number(iptUmidMax.value);
-
+				var id_empresa = sessionStorage.ID_EMPRESA;
 				var valido_parametros = true;
 
 				if (tempMin === '' || tempMax === '' || umidMin === '' || umidMax === '') {
@@ -323,8 +322,32 @@
 				} else if (umidMin < 0 || umidMax > 100) {
 					alert('Valores de umidade fora do intervalo permitido (0% a 100%).');
 				} else {
-					console.log('PASSOU NOS PARAMETROS');
-					avancar();
+					fetch('/usuarios/cadastrarParametros', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+							idEmpresaServer: id_empresa,
+							tempMinIdealServer: tempMin,
+							tempMaxIdealServer: tempMax,
+							umidadeMinIdealServer: umidMin,
+							umidadeMaxIdealServer: umidMax,
+						}),
+					})
+						.then((resposta) => {
+							console.log('resposta: ', resposta);
+
+							if (resposta.ok) {
+								console.log('Cadastro dos parâmetros realizados com sucesso!');
+								avancar()
+							} else {
+								throw 'Houve um erro ao realizar o cadastro dos parâmetros';
+							}
+						})
+						.catch((erro) => {
+							console.log('#ERRO! ', erro.message);
+						});
 				}
 			}
 
@@ -384,18 +407,18 @@
 				} else if (etapa == 2) {
 					proxEtapa2();
 				} else if (etapa == 3) {
-					proxEtapa3()
+					proxEtapa3();
 				}
 			});
 
 			botaoAnterior.addEventListener('click', () => {
 				voltar();
-			})
+			});
 
 			botaoLogin.addEventListener('click', (event) => {
 				event.preventDefault();
 				voltarParaLogin();
-			})
+			});
 
 			function adicionarFuncionario() {
 				var nomeUser = iptNomeUser.value.toLowerCase();
@@ -403,7 +426,6 @@
 				var senhaUser = iptSenhaUser.value.toLowerCase();
 				var cargoUser = iptCargo.value.toLowerCase();
 				var confirmacaoSenhaUser = iptConfirmacaoSenhaUser.value.toLowerCase();
-				var idEmpresa = sessionStorage.ID_EMPRESA;
 				var valido_funcionario = true;
 
 				if (nomeUser == '' || emailUser == '' || senhaUser == '' || confirmacaoSenhaUser == '' || cargoUser == '') {

@@ -120,10 +120,43 @@ function temUsuarioCadastrado(req, res) {
 		});
 }
 
+function cadastrarParametros(req, res) {
+	var idEmpresa = req.body.idEmpresaServer;
+	var tempMinIdeal = req.body.tempMinIdealServer;
+	var tempMaxIdeal = req.body.tempMaxIdealServer;
+	var umidadeMinIdeal = req.body.umidadeMinIdealServer;
+	var umidadeMaxIdeal = req.body.umidadeMaxIdealServer;
+
+	usuarioModel
+		.cadastrarParametros(tempMinIdeal, tempMaxIdeal, umidadeMinIdeal, umidadeMaxIdeal, idEmpresa)
+		.then((resultado) => {
+			res.json(resultado);
+		})
+		.catch((erro) => {
+			console.log(erro);
+			res.status(500).json(erro.sqlMessage);
+		});
+}
+
+function pegarParametros(req, res) {
+	var idEmpresa = req.params.idEmpresa;
+
+	usuarioModel
+		.pegarParametros(idEmpresa)
+		.then((resultado) => {
+			res.status(200).json(resultado);
+		})
+		.catch((erro) => {
+			res.status(500).json(erro.sqlMessage);
+		});
+}
+
 module.exports = {
 	autenticar,
 	cadastrar,
 	pegarCodigosUsados,
 	pegarIdEmpresa,
 	temUsuarioCadastrado,
+	cadastrarParametros,
+	pegarParametros,
 };

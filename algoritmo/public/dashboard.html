@@ -17,9 +17,7 @@
 				</div>
 				<div class="secao-usuario">
 					<h2 class="nome-usuario">Olá, <span class="nome-usuario" id="nomeUsuario"></span>!</h2>
-					<p class="cargo-usuario">
-						<span id="cargoUsuario"></span> - <span id="empresaUsuario"></span>
-					</p>
+					<p class="cargo-usuario"><span id="cargoUsuario"></span> - <span id="empresaUsuario"></span></p>
 					<p class="email-usuario" id="emailUsuario"></p>
 				</div>
 
@@ -229,6 +227,28 @@
 		document.getElementById('emailUsuario').innerHTML = emailUsuario;
 		document.getElementById('empresaUsuario').innerHTML = empresaUsuario[0].toUpperCase() + empresaUsuario.substr(1);
 
-		exibirAquariosDoUsuario();
+		pegarParametros();
 	};
+
+	function pegarParametros() {
+		var idEmpresa = sessionStorage.ID_EMPRESA;
+		fetch(`/usuarios/pegarParametros/${idEmpresa}`, { cache: 'no-store' })
+			.then((response) => {
+				if (response.ok) {
+					response.json().then((resposta) => {
+						console.log('PARÂMETROS RECEBIDOS COM SUCESSO!');
+						console.log('Dados recebidos: ', JSON.stringify(resposta));
+						sessionStorage.TEMP_MIN_IDEAL = resposta[0].tempMinIdeal;
+						sessionStorage.TEMP_MAX_IDEAL = resposta[0].tempMaxIdeal;
+						sessionStorage.UMID_MIN_IDEAL = resposta[0].umidadeMinIdeal;
+						sessionStorage.UMID_MAX_IDEAL = resposta[0].umidadeMaxIdeal;
+					});
+				} else {
+					throw 'ERRO AO PEGAR OS PARÂMETROS DA EMPRESA';
+				}
+			})
+			.catch((erro) => {
+				console.log('#ERRO: ', erro);
+			});
+	}
 </script>

@@ -24,4 +24,11 @@ router.get('/temUsuarioCadastrado/:idEmpresa', (req, res) => {
 	usuarioController.temUsuarioCadastrado(req, res);
 });
 
+router.post('/cadastrarParametros', (req, res) => {
+	usuarioController.cadastrarParametros(req, res);
+});
+
+router.get('/pegarParametros/:idEmpresa', (req, res) => {
+	usuarioController.pegarParametros(req, res);
+});
 module.exports = router;

@@ -36,19 +36,23 @@ CREATE TABLE IF NOT EXISTS parametros (
     tempMinIdeal DECIMAL(3,1) NOT NULL,
     tempMaxIdeal DECIMAL(3,1) NOT NULL,
     umidadeMinIdeal INT NOT NULL,
-    umidadeMaxIdeal INT NOT NULL
+    umidadeMaxIdeal INT NOT NULL,
+    fkEmpresa INT,
+    FOREIGN KEY (fkEmpresa) REFERENCES empresa(idEMpresa)
 );
 
 CREATE TABLE IF NOT EXISTS sensor (
-	idSensor INT PRIMARY KEY AUTO_INCREMENT,
+    idSensor INT PRIMARY KEY AUTO_INCREMENT,
     nomeSensor VARCHAR(45) NOT NULL,
     dataInstalacaoSensor DATE,
     statusSensor VARCHAR(10),
-	fkRack INT,
+    fkRack INT,
     fkParametros INT DEFAULT 1,
-    CONSTRAINT chkStatus CHECK (statusSensor IN ('Ativo', 'Inativo', 'Manutenção')),
-	CONSTRAINT fkSensorRack FOREIGN KEY (fkRack) REFERENCES rack(idRack),
-	CONSTRAINT fkSensorParams FOREIGN KEY (fkParametros) REFERENCES parametros(idParams)
+    CONSTRAINT chkStatus CHECK (statusSensor IN ('Ativo' , 'Inativo', 'Manutenção')),
+    CONSTRAINT fkSensorRack FOREIGN KEY (fkRack)
+        REFERENCES rack (idRack),
+    CONSTRAINT fkSensorParams FOREIGN KEY (fkParametros)
+        REFERENCES parametros (idParams)
 );
 
 CREATE TABLE IF NOT EXISTS leitura (

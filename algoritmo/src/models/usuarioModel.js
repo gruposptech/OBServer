@@ -62,10 +62,29 @@ function temUsuarioCadastrado(idEmpresa) {
 	return database.executar(instrucaoSql);
 }
 
+function cadastrarParametros(tempMinIdeal, tempMaxIdeal, umidadeMinIdeal, umidadeMaxIdeal, fkEmpresa) {
+	var instrucaoSql = `
+		INSERT INTO parametros (tempMinIdeal, tempMaxIdeal, umidadeMinIdeal, umidadeMaxIdeal, fkEmpresa) VALUES (${tempMinIdeal}, ${tempMaxIdeal}, ${umidadeMinIdeal}, ${umidadeMaxIdeal}, ${fkEmpresa})
+	`;
+
+	console.log('Executando a instrução SQL: \n' + instrucaoSql);
+	return database.executar(instrucaoSql);
+}
+
+function pegarParametros(idEmpresa) {
+	var instrucaoSql = `
+		SELECT tempMinIdeal, tempMaxIdeal, umidadeMinIdeal, umidadeMaxIdeal FROM parametros JOIN empresa on fkEmpresa = ${idEmpresa}
+	`;
+	console.log('Executando a instrução SQL: \n' + instrucaoSql);
+	return database.executar(instrucaoSql);
+}
+
 module.exports = {
 	autenticar,
 	cadastrar,
 	pegarCodigosUsados,
 	pegarIdEmpresa,
 	temUsuarioCadastrado,
+	cadastrarParametros,
+	pegarParametros,
 };
