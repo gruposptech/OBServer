@@ -250,9 +250,9 @@
 
 				racks.forEach((item) => {
 					if (checkBox.name == `rack-${item.idRack}`) {
-						nomeSala = item.descricao.charAt(0).toUpperCase() + item.descricao.slice(1).toLowerCase()
+						nomeSala = item.descricao.charAt(0).toUpperCase() + item.descricao.slice(1).toLowerCase();
 					}
-				})
+				});
 
 				// se o título não está vazio, eu adiciono uma vírgula para separar os nomes
 				if (titulo != '') {
@@ -266,6 +266,20 @@
 
 		// trocando o span do título para a variável título
 		spanTitulo.innerHTML = titulo;
+	}
+
+	function exibeDataHora() {
+		// selecionadno a div que exibe a data e a hora na dashboard pelo ID
+		var divDataHora = document.getElementById('data-hora');
+
+		// atualizando a hora a cada 1 minuto
+		setInterval(() => {
+			// pegando a data atual e colocando em uma variável
+			var data = new Date();
+
+			// inserindo a data e hora formatadas para o nosso local (pt-BR) na div que selecionei
+			divDataHora.innerHTML = `${data.toLocaleDateString('pt-BR')} - ${data.toLocaleTimeString('pt-BR')}`;
+		}, 1000);
 	}
 
 	window.onload = () => {
@@ -291,5 +305,6 @@
 
 		pegarParametros();
 		exibirRacksDoUsuario();
+		exibeDataHora();
 	};
 </script>
