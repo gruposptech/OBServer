@@ -184,11 +184,12 @@
 				</div>
 			</div>
 		</div>
-		<script src="../js/graficos.js"></script>
+		<!-- <script src="../js/graficos.js"></script> -->
 	</body>
 </html>
 <script>
 	var idEmpresa = sessionStorage.ID_EMPRESA;
+
 	function pegarParametros() {
 		fetch(`/usuarios/pegarParametros/${idEmpresa}`, { cache: 'no-store' })
 			.then((response) => {
@@ -223,7 +224,8 @@
 			</div>
 			`;
 
-			// obterDadosGrafico(item.idRack);
+			obterDadosGraficoTemp(item.idRack);
+			obterDadosGraficoUmid(item.idRack);
 		});
 	}
 
@@ -337,6 +339,322 @@
 			})
 			.catch((erro) => {
 				console.log('Erro no fetch dos sensores inativos: ', erro);
+			});
+	}
+
+	function obterDadosGraficoTemp(idRack) {
+		if (proximaAtualizacao != undefined) {
+			clearTimeout(proximaAtualizacao);
+		}
+
+		fetch(`/leituras/ultimasTemp/${idRack}`, { cache: 'no-store' })
+			.then((response) => {
+				if (response.ok) {
+					response.json().then((resposta) => {
+						console.log('Dados recebidos: ', JSON.stringify(resposta));
+						resposta.reverse();
+
+						plotarGraficoTemp(respota, idRack);
+					});
+				} else {
+					console.error('Nenhum dado encontrado ou erro na API');
+				}
+			})
+			.catch((erro) => {
+				console.error(`Erro na obtenção dos dados p/ gráfico: ${erro.message}`);
+			});
+	}
+
+	function obterDadosGraficoUmid(idRack) {
+		if (proximaAtualizacao != undefined) {
+			clearTimeout(proximaAtualizacao);
+		}
+
+		fetch(`/leituras/ultimasUmid/${idRack}`, { cache: 'no-store' })
+			.then((response) => {
+				if (response.ok) {
+					response.json().then((resposta) => {
+						console.log('Dados recebidos: ', JSON.stringify(resposta));
+						resposta.reverse();
+
+						plotarGraficoUmid(respota, idRack);
+					});
+				} else {
+					console.error('Nenhum dado encontrado ou erro na API');
+				}
+			})
+			.catch((erro) => {
+				console.error(`Erro na obtenção dos dados p/ gráfico: ${erro.message}`);
+			});
+	}
+
+	function plotarGraficoTemp(resposta, idRack) {
+		console.log('Iniciando plotagem do grafico de temperatura...');
+
+		let labels = [];
+
+		let dados = {
+			labels: labels,
+			datasets: {
+				label: '',
+				data: [],
+				backgroundColor: 'transparent',
+				tension: 0.4,
+				pointBackgroundColor: '#0cc0df',
+				borderColor: '#0cc0df',
+			},
+
+			options: {
+				layout: {
+					padding: {
+						top: 10,
+						bottom: 10,
+						left: 10,
+						right: 10,
+					},
+				},
+				plugins: {
+					legend: { display: false },
+					datalabels: {
+						align: 'top',
+						anchor: 'end',
+						color: '#000',
+						font: { weight: 'bold', size: 12 },
+						formatter: Math.round,
+					},
+				},
+
+				interaction: { mode: 'index' },
+				scales: {
+					x: {
+						title: {
+							display: true,
+							text: 'Horário do dia',
+							color: '#000',
+							font: { size: 10, weight: 'bold' },
+						},
+						ticks: { color: '#000', font: { size: 12 } },
+						grid: { color: 'rgba(0,0,0,0.05)' },
+					},
+					y: {
+						beginAtZero: true,
+						min: 0,
+						max: 40,
+						title: {
+							display: true,
+							text: 'Temperatura (°C)',
+							color: '#000',
+							font: { size: 10, weight: 'bold' },
+						},
+						ticks: { stepSize: 10, color: '#000', font: { size: 12 } },
+						grid: { color: 'rgba(0,0,0,0.05)' },
+					},
+				},
+			},
+			plugins: [ChartDataLabels],
+		};
+
+		console.log('----------------------------------------------');
+		console.log('Estes dados foram recebidos pela funcao "obterDadosGraficoTemp" e passados para "plotarGraficoTemp":');
+		console.log(resposta);
+
+		for (var i = 0; i < resposta.length; i++) {
+			var registro = resposta[i];
+			labels.push(registro.data_grafico);
+			dados.datasets[0].data.push(registro.temperatura);
+		}
+
+		console.log('----------------------------------------------');
+		console.log('O gráfico de temperatura será plotado com os respectivos valores:');
+		console.log('Labels:');
+		console.log(labels);
+		console.log('Dados:');
+		console.log(dados.datasets);
+		console.log('----------------------------------------------');
+
+		const config = {
+			type: 'line',
+			data: dados,
+		};
+
+		let myChart = new Chart(document.getElementById('grafico-temperatura'), config);
+
+		setTimeout(() => atualizarGraficoTemp(idRack, dados, myChart), 2000);
+	}
+
+	function plotarGraficoUmid(resposta, idRack) {
+		console.log('Iniciando plotagem do grafico de umidade...');
+
+		let labels = [];
+
+		let dados = {
+			labels: labels,
+			datasets: {
+				label: '',
+				data: [],
+				backgroundColor: 'transparent',
+				tension: 0.4,
+				pointBackgroundColor: '#0cc0df',
+				borderColor: '#0cc0df',
+			},
+
+			options: {
+				layout: {
+					padding: {
+						top: 10,
+						bottom: 10,
+						left: 10,
+						right: 10,
+					},
+				},
+				plugins: {
+					legend: { display: false },
+					datalabels: {
+						align: 'top',
+						anchor: 'end',
+						color: '#000',
+						font: { weight: 'bold', size: 12 },
+						formatter: Math.round,
+					},
+				},
+
+				interaction: { mode: 'index' },
+				scales: {
+					x: {
+						title: {
+							display: true,
+							text: 'Horário do dia',
+							color: '#000',
+							font: { size: 10, weight: 'bold' },
+						},
+						ticks: { color: '#000', font: { size: 12 } },
+						grid: { color: 'rgba(0,0,0,0.05)' },
+					},
+					y: {
+						beginAtZero: true,
+						min: 0,
+						max: 70,
+						title: {
+							display: true,
+							text: 'Umidade (%)',
+							color: '#000',
+							font: { size: 10, weight: 'bold' },
+						},
+						ticks: { stepSize: 10, color: '#000', font: { size: 12 } },
+						grid: { color: 'rgba(0,0,0,0.05)' },
+					},
+				},
+			},
+			plugins: [ChartDataLabels],
+		};
+
+		console.log('----------------------------------------------');
+		console.log('Estes dados foram recebidos pela funcao "obterDadosGraficoUmid" e passados para "plotarGraficoUmid":');
+		console.log(resposta);
+
+		for (var i = 0; i < resposta.length; i++) {
+			var registro = resposta[i];
+			labels.push(registro.data_grafico);
+			dados.datasets[0].data.push(registro.umidade);
+		}
+
+		console.log('----------------------------------------------');
+		console.log('O gráfico de umidade será plotado com os respectivos valores:');
+		console.log('Labels:');
+		console.log(labels);
+		console.log('Dados:');
+		console.log(dados.datasets);
+		console.log('----------------------------------------------');
+
+		const config = {
+			type: 'line',
+			data: dados,
+		};
+
+		let myChart = new Chart(document.getElementById('grafico-umidade'), config);
+
+		setTimeout(() => atualizarGraficoUmid(idRack, dados, myChart), 2000);
+	}
+
+	function atualizarGraficoTemp(idRack, dados, myChart) {
+		fetch(`/leituras/tempo-realTemp/${idRack}`, { cache: 'no-store' })
+			.then((response) => {
+				if (response.ok) {
+					response.json().then((novoRegistro) => {
+						obterdadosTemp(idRack);
+						console.log(`Dados recebidos de temperatura: ${JSON.stringify(novoRegistro)}`);
+						console.log(`Dados atuais do gráfico de temperatura:`);
+						console.log(dados);
+
+						if (novoRegistro[0] == dados.labels[dados.labels.length - 1]) {
+							console.log('---------------------------------------------------------------');
+							console.log('Como não há dados novos para captura, o gráfico de temperatura não atualizará.');
+							console.log('Horário do novo dado de temperatura capturado:');
+							console.log(novoRegistro[0].data_grafico);
+							console.log('Horário do último dado de umidade capturado:');
+							console.log(dados.labels[dados.labels.length - 1]);
+							console.log('---------------------------------------------------------------');
+						} else {
+							dados.labels.shift(); // apagar o primeiro
+							dados.labels.push(novoRegistro[0].data_grafico); // incluir um novo momento
+
+							dados.datasets[0].data.shift(); // apagar o primeiro de temperatura
+							dados.datasets[0].data.push(novoRegistro[0].temperatura); // incluir uma nova medida de temperatura
+
+							myChart.update();
+						}
+
+						proximaAtualizacao = setTimeout(() => atualizarGraficoTemp(idRack, dados, myChart), 2000);
+					});
+				} else {
+					console.error('Nenhum dado encontrado ou erro na API');
+					// Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
+					proximaAtualizacao = setTimeout(() => atualizarGraficoTemp(idRack, dados, myChart), 2000);
+				}
+			})
+			.catch((erro) => {
+				console.error(`Erro na obtenção dos dados p/ gráfico: ${erro.message}`);
+			});
+	}
+
+	function atualizarGraficoUmid(idRack, dados, myChart) {
+		fetch(`/leituras/tempo-realUmid/${idRack}`, { cache: 'no-store' })
+			.then((response) => {
+				if (response.ok) {
+					response.json().then((novoRegistro) => {
+						obterdadosUmid(idRack);
+						console.log(`Dados recebidos de umidade: ${JSON.stringify(novoRegistro)}`);
+						console.log(`Dados atuais do gráfico de umidade:`);
+						console.log(dados);
+
+						if (novoRegistro[0] == dados.labels[dados.labels.length - 1]) {
+							console.log('---------------------------------------------------------------');
+							console.log('Como não há dados novos para captura, o gráfico de umidade não atualizará.');
+							console.log('Horário do novo dado de umidade capturado:');
+							console.log(novoRegistro[0].data_grafico);
+							console.log('Horário do último dado de umidade capturado:');
+							console.log(dados.labels[dados.labels.length - 1]);
+							console.log('---------------------------------------------------------------');
+						} else {
+							dados.labels.shift(); // apagar o primeiro
+							dados.labels.push(novoRegistro[0].data_grafico); // incluir um novo momento
+
+							dados.datasets[0].data.shift(); // apagar o primeiro de temperatura
+							dados.datasets[0].data.push(novoRegistro[0].umidade); // incluir uma nova medida de temperatura
+
+							myChart.update();
+						}
+
+						proximaAtualizacao = setTimeout(() => atualizarGraficoUmid(idRack, dados, myChart), 2000);
+					});
+				} else {
+					console.error('Nenhum dado encontrado ou erro na API');
+					// Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
+					proximaAtualizacao = setTimeout(() => atualizarGraficoUmid(idRack, dados, myChart), 2000);
+				}
+			})
+			.catch((erro) => {
+				console.error(`Erro na obtenção dos dados p/ gráfico: ${erro.message}`);
 			});
 	}
 
