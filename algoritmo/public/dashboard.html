@@ -37,35 +37,8 @@
 					</div>
 				</div>
 
-				<div class="secao-filtro">
+				<div class="secao-filtro" id="secao-filtro">
 					<h3 class="titulo-filtro">Localização:</h3>
-
-					<!-- 
-                    quando um input está marcado, ele aciona a função trocaTitulo()
-                    o parâmetro this serve para conseguirmos acessar os parametros do input dentro dessa função,
-                    como id, name, class, etc   
-                -->
-
-					<div class="opcao-filtro">
-						<input type="checkbox" id="sala-1" name="sala-1" checked class="checkbox-sala" onchange="trocaTitulo(this)" />
-						<label for="sala-1">Datacenter Principal</label>
-					</div>
-					<div class="opcao-filtro">
-						<input type="checkbox" id="sala-2" name="sala-2" class="checkbox-sala" onchange="trocaTitulo(this)" />
-						<label for="sala-2">Sala de Backup</label>
-					</div>
-					<div class="opcao-filtro">
-						<input type="checkbox" id="sala-3" name="sala-3" class="checkbox-sala" onchange="trocaTitulo(this)" />
-						<label for="sala-3">Sala de Servidores A</label>
-					</div>
-					<div class="opcao-filtro">
-						<input type="checkbox" id="sala-4" name="sala-4" class="checkbox-sala" onchange="trocaTitulo(this)" />
-						<label for="sala-3">Sala de Servidores B</label>
-					</div>
-					<div class="opcao-filtro">
-						<input type="checkbox" id="sala-5" name="sala-5" class="checkbox-sala" onchange="trocaTitulo(this)" />
-						<label for="sala-3">Sala de Servidores C</label>
-					</div>
 				</div>
 				<br />
 
@@ -216,20 +189,6 @@
 	</body>
 </html>
 <script>
-	window.onload = () => {
-		var nomeUsuario = sessionStorage.NOME_FUNCIONARIO;
-		var cargoUsuario = sessionStorage.CARGO_FUNCIONARIO;
-		var emailUsuario = sessionStorage.EMAIL_FUNCIONARIO;
-		var empresaUsuario = sessionStorage.NOME_EMPRESA;
-
-		document.getElementById('nomeUsuario').innerHTML = nomeUsuario[0].toUpperCase() + nomeUsuario.substr(1);
-		document.getElementById('cargoUsuario').innerHTML = cargoUsuario[0].toUpperCase() + cargoUsuario.substr(1);
-		document.getElementById('emailUsuario').innerHTML = emailUsuario;
-		document.getElementById('empresaUsuario').innerHTML = empresaUsuario[0].toUpperCase() + empresaUsuario.substr(1);
-
-		pegarParametros();
-	};
-
 	function pegarParametros() {
 		var idEmpresa = sessionStorage.ID_EMPRESA;
 		fetch(`/usuarios/pegarParametros/${idEmpresa}`, { cache: 'no-store' })
@@ -251,4 +210,86 @@
 				console.log('#ERRO: ', erro);
 			});
 	}
+
+	function exibirRacksDoUsuario() {
+		var racks = JSON.parse(sessionStorage.RACKS);
+
+		racks.forEach((item) => {
+			document.getElementById('secao-filtro').innerHTML += `
+			<div class="opcao-filtro">
+						<input type="checkbox" id="rack-${item.idRack}" name="rack-${item.idRack}" class="checkbox-sala" onchange="trocaTitulo(this)"/>
+						<label for="rack-${item.idRack}" id="label-rack-${item.idRack}" >${
+				item.descricao.charAt(0).toUpperCase() + item.descricao.slice(1).toLowerCase()
+			}</label>
+			</div>
+			`;
+
+			// obterDadosGrafico(item.idRack);
+		});
+	}
+
+	function trocaTitulo(checkBox) {
+		//selecionando o span que exibe o nome da sala no topo da tela
+		var spanTitulo = document.getElementById('nome-sala-titulo');
+		// selecionando todas as checkbox
+		var checkBoxes = document.getElementsByClassName('checkbox-sala');
+		// criando uma variável para guardar o titulo da sala
+		var titulo = '';
+
+		// laço for que percorre todas as checkboxes
+		for (var i = 0; i < checkBoxes.length; i++) {
+			// a variável checkBox é a checkbox da posição i da lista checkBoxes
+			var checkBox = checkBoxes[i];
+
+			//se a checkBox está marcada...
+			if (checkBox.checked) {
+				var nomeSala = '';
+
+				// checando qual checkbox está marcada e atriuindo o nome dela a variavel nomeSala
+				var racks = JSON.parse(sessionStorage.RACKS);
+
+				racks.forEach((item) => {
+					if (checkBox.name == `rack-${item.idRack}`) {
+						nomeSala = item.descricao.charAt(0).toUpperCase() + item.descricao.slice(1).toLowerCase()
+					}
+				})
+
+				// se o título não está vazio, eu adiciono uma vírgula para separar os nomes
+				if (titulo != '') {
+					titulo += ', ';
+				}
+
+				// adicionando o nome da sala a variavel título
+				titulo += nomeSala;
+			}
+		}
+
+		// trocando o span do título para a variável título
+		spanTitulo.innerHTML = titulo;
+	}
+
+	window.onload = () => {
+		var nomeUsuario = sessionStorage.NOME_FUNCIONARIO;
+		var cargoUsuario = sessionStorage.CARGO_FUNCIONARIO;
+		var emailUsuario = sessionStorage.EMAIL_FUNCIONARIO;
+		var empresaUsuario = sessionStorage.NOME_EMPRESA;
+
+		document.getElementById('nomeUsuario').innerHTML = nomeUsuario[0].toUpperCase() + nomeUsuario.substr(1);
+		document.getElementById('cargoUsuario').innerHTML = cargoUsuario[0].toUpperCase() + cargoUsuario.substr(1);
+		document.getElementById('emailUsuario').innerHTML = emailUsuario;
+		document.getElementById('empresaUsuario').innerHTML = empresaUsuario[0].toUpperCase() + empresaUsuario.substr(1);
+
+		// aqui, estou procurando através de um laço for, qual checkbox está marcada
+		// quando acho, executo a função trocaTitulo() passando a dashboard marcada como parâmetro
+		var checkBoxes = document.getElementsByClassName('checkbox-sala');
+		for (var i = 0; i < checkBoxes.length; i++) {
+			if (checkBoxes[i].checked) {
+				trocaTitulo(checkBoxes[i]);
+				break;
+			}
+		}
+
+		pegarParametros();
+		exibirRacksDoUsuario();
+	};
 </script>

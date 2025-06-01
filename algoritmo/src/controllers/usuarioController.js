@@ -1,4 +1,5 @@
 var usuarioModel = require('../models/usuarioModel');
+var racksModel = require('../models/racksModel');
 
 function autenticar(req, res) {
 	var cnpj = req.body.cnpjServer;
@@ -20,14 +21,22 @@ function autenticar(req, res) {
 
 				if (resultadoAutenticar.length == 1) {
 					console.log(resultadoAutenticar);
-					res.json({
-						id: resultadoAutenticar[0].idEmpresa,
-						cnpj: resultadoAutenticar[0].cnpjEmpresa,
-						nomeEmpresa: resultadoAutenticar[0].nomeEmpresa,
-						nomeFuncionario: resultadoAutenticar[0].nomeUsuario,
-						emailFuncionario: resultadoAutenticar[0].emailUsuario,
-						cargoFuncionario: resultadoAutenticar[0].cargo,
-						senha: resultadoAutenticar[0].senhaUsuario,
+
+					racksModel.buscarRacksPorEmpresa(resultadoAutenticar[0].idEmpresa).then((resultadoRacks) => {
+						if (resultadoRacks.length > 0) {
+							res.json({
+								id: resultadoAutenticar[0].idEmpresa,
+								cnpj: resultadoAutenticar[0].cnpjEmpresa,
+								nomeEmpresa: resultadoAutenticar[0].nomeEmpresa,
+								nomeFuncionario: resultadoAutenticar[0].nomeUsuario,
+								emailFuncionario: resultadoAutenticar[0].emailUsuario,
+								cargoFuncionario: resultadoAutenticar[0].cargo,
+								senha: resultadoAutenticar[0].senhaUsuario,
+								racks: resultadoRacks,
+							});
+						} else {
+							res.status(204).json({ racks: [] });
+						}
 					});
 				} else if (resultadoAutenticar.length == 0) {
 					res.status(403).send('Email e/ou senha inválido(s)');

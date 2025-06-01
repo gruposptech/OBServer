@@ -427,6 +427,7 @@
 				var cargoUser = iptCargo.value.toLowerCase();
 				var confirmacaoSenhaUser = iptConfirmacaoSenhaUser.value.toLowerCase();
 				var valido_funcionario = true;
+				var idEmpresa = sessionStorage.ID_EMPRESA
 
 				if (nomeUser == '' || emailUser == '' || senhaUser == '' || confirmacaoSenhaUser == '' || cargoUser == '') {
 					txtErrorFunc.innerHTML = 'Todos os campos do funcionário precisam ser preenchidos!';
