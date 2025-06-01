@@ -82,15 +82,14 @@
 }
 
 .botao-sair {
-    margin-top: auto;
     background-color: #0cc0df;
     color: white;
     border: none;
     padding: 10px;
     border-radius: 4px;
     cursor: pointer;
-    margin-bottom: 20px;
     transition: transform 0.3s ease;
+    margin-top: 80%;
 }
 
 .botao-sair:hover {

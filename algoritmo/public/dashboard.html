@@ -171,21 +171,26 @@
 								<img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="Normal" class="icone-status" />
 								<p class="item-nivel-titulo">Normal</p>
 							</div>
-							<p class="item-nivel-descricao">Temperatura: 18°C a 27°C<br /><br />Umidade: 40% a 60%</p>
+							<p class="item-nivel-descricao">
+								T: <span id="temp-min-ideal"></span>°C a <span id="temp-max-ideal"></span>°C<br /><br />U:
+								<span id="umid-min-ideal"></span>% a <span id="umid-max-ideal"></span>%
+							</p>
 						</div>
 						<div class="item-nivel">
 							<div class="item-nivel-icone-titulo">
 								<img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Atenção" class="icone-status" />
 								<p class="item-nivel-titulo">Atenção</p>
 							</div>
-							<p class="item-nivel-descricao">Temperatura: <br />&lt;17.9°C ou &gt;27.1°C</p>
+							<p class="item-nivel-descricao">
+								T: &lt;<span id="temp-min-alerta"></span>°C ou &gt;<span id="temp-max-alerta"></span>°C
+								<br><br>
+							U: &lt;<span id="umid-min-alerta"></span>% ou &gt;<span id="umid-max-alerta"></span>%</p>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<script src="../js/graficos.js"></script>
-		<script src="../js/dashboard.js"></script>
 	</body>
 </html>
 <script>
@@ -241,7 +246,8 @@
 
 		if (contCheckboxes > maxCheckboxes) {
 			checkboxAtual.checked = false;
-			return
+			alert('Máximo de 3 racks permitidos!');
+			return;
 		}
 
 		trocaTitulo();
@@ -307,20 +313,26 @@
 		var emailUsuario = sessionStorage.EMAIL_FUNCIONARIO;
 		var empresaUsuario = sessionStorage.NOME_EMPRESA;
 
+		var tempMin = sessionStorage.TEMP_MIN_IDEAL;
+		var tempMax = sessionStorage.TEMP_MAX_IDEAL;
+
+		var umidMin = sessionStorage.UMID_MIN_IDEAL;
+		var umidMax = sessionStorage.UMID_MAX_IDEAL;
+
 		document.getElementById('nomeUsuario').innerHTML = nomeUsuario[0].toUpperCase() + nomeUsuario.substr(1);
 		document.getElementById('cargoUsuario').innerHTML = cargoUsuario[0].toUpperCase() + cargoUsuario.substr(1);
 		document.getElementById('emailUsuario').innerHTML = emailUsuario;
 		document.getElementById('empresaUsuario').innerHTML = empresaUsuario[0].toUpperCase() + empresaUsuario.substr(1);
 
-		// aqui, estou procurando através de um laço for, qual checkbox está marcada
-		// quando acho, executo a função trocaTitulo() passando a dashboard marcada como parâmetro
-		var checkBoxes = document.getElementsByClassName('checkbox-sala');
-		for (var i = 0; i < checkBoxes.length; i++) {
-			if (checkBoxes[i].checked) {
-				trocaTitulo(checkBoxes[i]);
-				break;
-			}
-		}
+		document.getElementById('temp-min-ideal').innerHTML = tempMin;
+		document.getElementById('temp-max-ideal').innerHTML = tempMax;
+		document.getElementById('umid-min-ideal').innerHTML = umidMin;
+		document.getElementById('umid-max-ideal').innerHTML = umidMax;
+		document.getElementById('temp-min-alerta').innerHTML = tempMin
+		document.getElementById('temp-max-alerta').innerHTML = tempMax
+		document.getElementById('umid-min-alerta').innerHTML = umidMin
+		document.getElementById('umid-max-alerta').innerHTML = umidMax
+
 
 		trocaTitulo();
 		pegarParametros();
