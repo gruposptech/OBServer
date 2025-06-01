@@ -217,7 +217,7 @@
 		racks.forEach((item) => {
 			document.getElementById('secao-filtro').innerHTML += `
 			<div class="opcao-filtro">
-						<input type="checkbox" id="rack-${item.idRack}" name="rack-${item.idRack}" class="checkbox-sala" onchange="trocaTitulo(this)"/>
+						<input type="checkbox" id="rack-${item.idRack}" name="rack-${item.idRack}" class="checkbox-sala" onchange="gerCheckbox(this)"/>
 						<label for="rack-${item.idRack}" id="label-rack-${item.idRack}" >${
 				item.descricao.charAt(0).toUpperCase() + item.descricao.slice(1).toLowerCase()
 			}</label>
@@ -228,7 +228,26 @@
 		});
 	}
 
-	function trocaTitulo(checkBox) {
+	function gerCheckbox(checkboxAtual) {
+		var maxCheckboxes = 3;
+		var checkboxes = document.querySelectorAll('.checkbox-sala');
+		var contCheckboxes = 0;
+
+		checkboxes.forEach((checkbox) => {
+			if (checkbox.checked) {
+				contCheckboxes++;
+			}
+		});
+
+		if (contCheckboxes > maxCheckboxes) {
+			checkboxAtual.checked = false;
+			return
+		}
+
+		trocaTitulo();
+	}
+
+	function trocaTitulo() {
 		//selecionando o span que exibe o nome da sala no topo da tela
 		var spanTitulo = document.getElementById('nome-sala-titulo');
 		// selecionando todas as checkbox
@@ -303,6 +322,7 @@
 			}
 		}
 
+		trocaTitulo();
 		pegarParametros();
 		exibirRacksDoUsuario();
 		exibeDataHora();
