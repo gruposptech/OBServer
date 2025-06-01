@@ -91,19 +91,13 @@
 
 					<div class="cartao-status">
 						<h3>
-							Sensores Inativos
+							Total de sensores inativos
 							<span class="tooltip"
 								>ⓘ
-								<span class="tooltip-text">
-									<p>Sensor 1 - 3º andar do prédio Alfa, Rua das Tecnologias, 123, está inativo. Responsável: João Silva (TI Infraestrutura).</p>
-									<p>
-										Sensor 2 - laboratório ambiental no subsolo do Bloco B, Avenida Inovações, 456, não está enviando dados. Responsável: Carla Mendes
-										(Engenharia de Manutenção).
-									</p>
-								</span>
+								<span class="tooltip-text" id="texto-informativo-sensores-inativos">Sensores inativos:<br /></span>
 							</span>
 						</h3>
-						<div class="valor">2/60</div>
+						<div class="valor"><span id="qtd-sensores-inativos"></span>/<span id="qtd-sensores-total"></span></div>
 					</div>
 				</div>
 
@@ -172,8 +166,8 @@
 								<p class="item-nivel-titulo">Normal</p>
 							</div>
 							<p class="item-nivel-descricao">
-								T: <span id="temp-min-ideal"></span>°C a <span id="temp-max-ideal"></span>°C<br /><br />U:
-								<span id="umid-min-ideal"></span>% a <span id="umid-max-ideal"></span>%
+								T: <span id="temp-min-ideal"></span>°C a <span id="temp-max-ideal"></span>°C<br /><br />U: <span id="umid-min-ideal"></span>% a
+								<span id="umid-max-ideal"></span>%
 							</p>
 						</div>
 						<div class="item-nivel">
@@ -182,9 +176,9 @@
 								<p class="item-nivel-titulo">Atenção</p>
 							</div>
 							<p class="item-nivel-descricao">
-								T: &lt;<span id="temp-min-alerta"></span>°C ou &gt;<span id="temp-max-alerta"></span>°C
-								<br><br>
-							U: &lt;<span id="umid-min-alerta"></span>% ou &gt;<span id="umid-max-alerta"></span>%</p>
+								T: &lt;<span id="temp-min-alerta"></span>°C ou &gt;<span id="temp-max-alerta"></span>°C <br /><br />
+								U: &lt;<span id="umid-min-alerta"></span>% ou &gt;<span id="umid-max-alerta"></span>%
+							</p>
 						</div>
 					</div>
 				</div>
@@ -194,8 +188,8 @@
 	</body>
 </html>
 <script>
+	var idEmpresa = sessionStorage.ID_EMPRESA;
 	function pegarParametros() {
-		var idEmpresa = sessionStorage.ID_EMPRESA;
 		fetch(`/usuarios/pegarParametros/${idEmpresa}`, { cache: 'no-store' })
 			.then((response) => {
 				if (response.ok) {
@@ -307,6 +301,45 @@
 		}, 1000);
 	}
 
+	function sensores() {
+		fetch(`/sensores/totalSensores/${idEmpresa}`, { cache: 'no-store' })
+			.then((response) => {
+				if (response.ok) {
+					response.json().then((resposta) => {
+						document.getElementById('qtd-sensores-total').innerHTML = resposta[0]['count(*)'];
+					});
+				} else {
+					throw 'ERRO AO PEGAR O TOTAL DE SENSORES!';
+				}
+			})
+			.catch((erro) => {
+				console.log('Erro no fetch do total de sensores: ', erro);
+			});
+
+		sensoresInativos();
+	}
+
+	function sensoresInativos() {
+		fetch(`/sensores/sensoresInativos/${idEmpresa}`, { cache: 'no-store' })
+			.then((response) => {
+				if (response.ok) {
+					response.json().then((resposta) => {
+						document.getElementById('qtd-sensores-inativos').innerHTML = resposta.length;
+						resposta.forEach((item) => {
+							document.getElementById('texto-informativo-sensores-inativos').innerHTML += `<br><p>Sensor: ${item.nomeSensor}<br>Localização: ${
+								item.descricao.charAt(0).toUpperCase() + item.descricao.slice(1).toLowerCase()
+							}</p><br>`;
+						});
+					});
+				} else {
+					throw 'ERRO AO PEGAR OS SENSORES INATIVOS!';
+				}
+			})
+			.catch((erro) => {
+				console.log('Erro no fetch dos sensores inativos: ', erro);
+			});
+	}
+
 	window.onload = () => {
 		var nomeUsuario = sessionStorage.NOME_FUNCIONARIO;
 		var cargoUsuario = sessionStorage.CARGO_FUNCIONARIO;
@@ -328,15 +361,15 @@
 		document.getElementById('temp-max-ideal').innerHTML = tempMax;
 		document.getElementById('umid-min-ideal').innerHTML = umidMin;
 		document.getElementById('umid-max-ideal').innerHTML = umidMax;
-		document.getElementById('temp-min-alerta').innerHTML = tempMin
-		document.getElementById('temp-max-alerta').innerHTML = tempMax
-		document.getElementById('umid-min-alerta').innerHTML = umidMin
-		document.getElementById('umid-max-alerta').innerHTML = umidMax
-
+		document.getElementById('temp-min-alerta').innerHTML = tempMin;
+		document.getElementById('temp-max-alerta').innerHTML = tempMax;
+		document.getElementById('umid-min-alerta').innerHTML = umidMin;
+		document.getElementById('umid-max-alerta').innerHTML = umidMax;
 
 		trocaTitulo();
 		pegarParametros();
 		exibirRacksDoUsuario();
 		exibeDataHora();
+		sensores();
 	};
 </script>
