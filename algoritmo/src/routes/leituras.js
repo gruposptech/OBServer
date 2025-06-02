@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var leituraController = require('../controllers/leituraController');
+var leituraController = require('../controllers/leiturasController');
 
 router.get('/ultimasTemp/:idRack', function (req, res) {
 	leituraController.buscarUltimasLeiturasTemp(req, res);

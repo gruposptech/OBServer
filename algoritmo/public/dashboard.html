@@ -343,9 +343,9 @@
 	}
 
 	function obterDadosGraficoTemp(idRack) {
-		if (proximaAtualizacao != undefined) {
-			clearTimeout(proximaAtualizacao);
-		}
+		// if (proximaAtualizacao != undefined) {
+		// 	clearTimeout(proximaAtualizacao);
+		// }
 
 		fetch(`/leituras/ultimasTemp/${idRack}`, { cache: 'no-store' })
 			.then((response) => {
@@ -366,9 +366,9 @@
 	}
 
 	function obterDadosGraficoUmid(idRack) {
-		if (proximaAtualizacao != undefined) {
-			clearTimeout(proximaAtualizacao);
-		}
+		// if (proximaAtualizacao != undefined) {
+		// 	clearTimeout(proximaAtualizacao);
+		// }
 
 		fetch(`/leituras/ultimasUmid/${idRack}`, { cache: 'no-store' })
 			.then((response) => {

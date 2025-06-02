@@ -24,9 +24,7 @@ CREATE TABLE IF NOT EXISTS usuario (
 
 CREATE TABLE IF NOT EXISTS rack (
 	idRack INT PRIMARY KEY AUTO_INCREMENT,
-    andar VARCHAR(45),
-    corredor VARCHAR(45),
-    sala VARCHAR(45),
+    descricao VARCHAR(45) not null
     fkEmpresa INT,
     CONSTRAINT fkRackEmpresa FOREIGN KEY (fkEmpresa) REFERENCES empresa(idEmpresa)
 );
