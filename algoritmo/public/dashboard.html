@@ -42,7 +42,7 @@
 				</div>
 				<br />
 
-				<button class="botao-sair">Sair</button>
+				<button class="botao-sair" onclick="sair()">Sair</button>
 			</div>
 
 			<div class="conteudo-principal">
@@ -63,7 +63,12 @@
 								>
 							</span>
 						</h3>
-						<div class="valor">23°C <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="OK" class="icone-status" /></div>
+						<div class="valor">
+							<span id="kpi-temperatura-media"></span>ºC<img
+								src="https://cdn-icons-png.flaticon.com/512/190/190411.png"
+								alt="OK"
+								class="icone-status" />
+						</div>
 					</div>
 					<div class="cartao-status">
 						<h3>
@@ -76,7 +81,9 @@
 								>
 							</span>
 						</h3>
-						<div class="valor">44% <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="OK" class="icone-status" /></div>
+						<div class="valor">
+							<span id="kpi-umidade-media"></span>% <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="OK" class="icone-status" />
+						</div>
 					</div>
 					<div class="cartao-status">
 						<h3>
@@ -189,7 +196,13 @@
 </html>
 <script>
 	var idEmpresa = sessionStorage.ID_EMPRESA;
-	let proximaAtualizacao;
+	let proximaAtualizacaoTemp;
+	let proximaAtualizacaoUmid;
+
+	function sair() {
+		sessionStorage.clear();
+		window.location.href = 'login.html'
+	}
 
 	function pegarParametros() {
 		fetch(`/usuarios/pegarParametros/${idEmpresa}`, { cache: 'no-store' })
@@ -225,8 +238,8 @@
 			</div>
 			`;
 
-			obterDadosGraficoTemp(item.idRack);
-			obterDadosGraficoUmid(item.idRack);
+			// obterDadosGraficoTemp(item.idRack);
+			// obterDadosGraficoUmid(item.idRack);
 		});
 	}
 
@@ -274,6 +287,11 @@
 					if (checkBox.name == `rack-${item.idRack}`) {
 						nomeSala = item.descricao.charAt(0).toUpperCase() + item.descricao.slice(1).toLowerCase();
 					}
+
+					if ((checkBox.name = 'rack-1')) {
+						obterDadosGraficoTemp(item.idRack);
+						obterDadosGraficoUmid(item.idRack);
+					}
 				});
 
 				// se o título não está vazio, eu adiciono uma vírgula para separar os nomes
@@ -283,6 +301,13 @@
 
 				// adicionando o nome da sala a variavel título
 				titulo += nomeSala;
+			} else {
+				var graficoTemp = document.getElementById('grafico-temperatura');
+				var graficoUmid = document.getElementById('grafico-umidade');
+				graficoTemp.style.display = 'none';
+				graficoUmid.style.display = 'none';
+				clearTimeout(proximaAtualizacaoTemp);
+				clearTimeout(proximaAtualizacaoUmid);
 			}
 		}
 
@@ -344,8 +369,8 @@
 	}
 
 	function obterDadosGraficoTemp(idRack) {
-		if (proximaAtualizacao != undefined) {
-			clearTimeout(proximaAtualizacao);
+		if (proximaAtualizacaoTemp != undefined) {
+			clearTimeout(proximaAtualizacaoTemp);
 		}
 
 		fetch(`/leituras/ultimasTemp/${idRack}`, { cache: 'no-store' })
@@ -367,8 +392,8 @@
 	}
 
 	function obterDadosGraficoUmid(idRack) {
-		if (proximaAtualizacao != undefined) {
-			clearTimeout(proximaAtualizacao);
+		if (proximaAtualizacaoUmid != undefined) {
+			clearTimeout(proximaAtualizacaoUmid);
 		}
 
 		fetch(`/leituras/ultimasUmid/${idRack}`, { cache: 'no-store' })
@@ -393,6 +418,10 @@
 		console.log('Iniciando plotagem do grafico de temperatura...');
 
 		let labels = [];
+
+		if (Chart.getChart('grafico-temperatura')) {
+			Chart.getChart('grafico-temperatura').destroy();
+		}
 
 		let dadosTemp = {
 			labels: labels,
@@ -423,7 +452,7 @@
 		console.log('Labels:');
 		console.log(labels);
 		console.log('Dados:');
-		console.log(dadosTemp.datasets);
+		console.log(dadosTemp.datasets[0]);
 		console.log('----------------------------------------------');
 
 		const configTemp = {
@@ -445,7 +474,7 @@
 						anchor: 'end',
 						color: '#000',
 						font: { weight: 'bold', size: 12 },
-						formatter: Math.round,
+						formatter: Math.round(1),
 					},
 				},
 				interaction: { mode: 'index' },
@@ -477,7 +506,6 @@
 			},
 			plugins: [ChartDataLabels],
 		};
-
 		let myChart = new Chart(document.getElementById('grafico-temperatura'), configTemp);
 
 		setTimeout(() => atualizarGraficoTemp(idRack, dadosTemp, myChart), 2000);
@@ -485,6 +513,10 @@
 
 	function plotarGraficoUmid(resposta, idRack) {
 		console.log('Iniciando plotagem do grafico de umidade...');
+
+		if (Chart.getChart('grafico-umidade')) {
+			Chart.getChart('grafico-umidade').destroy();
+		}
 
 		let labels = [];
 
@@ -636,15 +668,24 @@
 							dados.datasets[0].data.shift(); // apagar o primeiro de temperatura
 							dados.datasets[0].data.push(novoRegistro[0].temperatura); // incluir uma nova medida de temperatura
 
+							var somaTemperaturas = 0;
+							var mediaTemperaturas = 0;
+							for (var i = 0; i < dados.datasets[0].data.length; i++) {
+								somaTemperaturas += parseFloat(dados.datasets[0].data[i]);
+								mediaTemperaturas = (somaTemperaturas / dados.datasets[0].data.length).toFixed(1);
+							}
+
+							document.getElementById('kpi-temperatura-media').innerHTML = mediaTemperaturas;
+
 							myChart.update();
 						}
 
-						proximaAtualizacao = setTimeout(() => atualizarGraficoTemp(idRack, dados, myChart), 2000);
+						proximaAtualizacaoTemp = setTimeout(() => atualizarGraficoTemp(idRack, dados, myChart), 1000);
 					});
 				} else {
 					console.error('Nenhum dado encontrado ou erro na API');
 					// Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
-					proximaAtualizacao = setTimeout(() => atualizarGraficoTemp(idRack, dados, myChart), 2000);
+					proximaAtualizacaoTemp = setTimeout(() => atualizarGraficoTemp(idRack, dados, myChart), 1000);
 				}
 			})
 			.catch((erro) => {
@@ -677,15 +718,24 @@
 							dados.datasets[0].data.shift(); // apagar o primeiro de temperatura
 							dados.datasets[0].data.push(novoRegistro[0].umidade); // incluir uma nova medida de temperatura
 
+							var somaUmidade = 0;
+							var mediaUmidade = 0;
+							for (var i = 0; i < dados.datasets[0].data.length; i++) {
+								somaUmidade += parseInt(dados.datasets[0].data[i]);
+								mediaUmidade = (somaUmidade / dados.datasets[0].data.length).toFixed(0);
+							}
+
+							document.getElementById('kpi-umidade-media').innerHTML = mediaUmidade;
+
 							myChart.update();
 						}
 
-						proximaAtualizacao = setTimeout(() => atualizarGraficoUmid(idRack, dados, myChart), 2000);
+						proximaAtualizacaoUmid = setTimeout(() => atualizarGraficoUmid(idRack, dados, myChart), 1000);
 					});
 				} else {
 					console.error('Nenhum dado encontrado ou erro na API');
 					// Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
-					proximaAtualizacao = setTimeout(() => atualizarGraficoUmid(idRack, dados, myChart), 2000);
+					proximaAtualizacaoUmid = setTimeout(() => atualizarGraficoUmid(idRack, dados, myChart), 1000);
 				}
 			})
 			.catch((erro) => {
