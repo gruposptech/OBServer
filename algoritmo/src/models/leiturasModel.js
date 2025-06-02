@@ -1,4 +1,4 @@
-var databse = require('../database/config');
+var database = require('../database/config');
 
 function buscarUltimasLeiturasTemp(idRack, limiteLinhas) {
 	var instrucaoSql = `

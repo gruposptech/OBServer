@@ -189,6 +189,7 @@
 </html>
 <script>
 	var idEmpresa = sessionStorage.ID_EMPRESA;
+	let proximaAtualizacao;
 
 	function pegarParametros() {
 		fetch(`/usuarios/pegarParametros/${idEmpresa}`, { cache: 'no-store' })
@@ -343,9 +344,9 @@
 	}
 
 	function obterDadosGraficoTemp(idRack) {
-		// if (proximaAtualizacao != undefined) {
-		// 	clearTimeout(proximaAtualizacao);
-		// }
+		if (proximaAtualizacao != undefined) {
+			clearTimeout(proximaAtualizacao);
+		}
 
 		fetch(`/leituras/ultimasTemp/${idRack}`, { cache: 'no-store' })
 			.then((response) => {
@@ -354,7 +355,7 @@
 						console.log('Dados recebidos: ', JSON.stringify(resposta));
 						resposta.reverse();
 
-						plotarGraficoTemp(respota, idRack);
+						plotarGraficoTemp(resposta, idRack);
 					});
 				} else {
 					console.error('Nenhum dado encontrado ou erro na API');
@@ -366,9 +367,9 @@
 	}
 
 	function obterDadosGraficoUmid(idRack) {
-		// if (proximaAtualizacao != undefined) {
-		// 	clearTimeout(proximaAtualizacao);
-		// }
+		if (proximaAtualizacao != undefined) {
+			clearTimeout(proximaAtualizacao);
+		}
 
 		fetch(`/leituras/ultimasUmid/${idRack}`, { cache: 'no-store' })
 			.then((response) => {
@@ -377,7 +378,7 @@
 						console.log('Dados recebidos: ', JSON.stringify(resposta));
 						resposta.reverse();
 
-						plotarGraficoUmid(respota, idRack);
+						plotarGraficoUmid(resposta, idRack);
 					});
 				} else {
 					console.error('Nenhum dado encontrado ou erro na API');
@@ -393,17 +394,41 @@
 
 		let labels = [];
 
-		let dados = {
+		let dadosTemp = {
 			labels: labels,
-			datasets: {
-				label: '',
-				data: [],
-				backgroundColor: 'transparent',
-				tension: 0.4,
-				pointBackgroundColor: '#0cc0df',
-				borderColor: '#0cc0df',
-			},
+			datasets: [
+				{
+					label: '',
+					data: [],
+					backgroundColor: 'transparent',
+					tension: 0.4,
+					pointBackgroundColor: 'orange',
+					borderColor: 'orange',
+				},
+			],
+		};
 
+		console.log('----------------------------------------------');
+		console.log('Estes dados foram recebidos pela funcao "obterDadosGraficoTemp" e passados para "plotarGraficoTemp":');
+		console.log(resposta);
+
+		for (var i = 0; i < resposta.length; i++) {
+			var registro = resposta[i];
+			labels.push(registro.data_grafico);
+			dadosTemp.datasets[0].data.push(registro.temperatura);
+		}
+
+		console.log('----------------------------------------------');
+		console.log('O gráfico de temperatura será plotado com os respectivos valores:');
+		console.log('Labels:');
+		console.log(labels);
+		console.log('Dados:');
+		console.log(dadosTemp.datasets);
+		console.log('----------------------------------------------');
+
+		const configTemp = {
+			type: 'line',
+			data: dadosTemp,
 			options: {
 				layout: {
 					padding: {
@@ -423,7 +448,6 @@
 						formatter: Math.round,
 					},
 				},
-
 				interaction: { mode: 'index' },
 				scales: {
 					x: {
@@ -454,32 +478,9 @@
 			plugins: [ChartDataLabels],
 		};
 
-		console.log('----------------------------------------------');
-		console.log('Estes dados foram recebidos pela funcao "obterDadosGraficoTemp" e passados para "plotarGraficoTemp":');
-		console.log(resposta);
+		let myChart = new Chart(document.getElementById('grafico-temperatura'), configTemp);
 
-		for (var i = 0; i < resposta.length; i++) {
-			var registro = resposta[i];
-			labels.push(registro.data_grafico);
-			dados.datasets[0].data.push(registro.temperatura);
-		}
-
-		console.log('----------------------------------------------');
-		console.log('O gráfico de temperatura será plotado com os respectivos valores:');
-		console.log('Labels:');
-		console.log(labels);
-		console.log('Dados:');
-		console.log(dados.datasets);
-		console.log('----------------------------------------------');
-
-		const config = {
-			type: 'line',
-			data: dados,
-		};
-
-		let myChart = new Chart(document.getElementById('grafico-temperatura'), config);
-
-		setTimeout(() => atualizarGraficoTemp(idRack, dados, myChart), 2000);
+		setTimeout(() => atualizarGraficoTemp(idRack, dadosTemp, myChart), 2000);
 	}
 
 	function plotarGraficoUmid(resposta, idRack) {
@@ -489,15 +490,39 @@
 
 		let dados = {
 			labels: labels,
-			datasets: {
-				label: '',
-				data: [],
-				backgroundColor: 'transparent',
-				tension: 0.4,
-				pointBackgroundColor: '#0cc0df',
-				borderColor: '#0cc0df',
-			},
+			datasets: [
+				{
+					label: '',
+					data: [],
+					backgroundColor: 'transparent',
+					tension: 0.4,
+					pointBackgroundColor: '#0cc0df',
+					borderColor: '#0cc0df',
+				},
+			],
+		};
 
+		console.log('----------------------------------------------');
+		console.log('Estes dados foram recebidos pela funcao "obterDadosGraficoUmid" e passados para "plotarGraficoUmid":');
+		console.log(resposta);
+
+		for (var i = 0; i < resposta.length; i++) {
+			var registro = resposta[i];
+			labels.push(registro.data_grafico);
+			dados.datasets[0].data.push(registro.umidade);
+		}
+
+		console.log('----------------------------------------------');
+		console.log('O gráfico de umidade será plotado com os respectivos valores:');
+		console.log('Labels:');
+		console.log(labels);
+		console.log('Dados:');
+		console.log(dados.datasets.data);
+		console.log('----------------------------------------------');
+
+		const config = {
+			type: 'line',
+			data: dados,
 			options: {
 				layout: {
 					padding: {
@@ -517,7 +542,6 @@
 						formatter: Math.round,
 					},
 				},
-
 				interaction: { mode: 'index' },
 				scales: {
 					x: {
@@ -532,8 +556,8 @@
 					},
 					y: {
 						beginAtZero: true,
-						min: 0,
-						max: 70,
+						min: 30,
+						max: 100,
 						title: {
 							display: true,
 							text: 'Umidade (%)',
@@ -548,32 +572,43 @@
 			plugins: [ChartDataLabels],
 		};
 
-		console.log('----------------------------------------------');
-		console.log('Estes dados foram recebidos pela funcao "obterDadosGraficoUmid" e passados para "plotarGraficoUmid":');
-		console.log(resposta);
-
-		for (var i = 0; i < resposta.length; i++) {
-			var registro = resposta[i];
-			labels.push(registro.data_grafico);
-			dados.datasets[0].data.push(registro.umidade);
-		}
-
-		console.log('----------------------------------------------');
-		console.log('O gráfico de umidade será plotado com os respectivos valores:');
-		console.log('Labels:');
-		console.log(labels);
-		console.log('Dados:');
-		console.log(dados.datasets);
-		console.log('----------------------------------------------');
-
-		const config = {
-			type: 'line',
-			data: dados,
-		};
-
 		let myChart = new Chart(document.getElementById('grafico-umidade'), config);
 
 		setTimeout(() => atualizarGraficoUmid(idRack, dados, myChart), 2000);
+	}
+
+	function obterdadosTemp(idRack) {
+		fetch(`/leituras/tempo-realTemp/${idRack}`, { cache: 'no-store' })
+			.then((response) => {
+				if (response.status == 200) {
+					response.json().then((resposta) => {
+						console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+						// alertar(resposta, fkRack);
+					});
+				} else {
+					console.error(`Nenhum dado encontrado para o id ${idRack} ou erro na API`);
+				}
+			})
+			.catch((erro) => {
+				console.error(`Erro na obtenção dos dados do rack p/ gráfico: ${error.message}`);
+			});
+	}
+
+	function obterdadosUmid(idRack) {
+		fetch(`/leituras/tempo-realUmid/${idRack}`, { cache: 'no-store' })
+			.then((response) => {
+				if (response.status == 200) {
+					response.json().then((resposta) => {
+						console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+						// alertar(resposta, fkRack);
+					});
+				} else {
+					console.error(`Nenhum dado encontrado para o id ${idRack} ou erro na API`);
+				}
+			})
+			.catch((erro) => {
+				console.error(`Erro na obtenção dos dados do rack p/ gráfico: ${error.message}`);
+			});
 	}
 
 	function atualizarGraficoTemp(idRack, dados, myChart) {
