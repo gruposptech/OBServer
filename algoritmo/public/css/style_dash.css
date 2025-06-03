@@ -64,6 +64,7 @@
 }
 
 .secao-filtro {
+    text-align: center;
     margin-bottom: 25px;
 }
 
@@ -78,6 +79,7 @@
     margin-bottom: 10px;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
 }
 
@@ -89,7 +91,7 @@
     border-radius: 4px;
     cursor: pointer;
     transition: transform 0.3s ease;
-    margin-top: 80%;
+    margin-top: 180%;
 }
 
 .botao-sair:hover {
@@ -378,19 +380,149 @@
 
 .botao-historico {
     width: 100%;
-    padding: 10px;
+    padding: 4%;
     background-color: #0cc0df;
     color: white;
     border: none;
     border-radius: 4px;
-    margin-top: auto;
+    margin-top: 10%;
     cursor: pointer;
     transition: transform 0.3s ease;
 }
 
+.botao-historico h1 {
+   text-align: center;
+}
+
 .botao-historico:hover {
-    transform: scale(1.03);
     background-color: #0cc0df;
+}
+
+.botao-bob {
+    width: 100%;
+    padding: 4%;
+    background-color: #0cc0df;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    margin-top: 10%;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.botao-bob h1 {
+   text-align: center;
+}
+
+.botao-bob:hover {
+    background-color: #0cc0df;
+}
+
+.bob {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    height: 350px;
+}
+
+.bob img {
+    margin-top: 80%;
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    display: block;
+}
+
+.pergunta {
+    width: 100%;
+    height: 100px;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #22344e;
+    color: white;
+    resize: none;
+    box-sizing: border-box;
+}
+
+.geraresposta {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+    margin-bottom: 20px;
+}
+
+.geraresposta button {
+    background-color: grey;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.geraresposta button:hover {
+    transform: scale(1.03);
+    background-color: yellow;
+    color: black;
+}
+
+.botaon3 {
+    background-color: #0cc0df;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.botaon3:hover {
+    background-color: yellow;
+    color: black;
+    transform: scale(1.03);
+}
+
+#data-center {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#data-center img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+}
+
+.copiar-container {
+    text-align: right;
+    margin-top: 5px;
+}
+
+.botao-copiar {
+    background-color: grey;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.botao-copiar:hover {
+    background-color: yellow;
+    color: black;
+    transform: scale(1.03);
 }
 
 /* Icons */

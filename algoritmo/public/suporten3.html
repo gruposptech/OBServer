@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Suporte OBServer</title>
+    <link rel="stylesheet" href="./css/style_dash.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</head>
+
+<body>
+    <div class="container-painel">
+        <div class="barra-lateral">
+            <div class="secao-logo">
+                <img src="../img/logo.png" alt="Logo Observer" class="logo" />
+            </div>
+            <div class="secao-usuario">
+                <h2 class="nome-usuario">Olá, <span class="nome-usuario" id="nomeUsuario"></span>!</h2>
+                <p class="cargo-usuario"><span id="cargoUsuario"></span> - <span id="empresaUsuario"></span></p>
+                <p class="email-usuario" id="emailUsuario"></p>
+            </div>
+
+            <div class="secao-filtro">
+                <h3 class="titulo-filtro"></h3>
+                <div class="opcao-filtro">
+                    <h2>Jira / Suporte</h2>
+                </div>
+                <a href="https://observergrupo4.atlassian.net/jira/servicedesk/projects/GRUPO4/queues/custom/1"
+                    target="_blank" rel="noopener noreferrer">
+                    <button class="botaon3">Clique para acessar a Central de Chamados</button>
+                </a>
+            </div>
+
+            <button class="botao-sair" onclick="sair()">Sair</button>
+        </div>
+
+        <div class="conteudo-principal">
+            <div class="cabecalho">
+                <h2>Painel de Suporte ao Cliente - N3<span id="nome-sala-titulo"></span></h2>
+                <div class="data-hora" id="data-hora"></div>
+            </div>
+
+            <div id="data-center">
+                <img src="./img/data.jpg" alt="DataCenter">
+            </div>
+
+        </div>
+        <div class="secao-alertas">
+
+            <div class="bob">
+                <img src="./img/bob_logo.png" alt="BobIA">
+            </div>
+            <div class="botao-bob">
+                <h1>BobIA</h1>
+                <h2>Suporte técnico inteligente com a IA Gemini</h2>
+                <div class="container-itens-niveis">
+                    <div id="container">
+                        <br>
+                        <textarea id="pergunta" class="pergunta" placeholder="Digite a pergunta..."></textarea>
+                        <div class="geraresposta">
+                            <button onclick="gerarResposta()">Gerar Resposta</button>
+                        </div>
+                        <div>
+                            <textarea id="resposta" class="pergunta" placeholder="A resposta da IA aparecerá aqui..."
+                                readonly></textarea>
+                            <div class="copiar-container">
+                                <button class="botao-copiar" onclick="copiarResposta()" title="Copiar resposta">
+                                    Copiar</button>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+
+    var idEmpresa = sessionStorage.ID_EMPRESA;
+    let proximaAtualizacaoTemp;
+    let proximaAtualizacaoUmid;
+
+    function sair() {
+        sessionStorage.clear();
+        window.location.href = 'login.html'
+    }
+
+    function exibeDataHora() {
+        // selecionadno a div que exibe a data e a hora na dashboard pelo ID
+        var divDataHora = document.getElementById('data-hora');
+
+        // atualizando a hora a cada 1 minuto
+        setInterval(() => {
+            // pegando a data atual e colocando em uma variável
+            var data = new Date();
+
+            // inserindo a data e hora formatadas para o nosso local (pt-BR) na div que selecionei
+            divDataHora.innerHTML = `${data.toLocaleDateString('pt-BR')} - ${data.toLocaleTimeString('pt-BR')}`;
+        }, 1000);
+    }
+
+    window.onload = () => {
+        var nomeUsuario = sessionStorage.NOME_FUNCIONARIO;
+        var cargoUsuario = sessionStorage.CARGO_FUNCIONARIO;
+        var emailUsuario = sessionStorage.EMAIL_FUNCIONARIO;
+        var empresaUsuario = sessionStorage.NOME_EMPRESA;
+
+        var tempMin = sessionStorage.TEMP_MIN_IDEAL;
+        var tempMax = sessionStorage.TEMP_MAX_IDEAL;
+
+        var umidMin = sessionStorage.UMID_MIN_IDEAL;
+        var umidMax = sessionStorage.UMID_MAX_IDEAL;
+
+        document.getElementById('nomeUsuario').innerHTML = nomeUsuario[0].toUpperCase() + nomeUsuario.substr(1);
+        document.getElementById('cargoUsuario').innerHTML = cargoUsuario[0].toUpperCase() + cargoUsuario.substr(1);
+        document.getElementById('emailUsuario').innerHTML = emailUsuario;
+        document.getElementById('empresaUsuario').innerHTML = empresaUsuario[0].toUpperCase() + empresaUsuario.substr(1);
+
+        document.getElementById('temp-min-ideal').innerHTML = tempMin;
+        document.getElementById('temp-max-ideal').innerHTML = tempMax;
+        document.getElementById('umid-min-ideal').innerHTML = umidMin;
+        document.getElementById('umid-max-ideal').innerHTML = umidMax;
+        document.getElementById('temp-min-alerta').innerHTML = tempMin;
+        document.getElementById('temp-max-alerta').innerHTML = tempMax;
+        document.getElementById('umid-min-alerta').innerHTML = umidMin;
+        document.getElementById('umid-max-alerta').innerHTML = umidMax;
+
+        trocaTitulo();
+        pegarParametros();
+        exibirRacksDoUsuario();
+        exibeDataHora();
+        sensores();
+    };
+
+    async function gerarResposta() {
+        const pergunta = document.getElementById('pergunta').value;
+
+        const response = await fetch('/perguntar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ pergunta })
+        });
+
+        const data = await response.json();
+
+        resposta.style.display = 'block';
+        document.getElementById('resposta').innerText = data.resultado;
+    }
+
+    function copiarResposta() {
+        var textarea = document.getElementById("resposta");
+        textarea.select(); // seleciona todo o conteúdo do Bob
+        document.execCommand("copy"); // copia para a área de transferência, facilita a vida do N3
+        alert("Resposta copiada!");
+    }
+
+
+
+</script>
