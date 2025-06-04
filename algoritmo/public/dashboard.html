@@ -21,22 +21,6 @@
 					<p class="email-usuario" id="emailUsuario"></p>
 				</div>
 
-				<div class="secao-filtro">
-					<h3 class="titulo-filtro">Período de Análise:</h3>
-					<div class="opcao-filtro">
-						<input type="radio" id="tempo-real" name="radio-periodo" checked />
-						<label for="tempo-real">Dados recentes</label>
-					</div>
-					<div class="opcao-filtro">
-						<input type="radio" id="7-dias" name="radio-periodo" />
-						<label for="7-dias">7 dias</label>
-					</div>
-					<div class="opcao-filtro">
-						<input type="radio" id="15-dias" name="radio-periodo" />
-						<label for="15-dias">15 dias</label>
-					</div>
-				</div>
-
 				<div class="secao-filtro" id="secao-filtro">
 					<h3 class="titulo-filtro">Localização:</h3>
 				</div>
@@ -93,7 +77,7 @@
 								<span class="tooltip-text">Tempo desde a última leitura dos sensores.</span>
 							</span>
 						</h3>
-						<div class="valor">há 5 segundos</div>
+						<div class="valor">há <span id="tempo-ultima-leitura"></span> segundos</div>
 					</div>
 
 					<div class="cartao-status">
@@ -121,7 +105,7 @@
 			</div>
 			<div class="secao-alertas">
 				<h2>ALERTAS ATIVOS</h2>
-				<div class="lista-alertas">
+				<div class="lista-alertas" id="lista-de-alertas">
 					<div class="item-alerta">
 						<img src="https://cdn-icons-png.flaticon.com/512/753/753345.png" alt="Emergência" class="icone-status" />
 						<div class="conteudo-alerta">
@@ -129,36 +113,6 @@
 							<div class="local-alerta">Datacenter Principal - Rack 05 - Sensor C</div>
 							<div class="tipo-alerta">Alerta de Temperatura</div>
 							<div class="valor-alerta">T: 31,2°</div>
-							<button class="botao-acao" onclick="registrarAcao(this)">Alterar Status</button>
-						</div>
-					</div>
-					<div class="item-alerta">
-						<img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Atenção" class="icone-status" />
-						<div class="conteudo-alerta">
-							<div class="hora-alerta">22/04/2025 - 17h15</div>
-							<div class="local-alerta">Datacenter Principal - Rack 02 - Sensor A</div>
-							<div class="tipo-alerta">Alerta de Umidade</div>
-							<div class="valor-alerta">U: 38%</div>
-							<button class="botao-acao" onclick="registrarAcao(this)">Alterar Status</button>
-						</div>
-					</div>
-					<div class="item-alerta">
-						<img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Atenção" class="icone-status" />
-						<div class="conteudo-alerta">
-							<div class="hora-alerta">22/04/2025 - 17h00</div>
-							<div class="local-alerta">Datacenter Principal - Rack 08 - Sensor B</div>
-							<div class="tipo-alerta">Alerta de Temperatura</div>
-							<div class="valor-alerta">T: 28,5°</div>
-							<button class="botao-acao" onclick="registrarAcao(this)">Alterar Status</button>
-						</div>
-					</div>
-					<div class="item-alerta">
-						<img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Atenção" class="icone-status" />
-						<div class="conteudo-alerta">
-							<div class="hora-alerta">22/04/2025 - 17h00</div>
-							<div class="local-alerta">Datacenter Principal - Rack 08 - Sensor B</div>
-							<div class="tipo-alerta">Alerta de Temperatura</div>
-							<div class="valor-alerta">T: 28,5°</div>
 							<button class="botao-acao" onclick="registrarAcao(this)">Alterar Status</button>
 						</div>
 					</div>
@@ -201,7 +155,7 @@
 
 	function sair() {
 		sessionStorage.clear();
-		window.location.href = 'login.html'
+		window.location.href = 'login.html';
 	}
 
 	function pegarParametros() {
@@ -609,13 +563,65 @@
 		setTimeout(() => atualizarGraficoUmid(idRack, dados, myChart), 2000);
 	}
 
+	function exibirAlerta(mensagem, temperatura, umidade, hora) {
+		var dadosMostrados = [];
+
+		if (mensagem.includes('Temperatura')) {
+			dadosMostrados.push(`T: ${temperatura}`);
+		}
+
+		if (mensagem.includes('Umidade')) {
+			dadosMostrados.push(`U: ${umidade}%`);
+		}
+
+		document.getElementById('lista-de-alertas').innerHTML += `
+			<div class="item-alerta">
+						<img src="https://cdn-icons-png.flaticon.com/512/753/753345.png" alt="Emergência" class="icone-status" />
+						<div class="conteudo-alerta">
+							<div class="hora-alerta">${hora}</div>
+							<div class="local-alerta">Datacenter Principal - Rack 05 - Sensor C</div>
+							<div class="tipo-alerta">${mensagem}</div>
+							<div class="valor-alerta">${dadosMostrados}</div>
+							<button class="botao-acao" onclick="registrarAcao(this)">Alterar Status</button>
+						</div>
+					</div>
+		`;
+	}
+
+	function alertar(resposta, idRack) {
+		var temp = resposta[0].temperatura;
+		var umid = resposta[0].umidade;
+		var hora = resposta[0].data_grafico;
+
+		var limites = {
+			umidade_minima: sessionStorage.UMID_MIN_IDEAL,
+			umidade_maxima: sessionStorage.UMID_MAX_IDEAL,
+			temperatura_minima: sessionStorage.TEMP_MIN_IDEAL,
+			temperatura_maxima: sessionStorage.TEMP_MAX_IDEAL,
+		};
+
+		if (temp > limites.temperatura_maxima || temp < limites.temperatura_minima || umid > limites.umidade_maxima || umid < limites.umidade_minima) {
+			var alerta = [];
+
+			if (temp > limites.temperatura_maxima || temp < limites.temperatura_minima) {
+				alerta.push('Temperatura ');
+			}
+
+			if (umid > limites.umidade_maxima || umid < limites.umidade_minima) {
+				alerta.push('Umidade');
+			}
+
+			exibirAlerta(`Alerta de ${alerta.join(' e ')}`, temp, umid, hora);
+		}
+	}
+
 	function obterdadosTemp(idRack) {
 		fetch(`/leituras/tempo-realTemp/${idRack}`, { cache: 'no-store' })
 			.then((response) => {
 				if (response.status == 200) {
 					response.json().then((resposta) => {
 						console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
-						// alertar(resposta, fkRack);
+						alertar(resposta, idRack);
 					});
 				} else {
 					console.error(`Nenhum dado encontrado para o id ${idRack} ou erro na API`);
@@ -632,7 +638,7 @@
 				if (response.status == 200) {
 					response.json().then((resposta) => {
 						console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
-						// alertar(resposta, fkRack);
+						alertar(resposta, idRack);
 					});
 				} else {
 					console.error(`Nenhum dado encontrado para o id ${idRack} ou erro na API`);
@@ -680,12 +686,12 @@
 							myChart.update();
 						}
 
-						proximaAtualizacaoTemp = setTimeout(() => atualizarGraficoTemp(idRack, dados, myChart), 1000);
+						proximaAtualizacaoTemp = setTimeout(() => atualizarGraficoTemp(idRack, dados, myChart), 10000);
 					});
 				} else {
 					console.error('Nenhum dado encontrado ou erro na API');
 					// Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
-					proximaAtualizacaoTemp = setTimeout(() => atualizarGraficoTemp(idRack, dados, myChart), 1000);
+					proximaAtualizacaoTemp = setTimeout(() => atualizarGraficoTemp(idRack, dados, myChart), 10000);
 				}
 			})
 			.catch((erro) => {
@@ -725,17 +731,31 @@
 								mediaUmidade = (somaUmidade / dados.datasets[0].data.length).toFixed(0);
 							}
 
+							var tempoAtualizacao = 1;
+
+							var intervaloLeituras = 10 //tempo em segundos dos intervalos das leituras
+
+							var intervalo = setInterval(() => {
+								document.getElementById('tempo-ultima-leitura').innerHTML = tempoAtualizacao;
+
+								tempoAtualizacao++;
+
+								if(tempoAtualizacao > intervaloLeituras) {
+									clearInterval(intervalo)
+								}
+							}, 1000)
+
 							document.getElementById('kpi-umidade-media').innerHTML = mediaUmidade;
 
 							myChart.update();
 						}
 
-						proximaAtualizacaoUmid = setTimeout(() => atualizarGraficoUmid(idRack, dados, myChart), 1000);
+						proximaAtualizacaoUmid = setTimeout(() => atualizarGraficoUmid(idRack, dados, myChart), 10000);
 					});
 				} else {
 					console.error('Nenhum dado encontrado ou erro na API');
 					// Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
-					proximaAtualizacaoUmid = setTimeout(() => atualizarGraficoUmid(idRack, dados, myChart), 1000);
+					proximaAtualizacaoUmid = setTimeout(() => atualizarGraficoUmid(idRack, dados, myChart), 10000);
 				}
 			})
 			.catch((erro) => {
