@@ -70,7 +70,7 @@ body {
   border-bottom: none;
 }
 
-.barra-separacao  {
+.barra-separacao {
   color: white;
 }
 
@@ -358,6 +358,67 @@ body {
   border-left: 50px solid var(--cor_decoration);
 }
 
+
+
+.Fac .titulo {
+  color: #000;
+  margin: 0 0 24px;
+  font-size: 40px;
+  line-height: 50px;
+  text-align: center;
+
+}
+
+.Fac .input {
+  display: flex;
+  justify-content: center;
+  padding: 2px;
+  border-radius: 4px;
+  background: linear-gradient(to right, #0080cf -0.08%, #00d5ff 81.14%, #00d0ff 99.92%);
+  margin: auto;
+  width: 25vw;
+  height: 5vh;
+  margin-top: -30px;
+  border-radius: 30px;
+  
+}
+
+input::placeholder {
+  color: rgb(0, 0, 56);       
+  font-style: italic;
+  font-size: 12px;
+  opacity: 70%;
+  
+}
+.Fac h3{
+  text-align: center;
+  margin-top: 10px;
+  font-size: 20px;
+}
+.container_cards{
+  position: relative;
+  width: 99vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 70px;
+  flex-wrap: wrap;
+  
+}
+.cards_fac{
+  position: relative;
+  max-width: 270px;
+  height: 70px;
+  background-color: var(--cor_decoration);
+  margin: 30px 30px;
+  padding: 20px 15px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 5px 20px #0b0e2d48;
+  transition: 0.3s ease-in-out;
+ border-radius: 10px;
+}
+
 footer {
   height: auto;
   background-color: var(--cor_decoration_escuro);
@@ -423,6 +484,7 @@ footer {
 [id] {
   scroll-margin-top: 130px;
 }
+
 .div_container_pai_fale {
   display: flex;
   width: 100%;
