@@ -5,7 +5,8 @@ function buscarUltimasLeiturasTemp(idRack, limiteLinhas) {
     SELECT
     temperatura, 
     dataHoraLeitura, 
-    DATE_FORMAT(dataHoraLeitura, '%H:%i:%s') as data_grafico 
+    DATE_FORMAT(dataHoraLeitura, '%H:%i:%s') as data_grafico,
+    idLeitura
     FROM leitura l
     JOIN sensor s ON l.fkSensor = s.idSensor
     JOIN rack r ON s.fkRack = r.idRack
@@ -22,8 +23,9 @@ function buscarLeiturasEmTempoRealTemp(idRack) {
     SELECT
     temperatura, 
     dataHoraLeitura, 
-    DATE_FORMAT(dataHoraLeitura, '%H:%i:%s') as data_grafico ,
+    DATE_FORMAT(dataHoraLeitura, '%H:%i:%s') as data_grafico,
     fkRack
+    idLeitura
     FROM leitura l
     JOIN sensor s ON l.fkSensor = s.idSensor
     JOIN rack r ON s.fkRack = r.idRack
@@ -40,7 +42,8 @@ function buscarUltimasLeiturasUmid(idRack, limiteLinhas) {
     SELECT
     umidade, 
     dataHoraLeitura, 
-    DATE_FORMAT(dataHoraLeitura, '%H:%i:%s') as data_grafico 
+    DATE_FORMAT(dataHoraLeitura, '%H:%i:%s') as data_grafico,
+    idLeitura
     FROM leitura l
     JOIN sensor s ON l.fkSensor = s.idSensor
     JOIN rack r ON s.fkRack = r.idRack
@@ -57,7 +60,8 @@ function buscarLeiturasEmTempoRealUmid(idRack) {
     SELECT
     umidade, 
     dataHoraLeitura, 
-    DATE_FORMAT(dataHoraLeitura, '%H:%i:%s') as data_grafico ,
+    DATE_FORMAT(dataHoraLeitura, '%H:%i:%s') as data_grafico,
+    idLeitura,
     fkRack
     FROM leitura l
     JOIN sensor s ON l.fkSensor = s.idSensor
@@ -70,9 +74,29 @@ function buscarLeiturasEmTempoRealUmid(idRack) {
 	return database.executar(instrucaoSql);
 }
 
+function mockarTemp(idSensor, temperaturaMockada) {
+var instrucaoSql = `
+    INSERT INTO leitura (fkSensor, temperatura) VALUES (${idSensor}, ${temperaturaMockada});
+  `;
+
+	console.log('Executando a instrução SQL: \n' + instrucaoSql);
+	return database.executar(instrucaoSql);
+}
+
+function mockarUmid(idSensor, umidadeMockada) {
+  var instrucaoSql = `
+    INSERT INTO leitura (fkSensor, umidade) VALUES (${idSensor}, ${umidadeMockada});
+  `;
+
+	console.log('Executando a instrução SQL: \n' + instrucaoSql);
+	return database.executar(instrucaoSql);
+}
+
 module.exports = {
 	buscarUltimasLeiturasTemp,
 	buscarLeiturasEmTempoRealTemp,
 	buscarUltimasLeiturasUmid,
 	buscarLeiturasEmTempoRealUmid,
+  mockarTemp,
+  mockarUmid
 };

@@ -31,4 +31,5 @@ router.post('/cadastrarParametros', (req, res) => {
 router.get('/pegarParametros/:idEmpresa', (req, res) => {
 	usuarioController.pegarParametros(req, res);
 });
+
 module.exports = router;

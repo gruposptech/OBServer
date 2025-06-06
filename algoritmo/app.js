@@ -21,6 +21,7 @@ var funcionarioRouter = require('./src/routes/funcionario');
 var racksRouter = require('./src/routes/racks');
 var sensoresRouter = require('./src/routes/sensores');
 var leiturasRouter = require('./src/routes/leituras');
+var alertasRouter = require('./src/routes/alertas')
 
 // Middleware para tratar JSON, formulário e arquivos estáticos
 app.use(express.json());
@@ -36,6 +37,7 @@ app.use('/funcionario', funcionarioRouter);
 app.use('/racks', racksRouter);
 app.use('/sensores', sensoresRouter);
 app.use('/leituras', leiturasRouter);
+app.use('/alertas', alertasRouter)
 
 // Configurando o Gemini (Bob IA)
 const chatIA = new GoogleGenAI({ apiKey: process.env.MINHA_CHAVE });

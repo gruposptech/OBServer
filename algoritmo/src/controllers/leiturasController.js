@@ -88,9 +88,39 @@ function buscarLeiturasEmTempoRealUmid(req, res) {
 		});
 }
 
+function mockarTemp(req, res) {
+	var idSensor = req.body.idSensor;
+	var temperaturaMockada = req.body.temperaturaMockada;
+
+	leiturasModel
+		.mockarTemp(idSensor, temperaturaMockada)
+		.then((resposta) => {
+			res.status(200).json(resposta);
+		})
+		.catch((erro) => {
+			res.status(500).json(erro);
+		});
+}
+
+function mockarUmid(req, res) {
+	var idSensor = req.body.idSensor;
+	var umidadeMockada = req.body.umidadeMockada;
+
+	leiturasModel
+		.mockarUmid(idSensor, umidadeMockada)
+		.then((resposta) => {
+			res.status(200).json(resposta);
+		})
+		.catch((erro) => {
+			res.status(500).json(erro);
+		});
+}
+
 module.exports = {
 	buscarUltimasLeiturasTemp,
 	buscarLeiturasEmTempoRealTemp,
 	buscarUltimasLeiturasUmid,
 	buscarLeiturasEmTempoRealUmid,
+	mockarTemp,
+	mockarUmid
 };

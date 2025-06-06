@@ -19,4 +19,12 @@ router.get('/tempo-realUmid/:idRack', function (req, res) {
 	leituraController.buscarLeiturasEmTempoRealUmid(req, res);
 });
 
+router.post('/mockarTemp', function (req, res) {
+	leituraController.mockarTemp(req, res);
+});
+
+router.post('/mockarUmid', function (req, res) {
+	leituraController.mockarUmid(req, res);
+});
+
 module.exports = router;

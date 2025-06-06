@@ -29,7 +29,7 @@ void loop() {
 
   }
 
-  delay(1000); // delay de 5s para captura de dados
+  delay(5000); // delay de 5s para captura de dados
 
 
 }
