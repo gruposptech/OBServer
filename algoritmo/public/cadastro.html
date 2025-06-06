@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>OBServer: Cadastro</title>
+		<link rel="stylesheet" href="./css/cadastro.css" />
+	</head>
+
+	<body>
+		<header class="linha-cima"></header>
+		<div class="cadastro">
+		<section class="container_cadastro">
+			<span class="titulo">PRIMEIRO ACESSO</span>
+			<div class="linha_progresso">
+				<div class="linha_cor" id="barra_progresso"></div>
+				<div class="bolinha" id="etapa_empresa"></div>
+				<div class="bolinha" id="etapa_cliente"></div>
+				<div class="bolinha" id="etapa_parametros"></div>
+				<div class="bolinha" id="etapa_final"></div>
+			</div>
+
+			<div class="container_formulario">
+				<form id="formulario">
+					<div class="secoes_form" id="codigo_sec">
+						<label class="label">Digite o seu código de acesso</label>
+						<input type="text" class="input" id="iptCodigoCadastro" />
+						<div class="outputErrorFunc">
+							<p class="txtErrorFunc" id="txtErrorFunc"></p>
+						</div>
+					</div>
+
+					<div class="secoes_form" id="funcionario_sec">
+						<label class="label">Nome do Usuário:</label><br />
+						<input type="text" class="input" id="iptNomeUser" /><br />
+
+						<label class="label">Email para acesso:</label><br />
+						<input type="text" class="input" id="iptEmailUser" /><br />
+
+						<label class="label">Senha para acesso:</label><br />
+						<input type="password" class="input" id="iptSenhaUser" /><br />
+
+						<label class="label">Confirme a senha:</label><br />
+						<input type="password" class="input" id="iptConfirmacaoSenhaUser" /><br />
+
+						<label class="label">Cargo:</label><br />
+						<input type="text" class="input" id="iptCargo" /><br />
+						<div class="outputErrorFunc">
+							<p class="txtErrorFunc" id="txtErrorFuncionario"></p>
+						</div>
+						<button type="button" class="btn_func" onclick="adicionarFuncionario()">Adicionar Funcionário</button>
+					</div>
+
+					<div class="secoes_form" id="parametros_sec">
+						<label class="label">Temperatura Mínima (°C):</label><br />
+						<input type="number" class="input" id="iptTempMin" /><br />
+
+						<label class="label">Temperatura Máxima (°C):</label><br />
+						<input type="number" class="input" id="iptTempMax" /><br />
+
+						<label class="label">Umidade Mínima (%):</label><br />
+						<input type="number" class="input" id="iptUmidMin" /><br />
+
+						<label class="label">Umidade Máxima (%):</label><br />
+						<input type="number" class="input" id="iptUmidMax" /><br />
+					</div>
+
+					<div class="secoes_form" id="final_sec">
+						<h2>O Primeiro Acesso foi Concluído!</h2>
+						<p>Faça login para ter acesso ao seu painel</p>
+						<button class="buttonReturnLogin" id="btnReturnLogin">Voltar para o login</button>
+					</div>
+
+					<div class="btn_nav" id="btn">
+						<button type="button" id="buttonAnterior">Anterior</button>
+						<button type="button" id="buttonProximo">Próximo</button>
+					</div>
+				</form>
+			</div>
+		</section>
+		</div>
+		<footer class="linha-baixo"></footer>
+		<script>	
+			var codigosCadastrados = ['ab3de'];
+			var etapa = 1;
+			var txtError = document.getElementById('txtError');
+			var txtErrorFunc = document.getElementById('txtErrorFunc');
+			var barra = document.getElementById('barra_progresso');
+
+			var botaoAnterior = document.getElementById('buttonAnterior');
+			var botaoProximo = document.getElementById('buttonProximo');
+			var botaoLogin = document.getElementById('btnReturnLogin');
+
+			function proxEtapa1() {
+				var codigoUsado = false;
+
+				var codigo = iptCodigoCadastro.value.toLowerCase();
+
+				if (codigo == '') {
+					txtErrorFunc.innerHTML = 'Digite algo!';
+				} else if (codigo.length != 5 || !codigosCadastrados.includes(codigo)) {
+					txtErrorFunc.innerHTML = 'Código inválido!';
+				} else {
+					// pegando os codigos que ja foram usados e fazendo a verificação
+					fetch('/usuarios/pegarCodigosUsados', { cache: 'no-store' })
+						.then(function (response) {
+							if (response.ok) {
+								response.json().then(function (resposta) {
+									console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+									for (var i = 0; i < resposta.length; i++) {
+										if (resposta[i].codigoCadastro == codigo) {
+											txtErrorFunc.innerHTML = 'Código já utilizado!';
+											codigoUsado = true;
+											break;
+										}
+									}
+									if (codigoUsado == false) {
+										sessionStorage.CODIGO_EMPRESA = codigo;
+										avancar();
+									}
+								});
+							} else {
+								console.log('Responsa nao veio ok ao pegar codigos usados');
+							}
+						})
+						.catch((erro) => {
+							console.log('Erro no fetch ao pegar codigos usados: ', erro);
+						});
+				}
+			}
+			function proxEtapa2() {
+				fetch(`/usuarios/temUsuarioCadastrado/${sessionStorage.ID_EMPRESA}`, { cache: 'no-store' })
+					.then(function (response) {
+						if (response.ok) {
+							response.json().then(function (resposta) {
+								console.log(`Dados recebidos SE TEM USUARIO CADASTRADO: ${JSON.stringify(resposta)}`);
+								if (resposta[0].qtdFuncionarios != 0) {
+									avancar();
+								} else {
+									var divErro = document.getElementById('txtErrorFuncionario');
+									divErro.innerHTML = 'Você precisa de pelo menos 1 usuário cadastrado!';
+								}
+							});
+						} else {
+							console.error('Nenhum dado encontrado ou erro na API');
+						}
+					})
+					.catch((error) => {
+						console.log(`#ERRO: ${error.message}`);
+					});
+			}
+
+			function proxEtapa3() {
+				var tempMin = Number(iptTempMin.value);
+				var tempMax = Number(iptTempMax.value);
+				var umidMin = Number(iptUmidMin.value);
+				var umidMax = Number(iptUmidMax.value);
+				var id_empresa = sessionStorage.ID_EMPRESA;
+				var valido_parametros = true;
+
+				if (tempMin === '' || tempMax === '' || umidMin === '' || umidMax === '') {
+					alert('Todos os campos de parâmetros precisam ser preenchidos!');
+				} else if (tempMin >= tempMax) {
+					alert('Temperatura mínima deve ser menor que a máxima.');
+				} else if (umidMin >= umidMax) {
+					alert('Umidade mínima deve ser menor que a máxima.');
+				} else if (tempMin < 0 || tempMax > 40) {
+					alert('Valores de temperatura fora do intervalo permitido (0°C a 40°C).');
+				} else if (umidMin < 0 || umidMax > 90) {
+					alert('Valores de umidade fora do intervalo permitido (0% a 90%).');
+				} else {
+					fetch('/usuarios/cadastrarParametros', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+							idEmpresaServer: id_empresa,
+							tempMinIdealServer: tempMin,
+							tempMaxIdealServer: tempMax,
+							umidadeMinIdealServer: umidMin,
+							umidadeMaxIdealServer: umidMax,
+						}),
+					})
+						.then((resposta) => {
+							console.log('resposta: ', resposta);
+
+							if (resposta.ok) {
+								console.log('Cadastro dos parâmetros realizados com sucesso!');
+								avancar();
+							} else {
+								throw 'Houve um erro ao realizar o cadastro dos parâmetros';
+							}
+						})
+						.catch((erro) => {
+							console.log('#ERRO! ', erro.message);
+						});
+				}
+			}
+
+			function etapas() {
+				document.getElementById('codigo_sec').style.display = 'nonew';
+				document.getElementById('funcionario_sec').style.display = 'none';
+				document.getElementById('parametros_sec').style.display = 'none';
+				document.getElementById('final_sec').style.display = 'none';
+
+				document.getElementById('etapa_empresa').style.background = '#ccc';
+				document.getElementById('etapa_cliente').style.background = '#ccc';
+				document.getElementById('etapa_parametros').style.background = '#ccc';
+				document.getElementById('etapa_final').style.background = '#ccc';
+
+				// cadastro da empresa
+				if (etapa == 1) {
+					document.getElementById('codigo_sec').style.display = 'block';
+					document.getElementById('etapa_empresa').style.background = '#0cc0df';
+					barra.style.width = '0%';
+					botaoAnterior.style.display = 'none';
+				}
+
+				// cadastro do funcionario
+				if (etapa == 2) {
+					txtErrorFunc.innerHTML = '';
+					document.getElementById('codigo_sec').style.display = 'none';
+					document.getElementById('funcionario_sec').style.display = 'block';
+					document.getElementById('etapa_empresa').style.background = '#0cc0df';
+					document.getElementById('etapa_cliente').style.background = '#0cc0df';
+					barra.style.width = '50%';
+
+					fetch(`usuarios/pegarIdEmpresa/${sessionStorage.CODIGO_EMPRESA}`, { cache: 'no-store' })
+						.then(function (response) {
+							if (response.ok) {
+								response.json().then(function (resposta) {
+									console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+									sessionStorage.ID_EMPRESA = resposta[0].idEmpresa;
+								});
+							} else {
+								console.error('Nenhum dado encontrado ou erro na API');
+							}
+						})
+						.catch((error) => {
+							console.log(`#ERRO: ${resposta}`);
+						});
+				}
+
+				// tela parametro
+				if (etapa == 3) {
+					document.getElementById('parametros_sec').style.display = 'block';
+					document.getElementById('etapa_empresa').style.background = '#0cc0df';
+					document.getElementById('etapa_cliente').style.background = '#0cc0df';
+					document.getElementById('etapa_parametros').style.background = '#0cc0df';
+					barra.style.width = '75%';
+				}
+				if (etapa == 4) {
+					document.getElementById('final_sec').style.display = 'block';
+					document.getElementById('etapa_empresa').style.background = '#0cc0df';
+					document.getElementById('etapa_cliente').style.background = '#0cc0df';
+					document.getElementById('etapa_parametros').style.background = '#0cc0df';
+					document.getElementById('etapa_final').style.background = '#0cc0df';
+					document.getElementById('btn').style.display = 'none';
+					barra.style.width = '98%';
+					sessionStorage.clear();
+					botaoProximo.style.display = 'none';
+					botaoAnterior.style.display = 'none';
+					botaoLogin.style.display = 'block';
+				}
+			}
+
+			botaoProximo.addEventListener('click', () => {
+				if (etapa == 1) {
+					proxEtapa1();
+				} else if (etapa == 2) {
+					proxEtapa2();
+				} else if (etapa == 3) {
+					proxEtapa3();
+				}
+			});
+
+			botaoAnterior.addEventListener('click', () => {
+				voltar();
+			});
+
+			botaoLogin.addEventListener('click', (event) => {
+				event.preventDefault();
+				voltarParaLogin();
+			});
+
+			function adicionarFuncionario() {
+				var nomeUser = iptNomeUser.value.toLowerCase();
+				var emailUser = iptEmailUser.value.toLowerCase();
+				var senhaUser = iptSenhaUser.value.toLowerCase();
+				var cargoUser = iptCargo.value.toLowerCase();
+				var codigoCadastro = sessionStorage.CODIGO_EMPRESA;
+				var confirmacaoSenhaUser = iptConfirmacaoSenhaUser.value.toLowerCase();
+				var valido_funcionario = true;
+				var idEmpresa = sessionStorage.ID_EMPRESA;
+
+				if (nomeUser == '' || emailUser == '' || senhaUser == '' || confirmacaoSenhaUser == '' || cargoUser == '') {
+					txtErrorFuncionario.innerHTML = 'Todos os campos do funcionário precisam ser preenchidos!';
+					console.log(codigoCadastro);
+					console.log(typeof codigoCadastro);
+					valido_funcionario = false;
+				} else {
+					if (!emailUser.includes('@')) {
+						txtErrorFuncionario.innerHTML = 'Email do funcionário inválido!';
+						valido_funcionario = false;
+					} else if (senhaUser != confirmacaoSenhaUser) {
+						txtErrorFuncionario.innerHTML = 'Senhas do funcionário não coincidem!';
+						valido_funcionario = false;
+					} else if (senhaUser.length < 5) {
+						txtErrorFuncionario.innerHTML = 'A senha do funcionário precisa ter no mínimo 5 caracteres!';
+						valido_funcionario = false;
+					} else if (cargoUser.length < 3) {
+						txtErrorFuncionario.innerHTML = 'O cargo do funcionário precisa ter pelo menos 3 caracteres!';
+						valido_funcionario = false;
+					}
+				}
+
+				if (valido_funcionario) {
+					fetch(`/funcionario/cadastrar/${idEmpresa}`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+							// crie um atributo que recebe o valor recuperado aqui
+							// Agora vá para o arquivo routes/usuario.js
+							nomeUserServer: nomeUser,
+							emailUserServer: emailUser,
+							senhaUserServer: senhaUser,
+							cargoUserServer: cargoUser,
+							codigoCadastroServer: codigoCadastro,
+						}),
+					})
+						.then(function (resposta) {
+							console.log('resposta: ', resposta);
+
+							if (resposta.ok) {
+								console.log('Cadastro do usuario realizado com sucesso!');
+
+								txtErrorFunc.style.color = '#0cc0df';
+								txtErrorFunc.innerHTML = 'Funcionário adicionado com sucesso!';
+								iptNomeUser.value = '';
+								iptEmailUser.value = '';
+								iptSenhaUser.value = '';
+								iptConfirmacaoSenhaUser.value = '';
+								iptCargo.value = '';
+							} else {
+								throw 'Houve um erro ao tentar realizar o cadastro do usuário!';
+							}
+						})
+						.catch(function (resposta) {
+							console.log(`#ERRO: ${resposta}`);
+						});
+				}
+			}
+
+			function avancar() {
+				etapa = etapa + 1;
+				if (etapa > 4) etapa = 4;
+				etapas();
+			}
+
+			function voltar() {
+				etapa = etapa - 1;
+				if (etapa < 1) etapa = 1;
+				document.getElementById('btn').style.display = 'block';
+				etapas();
+			}
+
+			function voltarParaLogin() {
+				window.location.href = 'login.html';
+			}
+
+			window.onload = () => {
+				etapas();
+			};
+		</script>
+	</body>
+</html>

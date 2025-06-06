@@ -123,3 +123,33 @@ new Chart(ctxUmid, {
     },
     plugins: [ChartDataLabels]
 });
+
+
+function gerarValorAleatorio(min, max) {
+    return Math.round(Math.random() * (max - min) + min);
+}
+
+// variavel para acessar cada grafico
+var chartTemperatura = Chart.getChart('grafico-temperatura');
+var chartUmidade = Chart.getChart('grafico-umidade');
+
+// Atualiza os gráficos a cada 2 segundos
+setInterval(function () {
+    // for para geracao de 10 novos valores para cada gráfico
+    var novosValoresTemp = [];
+    var novosValoresUmid = [];
+    for (var index = 0; index < 10; index++) {
+        // aqui coloquei o liminite minimo e maximo dentro do normal para cada sensor
+        novosValoresTemp.push(gerarValorAleatorio(18, 27));
+        novosValoresUmid.push(gerarValorAleatorio(40, 60));
+    }
+
+    // Atualiza dados de temperatura
+    chartTemperatura.data.datasets[0].data = novosValoresTemp;
+    chartTemperatura.update();
+
+    // o grafico comeca com os valores ja setados e depois ele pega por aqui os novos 10 valores
+    chartUmidade.data.datasets[0].data = novosValoresUmid;
+    chartUmidade.update();
+}, 2000);
+

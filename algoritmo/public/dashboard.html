@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="pt">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Painel de Monitoramento Observer</title>
+		<link rel="stylesheet" href="./css/style_dash.css" />
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+	</head>
+
+	<body>
+		<div class="container-painel">
+			<div class="barra-lateral">
+				<div class="secao-logo">
+					<img src="../img/logo.png" alt="Logo Observer" class="logo" />
+				</div>
+				<div class="secao-usuario">
+					<h2 class="nome-usuario">Olá, <span class="nome-usuario" id="nomeUsuario"></span>!</h2>
+					<p class="cargo-usuario"><span id="cargoUsuario"></span> - <span id="empresaUsuario"></span></p>
+					<p class="email-usuario" id="emailUsuario"></p>
+				</div>
+
+				<div class="secao-filtro" id="secao-filtro">
+					<h3 class="titulo-filtro">Localização:</h3>
+				</div>
+				<br />
+
+				<button class="botao-sair" onclick="sair()">Sair</button>
+			</div>
+
+			<div class="conteudo-principal">
+				<div class="cabecalho">
+					<h1>Monitoramento de Temperatura e Umidade - <span id="nome-sala-titulo"></span></h1>
+					<div class="data-hora" id="data-hora"></div>
+				</div>
+
+				<div class="cartoes-status">
+					<div class="cartao-status">
+						<h3>
+							Temperatura média
+							<span class="tooltip"
+								>ⓘ
+								<span class="tooltip-text"
+									>A temperatura média é calculada com base em leituras horárias dos sensores DHT11, considerando o intervalo das últimas 24 horas
+									para representar variações térmicas ambientais de forma contínua.</span
+								>
+							</span>
+						</h3>
+						<div class="valor" id="kpi-temperatura"><span id="kpi-temperatura-media"></span>ºC<span id="icone-temperatura-media"></span></div>
+					</div>
+					<div class="cartao-status">
+						<h3>
+							Umidade média
+							<span class="tooltip"
+								>ⓘ
+								<span class="tooltip-text"
+									>A umidade média é obtida a partir da média aritmética das leituras dos sensores instalados, desconsiderando valores extremos fora
+									da faixa aceitável para garantir maior confiabilidade na análise ambiental.</span
+								>
+							</span>
+						</h3>
+						<div class="valor" id="kpi-umidade"><span id="kpi-umidade-media"></span>%<span id="icone-umidade-media"></span></div>
+					</div>
+					<div class="cartao-status">
+						<h3>
+							Última Atualização
+							<span class="tooltip"
+								>ⓘ
+								<span class="tooltip-text">Tempo desde a última leitura dos sensores.</span>
+							</span>
+						</h3>
+						<div class="valor" id="kpi-tempo">há <span id="tempo-ultima-leitura"></span> segundos</div>
+					</div>
+
+					<div class="cartao-status">
+						<h3>
+							Total de sensores inativos
+							<span class="tooltip"
+								>ⓘ
+								<span class="tooltip-text" id="texto-informativo-sensores-inativos">Sensores inativos:<br /></span>
+							</span>
+						</h3>
+						<div class="valor" id="kpi-sensores"><span id="qtd-sensores-inativos"></span>/<span id="qtd-sensores-total"></span></div>
+					</div>
+				</div>
+
+				<div class="container-graficos">
+					<div class="grafico-wrapper">
+						<h2>TEMPERATURA MÉDIA (°C)</h2>
+						<canvas id="grafico-temperatura" width="1000" height="250" style="display: block; margin-left: auto; margin-right: auto"></canvas>
+					</div>
+					<div class="grafico-wrapper">
+						<h2>UMIDADE MÉDIA (%)</h2>
+						<canvas id="grafico-umidade" width="1000" height="250" style="display: block; margin-left: auto; margin-right: auto"></canvas>
+					</div>
+				</div>
+			</div>
+			<div class="secao-alertas">
+				<h2>ALERTAS ATIVOS</h2>
+				<div class="lista-alertas" id="lista-de-alertas"></div>
+				<button class="botao-historico" onclick="historico()" target="_blank">Histórico de Alertas</button>
+				<div class="secao-niveis">
+					<h2>LEGENDA <br />NÍVEIS DE MONITORAMENTO</h2>
+					<div class="container-itens-niveis">
+						<div class="item-nivel">
+							<div class="item-nivel-icone-titulo">
+								<img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="Normal" class="icone-status" />
+								<p class="item-nivel-titulo">Normal</p>
+							</div>
+							<p class="item-nivel-descricao">
+								T: <span id="temp-min-ideal"></span>°C a <span id="temp-max-ideal"></span>°C<br /><br />U: <span id="umid-min-ideal"></span>% a
+								<span id="umid-max-ideal"></span>%
+							</p>
+						</div>
+						<div class="item-nivel">
+							<div class="item-nivel-icone-titulo">
+								<img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Atenção" class="icone-status" />
+								<p class="item-nivel-titulo">Atenção</p>
+							</div>
+							<p class="item-nivel-descricao">
+								T: &lt;<span id="temp-min-alerta"></span>°C ou &gt;<span id="temp-max-alerta"></span>°C <br /><br />
+								U: &lt;<span id="umid-min-alerta"></span>% ou &gt;<span id="umid-max-alerta"></span>%
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- <script src="../js/graficos.js"></script> -->
+	</body>
+</html>
+<script>
+	var idEmpresa = sessionStorage.ID_EMPRESA;
+	let proximaAtualizacaoTemp;
+	let proximaAtualizacaoUmid;
+
+	let graficoTemp;
+	let graficoUmid;
+
+	function historico() {
+		window.location.href = 'historico.html';
+	}
+
+	function sair() {
+		sessionStorage.clear();
+		window.location.href = 'login.html';
+	}
+
+	function pegarParametros() {
+		fetch(`/usuarios/pegarParametros/${idEmpresa}`, { cache: 'no-store' })
+			.then((response) => {
+				if (response.ok) {
+					response.json().then((resposta) => {
+						console.log('PARÂMETROS RECEBIDOS COM SUCESSO!');
+						console.log('Dados recebidos: ', JSON.stringify(resposta));
+						sessionStorage.TEMP_MIN_IDEAL = resposta[0].tempMinIdeal;
+						sessionStorage.TEMP_MAX_IDEAL = resposta[0].tempMaxIdeal;
+						sessionStorage.UMID_MIN_IDEAL = resposta[0].umidadeMinIdeal;
+						sessionStorage.UMID_MAX_IDEAL = resposta[0].umidadeMaxIdeal;
+					});
+				} else {
+					throw 'ERRO AO PEGAR OS PARÂMETROS DA EMPRESA';
+				}
+			})
+			.catch((erro) => {
+				console.log('#ERRO: ', erro);
+			});
+	}
+
+	function exibirRacksDoUsuario() {
+		var racks = JSON.parse(sessionStorage.RACKS);
+
+		racks.forEach((item) => {
+			document.getElementById('secao-filtro').innerHTML += `
+			<div class="opcao-filtro">
+						<input type="checkbox" id="rack-${item.idRack}" name="rack-${item.idRack}" class="checkbox-sala" onchange="gerCheckbox(this)"/>
+						<label for="rack-${item.idRack}" id="label-rack-${item.idRack}" >${
+				item.descricao.charAt(0).toUpperCase() + item.descricao.slice(1).toLowerCase()
+			}</label>
+			</div>
+			`;
+
+			// obterDadosGraficoTemp(item.idRack);
+			// obterDadosGraficoUmid(item.idRack);
+		});
+	}
+
+	function gerCheckbox(checkboxAtual) {
+		var maxCheckboxes = 3;
+		var checkboxes = document.querySelectorAll('.checkbox-sala');
+		var contCheckboxes = 0;
+
+		checkboxes.forEach((checkbox) => {
+			if (checkbox.checked) {
+				contCheckboxes++;
+			}
+		});
+
+		if (contCheckboxes > maxCheckboxes) {
+			checkboxAtual.checked = false;
+			alert('Máximo de 3 racks permitidos!');
+			return;
+		}
+
+		trocaTitulo();
+	}
+
+	function trocaTitulo() {
+		//selecionando o span que exibe o nome da sala no topo da tela
+		var spanTitulo = document.getElementById('nome-sala-titulo');
+		// selecionando todas as checkbox
+		var checkBoxes = document.getElementsByClassName('checkbox-sala');
+		// criando uma variável para guardar o titulo da sala
+		var titulo = '';
+
+		// laço for que percorre todas as checkboxes
+		for (var i = 0; i < checkBoxes.length; i++) {
+			// a variável checkBox é a checkbox da posição i da lista checkBoxes
+			var checkBox = checkBoxes[i];
+			var racks = JSON.parse(sessionStorage.RACKS);
+
+			//se a checkBox rack 1 está marcada...
+			var nomeSala = '';
+			if (checkBox.checked && checkBox.name == 'rack-1') {
+				// checando qual checkbox está marcada e atriuindo o nome dela a variavel nomeSala
+
+				racks.forEach((item) => {
+					if (checkBox.name == `rack-${item.idRack}`) {
+						nomeSala = item.descricao.charAt(0).toUpperCase() + item.descricao.slice(1).toLowerCase();
+					}
+
+					if (item.idRack == 1) {
+						obterDadosGraficoTemp(item.idRack);
+						obterDadosGraficoUmid(item.idRack);
+						var kpiTemperatura = document.getElementById('kpi-temperatura');
+						var kpiUmidade = document.getElementById('kpi-umidade');
+						var kpiTempo = document.getElementById('kpi-tempo');
+
+						kpiTemperatura.style.display = 'flex';
+						kpiUmidade.style.display = 'flex';
+						kpiTempo.style.display = 'flex';
+					}
+				});
+
+				// se o título não está vazio, eu adiciono uma vírgula para separar os nomes
+				if (titulo != '') {
+					titulo += ', ';
+				}
+
+				// adicionando o nome da sala a variavel título
+				titulo += nomeSala;
+			} else if (!checkBox.checked && checkBox.name == 'rack-1') {
+				var graficoTemp = document.getElementById('grafico-temperatura');
+				var graficoUmid = document.getElementById('grafico-umidade');
+				var kpiTemperatura = document.getElementById('kpi-temperatura');
+				var kpiUmidade = document.getElementById('kpi-umidade');
+				var kpiTempo = document.getElementById('kpi-tempo');
+
+				kpiTemperatura.style.display = 'none';
+				kpiUmidade.style.display = 'none';
+				kpiTempo.style.display = 'none';
+
+				graficoTemp.style.display = 'none';
+				graficoUmid.style.display = 'none';
+				clearTimeout(proximaAtualizacaoTemp);
+				clearTimeout(proximaAtualizacaoUmid);
+			} else if (checkBox.checked && checkBox.name == 'rack-4') {
+				racks.forEach((item) => {
+					if (checkBox.name == `rack-${item.idRack}`) {
+						nomeSala = item.descricao.charAt(0).toUpperCase() + item.descricao.slice(1).toLowerCase();
+					}
+				});
+				if (titulo != '') {
+					titulo += ', ';
+				}
+
+				// adicionando o nome da sala a variavel título
+				titulo += nomeSala;
+			}
+		}
+
+		// trocando o span do título para a variável título
+		spanTitulo.innerHTML = titulo;
+	}
+
+	function exibeDataHora() {
+		// selecionadno a div que exibe a data e a hora na dashboard pelo ID
+		var divDataHora = document.getElementById('data-hora');
+
+		// atualizando a hora a cada 1 minuto
+		setInterval(() => {
+			// pegando a data atual e colocando em uma variável
+			var data = new Date();
+
+			// inserindo a data e hora formatadas para o nosso local (pt-BR) na div que selecionei
+			divDataHora.innerHTML = `${data.toLocaleDateString('pt-BR')} - ${data.toLocaleTimeString('pt-BR')}`;
+		}, 1000);
+	}
+
+	function sensores() {
+		fetch(`/sensores/totalSensores/${idEmpresa}`, { cache: 'no-store' })
+			.then((response) => {
+				if (response.ok) {
+					response.json().then((resposta) => {
+						document.getElementById('qtd-sensores-total').innerHTML = resposta[0]['count(*)'];
+					});
+				} else {
+					throw 'ERRO AO PEGAR O TOTAL DE SENSORES!';
+				}
+			})
+			.catch((erro) => {
+				console.log('Erro no fetch do total de sensores: ', erro);
+			});
+
+		sensoresInativos();
+	}
+
+	function sensoresInativos() {
+		fetch(`/sensores/sensoresInativos/${idEmpresa}`, { cache: 'no-store' })
+			.then((response) => {
+				if (response.ok) {
+					response.json().then((resposta) => {
+						document.getElementById('qtd-sensores-inativos').innerHTML = resposta.length;
+						resposta.forEach((item) => {
+							document.getElementById('texto-informativo-sensores-inativos').innerHTML += `<br><p>Sensor: ${item.nomeSensor}<br>Localização: ${
+								item.descricao.charAt(0).toUpperCase() + item.descricao.slice(1).toLowerCase()
+							}</p><br>`;
+						});
+					});
+				} else {
+					throw 'ERRO AO PEGAR OS SENSORES INATIVOS!';
+				}
+			})
+			.catch((erro) => {
+				console.log('Erro no fetch dos sensores inativos: ', erro);
+			});
+	}
+
+	function obterDadosGraficoTemp(idRack) {
+		if (proximaAtualizacaoTemp != undefined) {
+			clearTimeout(proximaAtualizacaoTemp);
+		}
+
+		fetch(`/leituras/ultimasTemp/${idRack}`, { cache: 'no-store' })
+			.then((response) => {
+				if (response.ok) {
+					response.json().then((resposta) => {
+						console.log('Dados recebidos das ultimas temp: ', JSON.stringify(resposta));
+						resposta.reverse();
+
+						if (idRack == 4) {
+							var dadosParaInserir = [];
+							for (var i = 0; i < 10; i++) {
+								dadosParaInserir.push(resposta[i].temperatura);
+							}
+
+							var dadosGrafico = {
+								labels: '',
+								data: dadosParaInserir,
+								backgroundColor: 'transparent',
+								tension: 0.4,
+								pointBackgroundColor: 'pink',
+								borderColor: 'pink',
+							};
+
+							graficoTemp.data.datasets.push(dadosGrafico);
+						} else {
+							plotarGraficoTemp(resposta, idRack);
+						}
+					});
+				} else {
+					console.error('Nenhum dado encontrado ou erro na API');
+				}
+			})
+			.catch((erro) => {
+				console.error(`Erro na obtenção dos dados p/ gráfico: ${erro.message}`);
+			});
+	}
+
+	function obterDadosGraficoUmid(idRack) {
+		if (proximaAtualizacaoUmid != undefined) {
+			clearTimeout(proximaAtualizacaoUmid);
+		}
+
+		fetch(`/leituras/ultimasUmid/${idRack}`, { cache: 'no-store' })
+			.then((response) => {
+				if (response.ok) {
+					response.json().then((resposta) => {
+						console.log('Dados recebidos das ultimas umidades: ', JSON.stringify(resposta));
+						resposta.reverse();
+						if (idRack == 4) {
+							var dadosParaInserir = [];
+							for (var i = 0; i < 10; i++) {
+								dadosParaInserir.push(resposta[i].umidade);
+							}
+
+							var dadosGrafico = {
+								labels: '',
+								data: dadosParaInserir,
+								backgroundColor: 'transparent',
+								tension: 0.4,
+								pointBackgroundColor: 'pink',
+								borderColor: 'pink',
+							};
+
+							graficoUmid.data.datasets.push(dadosGrafico);
+						}
+
+						plotarGraficoUmid(resposta, idRack);
+					});
+				} else {
+					console.error('Nenhum dado encontrado ou erro na API');
+				}
+			})
+			.catch((erro) => {
+				console.error(`Erro na obtenção dos dados p/ gráfico: ${erro.message}`);
+			});
+	}
+
+	function plotarGraficoTemp(resposta, idRack) {
+		console.log('Iniciando plotagem do grafico de temperatura...');
+
+		let labels = [];
+
+		let dadosTemp = {
+			labels: labels,
+			datasets: [
+				{
+					label: '',
+					data: [],
+					backgroundColor: 'transparent',
+					tension: 0.4,
+					pointBackgroundColor: 'orange',
+					borderColor: 'orange',
+				},
+			],
+		};
+
+		if (Chart.getChart('grafico-temperatura')) {
+			Chart.getChart('grafico-temperatura').destroy();
+		}
+
+		console.log('----------------------------------------------');
+		console.log('Estes dados foram recebidos pela funcao "obterDadosGraficoTemp" e passados para "plotarGraficoTemp":');
+		console.log(resposta);
+
+		for (var i = 0; i < resposta.length; i++) {
+			var registro = resposta[i];
+			labels.push(registro.data_grafico);
+			dadosTemp.datasets[0].data.push(registro.temperatura);
+		}
+
+		console.log('----------------------------------------------');
+		console.log('O gráfico de temperatura será plotado com os respectivos valores:');
+		console.log('Labels:');
+		console.log(labels);
+		console.log('Dados:');
+		console.log(dadosTemp.datasets[0]);
+		console.log('----------------------------------------------');
+
+		const configTemp = {
+			type: 'line',
+			data: dadosTemp,
+			options: {
+				layout: {
+					padding: {
+						top: 10,
+						bottom: 10,
+						left: 10,
+						right: 10,
+					},
+				},
+				plugins: {
+					legend: { display: false },
+					datalabels: {
+						align: 'top',
+						anchor: 'end',
+						color: '#000',
+						font: { weight: 'bold', size: 12 },
+						formatter: Math.round(1),
+					},
+				},
+				interaction: { mode: 'index' },
+				scales: {
+					x: {
+						title: {
+							display: true,
+							text: 'Horário do dia',
+							color: '#000',
+							font: { size: 10, weight: 'bold' },
+						},
+						ticks: { color: '#000', font: { size: 12 } },
+						grid: { color: 'rgba(0,0,0,0.05)' },
+					},
+					y: {
+						beginAtZero: true,
+						min: 0,
+						max: 40,
+						title: {
+							display: true,
+							text: 'Temperatura (°C)',
+							color: '#000',
+							font: { size: 10, weight: 'bold' },
+						},
+						ticks: { stepSize: 10, color: '#000', font: { size: 12 } },
+						grid: { color: 'rgba(0,0,0,0.05)' },
+					},
+				},
+			},
+			plugins: [ChartDataLabels],
+		};
+		graficoTemp = new Chart(document.getElementById('grafico-temperatura'), configTemp);
+
+		setTimeout(() => atualizarGraficoTemp(idRack, dadosTemp, graficoTemp), 5000);
+	}
+
+	function plotarGraficoUmid(resposta, idRack) {
+		console.log('Iniciando plotagem do grafico de umidade...');
+
+		if (Chart.getChart('grafico-umidade')) {
+			Chart.getChart('grafico-umidade').destroy();
+		}
+
+		let labels = [];
+
+		let dados = {
+			labels: labels,
+			datasets: [
+				{
+					label: '',
+					data: [],
+					backgroundColor: 'transparent',
+					tension: 0.4,
+					pointBackgroundColor: '#0cc0df',
+					borderColor: '#0cc0df',
+				},
+			],
+		};
+
+		console.log('----------------------------------------------');
+		console.log('Estes dados foram recebidos pela funcao "obterDadosGraficoUmid" e passados para "plotarGraficoUmid":');
+		console.log(resposta);
+
+		for (var i = 0; i < resposta.length; i++) {
+			var registro = resposta[i];
+			labels.push(registro.data_grafico);
+			dados.datasets[0].data.push(registro.umidade);
+		}
+
+		console.log('----------------------------------------------');
+		console.log('O gráfico de umidade será plotado com os respectivos valores:');
+		console.log('Labels:');
+		console.log(labels);
+		console.log('Dados:');
+		console.log(dados.datasets[0]);
+		console.log('----------------------------------------------');
+
+		const config = {
+			type: 'line',
+			data: dados,
+			options: {
+				layout: {
+					padding: {
+						top: 10,
+						bottom: 10,
+						left: 10,
+						right: 10,
+					},
+				},
+				plugins: {
+					legend: { display: false },
+					datalabels: {
+						align: 'top',
+						anchor: 'end',
+						color: '#000',
+						font: { weight: 'bold', size: 12 },
+						formatter: Math.round,
+					},
+				},
+				interaction: { mode: 'index' },
+				scales: {
+					x: {
+						title: {
+							display: true,
+							text: 'Horário do dia',
+							color: '#000',
+							font: { size: 10, weight: 'bold' },
+						},
+						ticks: { color: '#000', font: { size: 12 } },
+						grid: { color: 'rgba(0,0,0,0.05)' },
+					},
+					y: {
+						beginAtZero: true,
+						min: 30,
+						max: 100,
+						title: {
+							display: true,
+							text: 'Umidade (%)',
+							color: '#000',
+							font: { size: 10, weight: 'bold' },
+						},
+						ticks: { stepSize: 10, color: '#000', font: { size: 12 } },
+						grid: { color: 'rgba(0,0,0,0.05)' },
+					},
+				},
+			},
+			plugins: [ChartDataLabels],
+		};
+
+		graficoUmid = new Chart(document.getElementById('grafico-umidade'), config);
+
+		setTimeout(() => atualizarGraficoUmid(idRack, dados, graficoUmid), 5000);
+	}
+
+	function exibirAlerta(mensagem, temperatura, umidade, hora) {
+		var dadosMostrados = [];
+
+		if (mensagem.includes('Temperatura')) {
+			dadosMostrados.push(`T: ${temperatura}`);
+		}
+
+		if (mensagem.includes('Umidade')) {
+			dadosMostrados.push(`U: ${umidade}%`);
+		}
+
+		document.getElementById('lista-de-alertas').innerHTML += `
+			<div class="item-alerta">
+						<img src="https://cdn-icons-png.flaticon.com/512/753/753345.png" alt="Emergência" class="icone-status" />
+						<div class="conteudo-alerta">
+							<div class="hora-alerta">${hora}</div>
+							<div class="local-alerta">Datacenter Principal - Rack 05 - Sensor C</div>
+							<div class="tipo-alerta">${mensagem}</div>
+							<div class="valor-alerta">${dadosMostrados}</div>
+							<button class="botao-acao" onclick="registrarAcao(this)">Alterar Status</button>
+						</div>
+					</div>
+		`;
+	}
+
+	function alertar(resposta, idRack) {
+		console.log('RESPOSTA RECEBIDA PELO ALERTA: ', resposta)
+		var temp = resposta[0].temperatura;
+		var umid = resposta[0].umidade;
+		var hora = resposta[0].data_grafico;
+		var idLeitura = resposta[0].idLeitura;
+		var idSensor = 1;
+
+		var limites = {
+			umidade_minima: sessionStorage.UMID_MIN_IDEAL,
+			umidade_maxima: sessionStorage.UMID_MAX_IDEAL,
+			temperatura_minima: sessionStorage.TEMP_MIN_IDEAL,
+			temperatura_maxima: sessionStorage.TEMP_MAX_IDEAL,
+		};
+
+		if (temp > limites.temperatura_maxima || temp < limites.temperatura_minima || umid > limites.umidade_maxima || umid < limites.umidade_minima) {
+			var alerta = [];
+
+			if (temp > limites.temperatura_maxima || temp < limites.temperatura_minima) {
+				alerta.push('Temperatura ');
+			}
+
+			if (umid > limites.umidade_maxima || umid < limites.umidade_minima) {
+				alerta.push('Umidade');
+			}
+
+			fetch(`/alertas/cadastrarAlerta`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					idLeituraServer: idLeitura,
+					idSensorServer: idSensor,
+					tipoAlertaServer: `Alerta de ${alerta.join(' e ')}`
+				}),
+			}).then((res)=> {
+
+			})
+
+			exibirAlerta(`Alerta de ${alerta.join(' e ')}`, temp, umid, hora);
+		}
+	}
+
+	function obterdadosTemp(idRack) {
+		fetch(`/leituras/tempo-realTemp/${idRack}`, { cache: 'no-store' })
+			.then((response) => {
+				if (response.status == 200) {
+					response.json().then((resposta) => {
+						console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+						alertar(resposta, idRack);
+					});
+				} else {
+					console.error(`Nenhum dado encontrado para o id ${idRack} ou erro na API`);
+				}
+			})
+			.catch((erro) => {
+				console.error(`Erro na obtenção dos dados do rack p/ gráfico: ${error.message}`);
+			});
+	}
+
+	function obterdadosUmid(idRack) {
+		fetch(`/leituras/tempo-realUmid/${idRack}`, { cache: 'no-store' })
+			.then((response) => {
+				if (response.status == 200) {
+					response.json().then((resposta) => {
+						console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+						alertar(resposta, idRack);
+					});
+				} else {
+					console.error(`Nenhum dado encontrado para o id ${idRack} ou erro na API`);
+				}
+			})
+			.catch((erro) => {
+				console.error(`Erro na obtenção dos dados do rack p/ gráfico: ${error.message}`);
+			});
+	}
+
+	function atualizarGraficoTemp(idRack, dados, myChart) {
+		fetch(`/leituras/tempo-realTemp/${idRack}`, { cache: 'no-store' })
+			.then((response) => {
+				if (response.ok) {
+					response.json().then((novoRegistro) => {
+						obterdadosTemp(idRack);
+						console.log(`Dados recebidos de temperatura: ${JSON.stringify(novoRegistro)}`);
+						console.log(`Dados atuais do gráfico de temperatura:`);
+						console.log(dados);
+
+						if (novoRegistro[0] == dados.labels[dados.labels.length - 1]) {
+							console.log('---------------------------------------------------------------');
+							console.log('Como não há dados novos para captura, o gráfico de temperatura não atualizará.');
+							console.log('Horário do novo dado de temperatura capturado:');
+							console.log(novoRegistro[0].data_grafico);
+							console.log('Horário do último dado de umidade capturado:');
+							console.log(dados.labels[dados.labels.length - 1]);
+							console.log('---------------------------------------------------------------');
+						} else {
+							dados.labels.shift(); // apagar o primeiro
+							dados.labels.push(novoRegistro[0].data_grafico); // incluir um novo momento
+
+							dados.datasets[0].data.shift(); // apagar o primeiro de temperatura
+							dados.datasets[0].data.push(novoRegistro[0].temperatura); // incluir uma nova medida de temperatura
+
+							var somaTemperaturas = 0;
+							var mediaTemperaturas = 0;
+							for (var i = 0; i < dados.datasets[0].data.length; i++) {
+								somaTemperaturas += parseFloat(dados.datasets[0].data[i]);
+								mediaTemperaturas = (somaTemperaturas / dados.datasets[0].data.length).toFixed(1);
+							}
+
+							document.getElementById('kpi-temperatura-media').innerHTML = mediaTemperaturas;
+
+							if (mediaTemperaturas > parseInt(sessionStorage.TEMP_MAX_IDEAL) || mediaTemperaturas < parseInt(sessionStorage.TEMP_MIN_IDEAL)) {
+								document.getElementById('icone-temperatura-media').innerHTML = `<img
+								src="https://cdn-icons-png.flaticon.com/512/564/564619.png"
+								alt="OK"
+								class="icone-status" />`;
+							} else {
+								document.getElementById('icone-temperatura-media').innerHTML = `<img
+								src="https://cdn-icons-png.flaticon.com/512/190/190411.png"
+								alt="OK"
+								class="icone-status" />`;
+							}
+
+							myChart.update();
+						}
+
+						proximaAtualizacaoTemp = setTimeout(() => atualizarGraficoTemp(idRack, dados, myChart), 5000);
+					});
+				} else {
+					console.error('Nenhum dado encontrado ou erro na API');
+					// Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
+					proximaAtualizacaoTemp = setTimeout(() => atualizarGraficoTemp(idRack, dados, myChart), 5000);
+				}
+			})
+			.catch((erro) => {
+				console.error(`Erro na obtenção dos dados p/ gráfico: ${erro.message}`);
+			});
+	}
+
+	function atualizarGraficoUmid(idRack, dados, myChart) {
+		fetch(`/leituras/tempo-realUmid/${idRack}`, { cache: 'no-store' })
+			.then((response) => {
+				if (response.ok) {
+					response.json().then((novoRegistro) => {
+						obterdadosUmid(idRack);
+						console.log(`Dados recebidos de umidade: ${JSON.stringify(novoRegistro)}`);
+						console.log(`Dados atuais do gráfico de umidade:`);
+						console.log(dados);
+
+						if (novoRegistro[0] == dados.labels[dados.labels.length - 1]) {
+							console.log('---------------------------------------------------------------');
+							console.log('Como não há dados novos para captura, o gráfico de umidade não atualizará.');
+							console.log('Horário do novo dado de umidade capturado:');
+							console.log(novoRegistro[0].data_grafico);
+							console.log('Horário do último dado de umidade capturado:');
+							console.log(dados.labels[dados.labels.length - 1]);
+							console.log('---------------------------------------------------------------');
+						} else {
+							dados.labels.shift(); // apagar o primeiro
+							dados.labels.push(novoRegistro[0].data_grafico); // incluir um novo momento
+
+							dados.datasets[0].data.shift(); // apagar o primeiro de temperatura
+							dados.datasets[0].data.push(novoRegistro[0].umidade); // incluir uma nova medida de temperatura
+
+							var somaUmidade = 0;
+							var mediaUmidade = 0;
+							for (var i = 0; i < dados.datasets[0].data.length; i++) {
+								somaUmidade += parseInt(dados.datasets[0].data[i]);
+								mediaUmidade = (somaUmidade / dados.datasets[0].data.length).toFixed(0);
+							}
+
+							var tempoAtualizacao = 1;
+
+							var intervaloLeituras = 5; //tempo em segundos dos intervalos das leituras
+
+							var intervalo = setInterval(() => {
+								document.getElementById('tempo-ultima-leitura').innerHTML = tempoAtualizacao;
+
+								tempoAtualizacao++;
+
+								if (tempoAtualizacao > intervaloLeituras) {
+									clearInterval(intervalo);
+								}
+							}, 1000);
+
+							document.getElementById('kpi-umidade-media').innerHTML = mediaUmidade;
+
+							if (mediaUmidade > parseInt(sessionStorage.UMID_MAX_IDEAL) || mediaUmidade < parseInt(sessionStorage.UMID_MIN_IDEAL)) {
+								document.getElementById('icone-umidade-media').innerHTML = `<img
+								src="https://cdn-icons-png.flaticon.com/512/564/564619.png"
+								alt="OK"
+								class="icone-status" />`;
+							} else {
+								document.getElementById('icone-umidade-media').innerHTML = `<img
+								src="https://cdn-icons-png.flaticon.com/512/190/190411.png"
+								alt="OK"
+								class="icone-status" />`;
+							}
+
+							myChart.update();
+						}
+
+						proximaAtualizacaoUmid = setTimeout(() => atualizarGraficoUmid(idRack, dados, myChart), 5000);
+					});
+				} else {
+					console.error('Nenhum dado encontrado ou erro na API');
+					// Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
+					proximaAtualizacaoUmid = setTimeout(() => atualizarGraficoUmid(idRack, dados, myChart), 5000);
+				}
+			})
+			.catch((erro) => {
+				console.error(`Erro na obtenção dos dados p/ gráfico: ${erro.message}`);
+			});
+	}
+
+	window.onload = () => {
+		var nomeUsuario = sessionStorage.NOME_FUNCIONARIO;
+		var cargoUsuario = sessionStorage.CARGO_FUNCIONARIO;
+		var emailUsuario = sessionStorage.EMAIL_FUNCIONARIO;
+		var empresaUsuario = sessionStorage.NOME_EMPRESA;
+
+		var tempMin = sessionStorage.TEMP_MIN_IDEAL;
+		var tempMax = sessionStorage.TEMP_MAX_IDEAL;
+
+		var umidMin = sessionStorage.UMID_MIN_IDEAL;
+		var umidMax = sessionStorage.UMID_MAX_IDEAL;
+
+		document.getElementById('nomeUsuario').innerHTML = nomeUsuario[0].toUpperCase() + nomeUsuario.substr(1);
+		document.getElementById('cargoUsuario').innerHTML = cargoUsuario[0].toUpperCase() + cargoUsuario.substr(1);
+		document.getElementById('emailUsuario').innerHTML = emailUsuario;
+		document.getElementById('empresaUsuario').innerHTML = empresaUsuario[0].toUpperCase() + empresaUsuario.substr(1);
+
+		document.getElementById('temp-min-ideal').innerHTML = tempMin;
+		document.getElementById('temp-max-ideal').innerHTML = tempMax;
+		document.getElementById('umid-min-ideal').innerHTML = umidMin;
+		document.getElementById('umid-max-ideal').innerHTML = umidMax;
+		document.getElementById('temp-min-alerta').innerHTML = tempMin;
+		document.getElementById('temp-max-alerta').innerHTML = tempMax;
+		document.getElementById('umid-min-alerta').innerHTML = umidMin;
+		document.getElementById('umid-max-alerta').innerHTML = umidMax;
+
+		trocaTitulo();
+		pegarParametros();
+		exibirRacksDoUsuario();
+		exibeDataHora();
+		sensores();
+	};
+</script>
