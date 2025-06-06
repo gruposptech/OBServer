@@ -39,16 +39,16 @@ function cadastrar(nome, cnpj, email, telefone, senha, codigo) {
 
 function pegarCodigosUsados() {
 	var instrucaoSql = `
-    SELECT codigoCadastro FROM empresa;
+    SELECT codigoCadastro FROM usuario;
     `;
 
 	console.log('Executando a instrução SQL: \n' + instrucaoSql);
 	return database.executar(instrucaoSql);
 }
 
-function pegarIdEmpresa(cnpjEmpresa) {
+function pegarIdEmpresa(codigo) {
 	var instrucaoSql = `
-	SELECT idEmpresa FROM empresa WHERE cnpjEmpresa = ${cnpjEmpresa}
+	SELECT idEmpresa FROM empresa WHERE codigoCadastro = '${codigo}'
 	`;
 	console.log('Executando a instrução SQL: \n' + instrucaoSql);
 	return database.executar(instrucaoSql);

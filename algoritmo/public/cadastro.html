@@ -21,30 +21,11 @@
 
 			<div class="container_formulario">
 				<form id="formulario">
-					<div class="secoes_form" id="empresa_sec">
-						<label class="label">Nome da Empresa:</label><br />
-						<input type="text" class="input" id="iptNomeEmpresa" /><br />
-
-						<label class="label">CNPJ:</label><br />
-						<input type="text" class="input" id="iptCNPJ" /><br />
-
-						<label class="label">Email:</label><br />
-						<input type="text" class="input" id="iptEmail" /><br />
-
-						<label class="label">Telefone:</label><br />
-						<input type="text" class="input" id="iptTelefone" /><br />
-
-						<label class="label">Senha:</label><br />
-						<input type="password" class="input" id="iptSenha" /><br />
-
-						<label class="label">Confirme a senha:</label><br />
-						<input type="password" class="input" id="iptConfirmacaoSenha" /><br />
-
-						<label class="label">Código de confirmação:</label><br />
-						<input type="text" class="input" id="iptCodigo" />
-
-						<div class="outputError">
-							<p class="txtError" id="txtError"></p>
+					<div class="secoes_form" id="codigo_sec">
+						<label class="label">Digite o seu código de acesso</label>
+						<input type="text" class="input" id="iptCodigoCadastro" />
+						<div class="outputErrorFunc">
+							<p class="txtErrorFunc" id="txtErrorFunc"></p>
 						</div>
 					</div>
 
@@ -64,7 +45,7 @@
 						<label class="label">Cargo:</label><br />
 						<input type="text" class="input" id="iptCargo" /><br />
 						<div class="outputErrorFunc">
-							<p class="txtErrorFunc" id="txtErrorFunc"></p>
+							<p class="txtErrorFunc" id="txtErrorFuncionario"></p>
 						</div>
 						<button type="button" class="btn_func" onclick="adicionarFuncionario()">Adicionar Funcionário</button>
 					</div>
@@ -98,62 +79,7 @@
 		</section>
 		<footer class="linha-baixo"></footer>
 		<script>
-			var codigos = [
-				'ab3de', 
-				'ch4fx', 
-				'kl3po', 
-				'uy0iu', 
-				'nt6zj', 
-				'kg5aq',
-				'qx4df',
-				'mv0ej',
-				'ji6fn',
-				'tr9xg',
-				'bn7sj',
-				'ea2yi',
-				'uf3ze',
-				'hd4mt',
-				'cj1os',
-				'wo2lb',
-				'mk0pc',
-				'gv9ul',
-				'xy6vn',
-				'dr7we',
-				'pl8yz',
-				'so1ft',
-				'ib5gx',
-				'az6ch',
-				'qe9rm',
-				'vy0sa',
-				'nz3kt',
-				'tx4hv',
-				'lj2oq',
-				'rp8bw',
-				'fc0me',
-				'wm5xz',
-				'dk1yn',
-				'hb7ju',
-				'sg4lr',
-				'ak6nw',
-				'jo3pz',
-				'uy2dc',
-				'zm9fg',
-				'nc7vs',
-				'xl0qb',
-				'pe4tz',
-				'gv5ih',
-				'bf3xa',
-				'ow2sk',
-				'ru1jp',
-				'dm6ne',
-				'tz9ol',
-				'yi0kc',
-				'cb8xf',
-				'hl4gv',
-				'aq7md',
-				'vn5zr',
-				'ks3wb',
-			];
+			var codigosCadastrados = ['ab3de', 'xj3de', 'ao9yx'];
 			var etapa = 1;
 			var txtError = document.getElementById('txtError');
 			var txtErrorFunc = document.getElementById('txtErrorFunc');
@@ -164,21 +90,14 @@
 			var botaoLogin = document.getElementById('btnReturnLogin');
 
 			function proxEtapa1() {
-				txtError.innerHTML = '';
-				var nome = iptNomeEmpresa.value.toLowerCase();
-				var cnpj = iptCNPJ.value.toLowerCase();
-				var email = iptEmail.value.toLowerCase();
-				var telefone = iptTelefone.value.toLowerCase();
-				var senha = iptSenha.value.toLowerCase();
-				var confirmacaoSenha = iptConfirmacaoSenha.value.toLowerCase();
-				var codigo = iptCodigo.value.toLowerCase();
-				var valido_empresa = true;
-				var todosIguais = true;
 				var codigoUsado = false;
 
-				if (nome == '' || cnpj == '' || email == '' || telefone == '' || senha == '' || confirmacaoSenha == '' || codigo == '') {
-					alert('Todos os campos da empresa precisam ser preenchidos!');
-					valido_empresa = false;
+				var codigo = iptCodigoCadastro.value.toLowerCase();
+
+				if (codigo == '') {
+					txtErrorFunc.innerHTML = 'Digite algo!';
+				} else if (codigo.length != 5 || !codigosCadastrados.includes(codigo)) {
+					txtErrorFunc.innerHTML = 'Código inválido!';
 				} else {
 					// pegando os codigos que ja foram usados e fazendo a verificação
 					fetch('/usuarios/pegarCodigosUsados', { cache: 'no-store' })
@@ -186,102 +105,27 @@
 							if (response.ok) {
 								response.json().then(function (resposta) {
 									console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
-
 									for (var i = 0; i < resposta.length; i++) {
 										if (resposta[i].codigoCadastro == codigo) {
+											txtErrorFunc.innerHTML = 'Código já utilizado!';
 											codigoUsado = true;
 											break;
 										}
 									}
-
-									if (senha != confirmacaoSenha) {
-										txtError.innerHTML = 'Senhas da empresa não coincidem.';
-										valido_empresa = false;
-									} else if (cnpj.length != 14) {
-										txtError.innerHTML = 'CNPJ inválido!';
-										valido_empresa = false;
-									} else if (telefone.length != 11) {
-										txtError.innerHTML = 'Telefone inválido!';
-										valido_empresa = false;
-									} else if (senha.length < 5) {
-										txtError.innerHTML = 'A senha da empresa precisa ter pelo menos 5 dígitos!';
-										valido_empresa = false;
-									} else if (codigo.length != 5 || !codigos.includes(codigo) || codigoUsado == true) {
-										txtError.innerHTML = 'Código inválido';
-										valido_empresa = false;
-									} else if (!email.includes('@')) {
-										txtError.innerHTML = 'Email da empresa inválido!';
-										valido_empresa = false;
-									} else if (todosIguais) {
-										for (var i = 0; i < cnpj.length; i++) {
-											if (cnpj[i] != cnpj[0]) {
-												todosIguais = false;
-												break;
-											}
-										}
-										if (todosIguais) {
-											txtError.innerHTML = 'Todos os números do CNPJ não podem ser iguais!';
-											valido_empresa = false;
-										}
-									}
-
-									if (valido_empresa) {
-										fetch('/usuarios/cadastrar', {
-											method: 'POST',
-											headers: {
-												'Content-Type': 'application/json',
-											},
-											body: JSON.stringify({
-												// crie um atributo que recebe o valor recuperado aqui
-												// Agora vá para o arquivo routes/usuario.js
-												nomeServer: nome,
-												cnpjServer: cnpj,
-												emailServer: email,
-												telefoneServer: telefone,
-												senhaServer: senha,
-												codigoServer: codigo,
-											}),
-										})
-											.then(function (resposta) {
-												console.log('resposta: ', resposta);
-
-												if (resposta.ok) {
-													console.log('Cadastro da empresa realizado com sucesso!');
-
-													fetch(`usuarios/pegarIdEmpresa/${cnpj}`, { cache: 'no-store' })
-														.then(function (response) {
-															if (response.ok) {
-																response.json().then(function (resposta) {
-																	console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
-																	sessionStorage.ID_EMPRESA = resposta[0].idEmpresa;
-																	avancar();
-																});
-															} else {
-																console.error('Nenhum dado encontrado ou erro na API');
-															}
-														})
-														.catch((error) => {
-															console.log(`#ERRO: ${resposta}`);
-														});
-												} else {
-													throw 'Houve um erro ao tentar realizar o cadastro!';
-												}
-											})
-											.catch(function (resposta) {
-												console.log(`#ERRO: ${resposta}`);
-											});
+									if (codigoUsado == false) {
+										sessionStorage.CODIGO_EMPRESA = codigo;
+										avancar();
 									}
 								});
 							} else {
-								console.error('Nenhum dado encontrado ou erro na API');
+								console.log('Responsa nao veio ok ao pegar codigos usados');
 							}
 						})
-						.catch(function (error) {
-							console.error(`Erro na obtenção dos dados: ${error.message}`);
+						.catch((erro) => {
+							console.log('Erro no fetch ao pegar codigos usados: ', erro);
 						});
 				}
 			}
-
 			function proxEtapa2() {
 				fetch(`/usuarios/temUsuarioCadastrado/${sessionStorage.ID_EMPRESA}`, { cache: 'no-store' })
 					.then(function (response) {
@@ -291,7 +135,8 @@
 								if (resposta[0].qtdFuncionarios != 0) {
 									avancar();
 								} else {
-									txtErrorFunc.innerHTML = 'Você precisa de pelo menos 1 usuário cadastrado!';
+									var divErro = document.getElementById('txtErrorFuncionario');
+									divErro.innerHTML = 'Você precisa de pelo menos 1 usuário cadastrado!';
 								}
 							});
 						} else {
@@ -317,10 +162,10 @@
 					alert('Temperatura mínima deve ser menor que a máxima.');
 				} else if (umidMin >= umidMax) {
 					alert('Umidade mínima deve ser menor que a máxima.');
-				} else if (tempMin < 0 || tempMax > 100) {
-					alert('Valores de temperatura fora do intervalo permitido (0°C a 100°C).');
-				} else if (umidMin < 0 || umidMax > 100) {
-					alert('Valores de umidade fora do intervalo permitido (0% a 100%).');
+				} else if (tempMin < 0 || tempMax > 40) {
+					alert('Valores de temperatura fora do intervalo permitido (0°C a 40°C).');
+				} else if (umidMin < 0 || umidMax > 90) {
+					alert('Valores de umidade fora do intervalo permitido (0% a 90%).');
 				} else {
 					fetch('/usuarios/cadastrarParametros', {
 						method: 'POST',
@@ -340,7 +185,7 @@
 
 							if (resposta.ok) {
 								console.log('Cadastro dos parâmetros realizados com sucesso!');
-								avancar()
+								avancar();
 							} else {
 								throw 'Houve um erro ao realizar o cadastro dos parâmetros';
 							}
@@ -352,7 +197,7 @@
 			}
 
 			function etapas() {
-				document.getElementById('empresa_sec').style.display = 'none';
+				document.getElementById('codigo_sec').style.display = 'nonew';
 				document.getElementById('funcionario_sec').style.display = 'none';
 				document.getElementById('parametros_sec').style.display = 'none';
 				document.getElementById('final_sec').style.display = 'none';
@@ -364,7 +209,7 @@
 
 				// cadastro da empresa
 				if (etapa == 1) {
-					document.getElementById('empresa_sec').style.display = 'block';
+					document.getElementById('codigo_sec').style.display = 'block';
 					document.getElementById('etapa_empresa').style.background = '#0cc0df';
 					barra.style.width = '0%';
 					botaoAnterior.style.display = 'none';
@@ -372,10 +217,27 @@
 
 				// cadastro do funcionario
 				if (etapa == 2) {
+					txtErrorFunc.innerHTML = '';
+					document.getElementById('codigo_sec').style.display = 'none';
 					document.getElementById('funcionario_sec').style.display = 'block';
 					document.getElementById('etapa_empresa').style.background = '#0cc0df';
 					document.getElementById('etapa_cliente').style.background = '#0cc0df';
 					barra.style.width = '50%';
+
+					fetch(`usuarios/pegarIdEmpresa/${sessionStorage.CODIGO_EMPRESA}`, { cache: 'no-store' })
+						.then(function (response) {
+							if (response.ok) {
+								response.json().then(function (resposta) {
+									console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+									sessionStorage.ID_EMPRESA = resposta[0].idEmpresa;
+								});
+							} else {
+								console.error('Nenhum dado encontrado ou erro na API');
+							}
+						})
+						.catch((error) => {
+							console.log(`#ERRO: ${resposta}`);
+						});
 				}
 
 				// tela parametro
@@ -394,7 +256,7 @@
 					document.getElementById('etapa_final').style.background = '#0cc0df';
 					document.getElementById('btn').style.display = 'none';
 					barra.style.width = '98%';
-					sessionStorage.removeItem('ID_EMPRESA');
+					sessionStorage.clear();
 					botaoProximo.style.display = 'none';
 					botaoAnterior.style.display = 'none';
 					botaoLogin.style.display = 'block';
@@ -425,25 +287,28 @@
 				var emailUser = iptEmailUser.value.toLowerCase();
 				var senhaUser = iptSenhaUser.value.toLowerCase();
 				var cargoUser = iptCargo.value.toLowerCase();
+				var codigoCadastro = sessionStorage.CODIGO_EMPRESA;
 				var confirmacaoSenhaUser = iptConfirmacaoSenhaUser.value.toLowerCase();
 				var valido_funcionario = true;
-				var idEmpresa = sessionStorage.ID_EMPRESA
+				var idEmpresa = sessionStorage.ID_EMPRESA;
 
 				if (nomeUser == '' || emailUser == '' || senhaUser == '' || confirmacaoSenhaUser == '' || cargoUser == '') {
-					txtErrorFunc.innerHTML = 'Todos os campos do funcionário precisam ser preenchidos!';
+					txtErrorFuncionario.innerHTML = 'Todos os campos do funcionário precisam ser preenchidos!';
+					console.log(codigoCadastro);
+					console.log(typeof codigoCadastro);
 					valido_funcionario = false;
 				} else {
 					if (!emailUser.includes('@')) {
-						txtErrorFunc.innerHTML = 'Email do funcionário inválido!';
+						txtErrorFuncionario.innerHTML = 'Email do funcionário inválido!';
 						valido_funcionario = false;
 					} else if (senhaUser != confirmacaoSenhaUser) {
-						txtErrorFunc.innerHTML = 'Senhas do funcionário não coincidem!';
+						txtErrorFuncionario.innerHTML = 'Senhas do funcionário não coincidem!';
 						valido_funcionario = false;
 					} else if (senhaUser.length < 5) {
-						txtErrorFunc.innerHTML = 'A senha do funcionário precisa ter no mínimo 5 caracteres!';
+						txtErrorFuncionario.innerHTML = 'A senha do funcionário precisa ter no mínimo 5 caracteres!';
 						valido_funcionario = false;
 					} else if (cargoUser.length < 3) {
-						txtErrorFunc.innerHTML = 'O cargo do funcionário precisa ter pelo menos 3 caracteres!';
+						txtErrorFuncionario.innerHTML = 'O cargo do funcionário precisa ter pelo menos 3 caracteres!';
 						valido_funcionario = false;
 					}
 				}
@@ -461,6 +326,7 @@
 							emailUserServer: emailUser,
 							senhaUserServer: senhaUser,
 							cargoUserServer: cargoUser,
+							codigoCadastroServer: codigoCadastro,
 						}),
 					})
 						.then(function (resposta) {

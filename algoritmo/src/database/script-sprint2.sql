@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS empresa (
     emailEmpresa VARCHAR(100) NOT NULL,                    
     telefoneEmpresa CHAR(11) NOT NULL,                
     senhaEmpresa VARCHAR(20) NOT NULL,
-    codigoCadastro VARCHAR(5) NOT NULL UNIQUE
+    codigoCadastro CHAR(5) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS usuario (
@@ -18,13 +18,14 @@ CREATE TABLE IF NOT EXISTS usuario (
     emailUsuario VARCHAR(100) NOT NULL,
     senhaUsuario VARCHAR(20) NOT NULL,
     cargo VARCHAR(45) NOT NULL,
+    codigoCadastro CHAR(5) NOT NULL,
     FOREIGN KEY (fkEmpresa) REFERENCES empresa(idEmpresa),
     PRIMARY KEY (idUsuario, fkEmpresa)
 );
 
 CREATE TABLE IF NOT EXISTS rack (
 	idRack INT PRIMARY KEY AUTO_INCREMENT,
-    descricao VARCHAR(45) not null
+    descricao VARCHAR(45) not null,
     fkEmpresa INT,
     CONSTRAINT fkRackEmpresa FOREIGN KEY (fkEmpresa) REFERENCES empresa(idEmpresa)
 );

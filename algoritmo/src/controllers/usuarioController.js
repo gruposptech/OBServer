@@ -102,10 +102,10 @@ function pegarCodigosUsados(req, res) {
 }
 
 function pegarIdEmpresa(req, res) {
-	var cnpjEmpresa = req.params.cnpjEmpresa;
-
+	var codigo = req.params.codigo;
+ 
 	usuarioModel
-		.pegarIdEmpresa(cnpjEmpresa)
+		.pegarIdEmpresa(codigo)
 		.then((resultado) => {
 			res.status(200).json(resultado);
 		})
