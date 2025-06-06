@@ -79,6 +79,14 @@ function pegarParametros(idEmpresa) {
 	return database.executar(instrucaoSql);
 }
 
+function atualizarParametrosSensores() {
+	var instrucaoSql = `
+		UPDATE sensor SET fkParametros = 1 WHERE fkRack = 1
+	`;
+	console.log('Executando a instrução SQL: \n' + instrucaoSql);
+	return database.executar(instrucaoSql);
+}
+
 module.exports = {
 	autenticar,
 	cadastrar,
@@ -87,4 +95,5 @@ module.exports = {
 	temUsuarioCadastrado,
 	cadastrarParametros,
 	pegarParametros,
+	atualizarParametrosSensores,
 };

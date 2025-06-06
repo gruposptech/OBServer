@@ -5,9 +5,7 @@ CREATE TABLE IF NOT EXISTS empresa (
 	idEmpresa INT PRIMARY KEY AUTO_INCREMENT,
     nomeEmpresa VARCHAR(100) NOT NULL,             
     cnpjEmpresa CHAR(14) NOT NULL UNIQUE,            
-    emailEmpresa VARCHAR(100) NOT NULL,                    
-    telefoneEmpresa CHAR(11) NOT NULL,                
-    senhaEmpresa VARCHAR(20) NOT NULL,
+    emailEmpresa VARCHAR(100) NOT NULL,                                   
     codigoCadastro CHAR(5) NOT NULL UNIQUE
 );
 
@@ -76,3 +74,17 @@ CREATE TABLE IF NOT EXISTS alerta (
     CONSTRAINT fkAlertaSensor FOREIGN KEY (fkSensor) REFERENCES leitura(fkSensor)
 );
 
+INSERT INTO empresa VALUES 
+	(default, 'XPTO Tech', '12345678000101', 'xptotech@email.com', 'ab3de');
+    
+INSERT INTO rack VALUES 
+	(default, 'Rack 01', 1), 
+    (default, 'Rack 02', 1), 
+    (default, 'Rack 03', 1), 
+    (default, 'Rack 04', 1);
+    
+INSERT INTO sensor VALUES 
+	(default, 'Sensor 1', '2025-01-01', 'Ativo', 1, null),
+    (default, 'Sensor 2', '2025-01-01', 'Inativo', 1, null),
+    (default, 'Sensor 3', '2025-01-01', 'Ativo', 1, null);
+    

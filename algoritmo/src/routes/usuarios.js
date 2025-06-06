@@ -32,4 +32,8 @@ router.get('/pegarParametros/:idEmpresa', (req, res) => {
 	usuarioController.pegarParametros(req, res);
 });
 
+router.put('/atualizarParametrosSensores/', (req, res) => {
+	usuarioController.atualizarParametrosSensores(req, res);
+})
+
 module.exports = router;

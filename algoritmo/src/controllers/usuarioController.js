@@ -103,7 +103,7 @@ function pegarCodigosUsados(req, res) {
 
 function pegarIdEmpresa(req, res) {
 	var codigo = req.params.codigo;
- 
+
 	usuarioModel
 		.pegarIdEmpresa(codigo)
 		.then((resultado) => {
@@ -160,6 +160,17 @@ function pegarParametros(req, res) {
 		});
 }
 
+function atualizarParametrosSensores(req, res) {
+	usuarioModel
+		.atualizarParametrosSensores()
+		.then((resultado) => {
+			res.status(200).json(resultado);
+		})
+		.catch((erro) => {
+			res.status(500).json(erro.sqlMessage);
+		});
+}
+
 module.exports = {
 	autenticar,
 	cadastrar,
@@ -168,4 +179,5 @@ module.exports = {
 	temUsuarioCadastrado,
 	cadastrarParametros,
 	pegarParametros,
+	atualizarParametrosSensores
 };
