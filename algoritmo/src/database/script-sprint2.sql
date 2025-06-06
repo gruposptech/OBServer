@@ -65,13 +65,14 @@ CREATE TABLE IF NOT EXISTS leitura (
 );
 
 CREATE TABLE IF NOT EXISTS alerta (
-	idAlerta INT PRIMARY KEY AUTO_INCREMENT,
-    tipoAlerta VARCHAR(21),
+	idAlerta INT AUTO_INCREMENT,
+    tipoAlerta VARCHAR(45),
     statusAlerta CHAR(9) NOT NULL,
     fkLeitura INT, 
     fkSensor INT,
-    CONSTRAINT chkTipoAlerta CHECK (tipoAlerta IN ('Temperatura', 'Umidade', 'Temperatura e Umidade')),
+    PRIMARY KEY (idAlerta, fkLeitura, fkSensor),
 	CONSTRAINT chkStatusAlerta CHECK (statusAlerta IN ('Pendente', 'Resolvido')),
 	CONSTRAINT fkAlertaLeitura FOREIGN KEY (fkLeitura) REFERENCES leitura(idLeitura),
     CONSTRAINT fkAlertaSensor FOREIGN KEY (fkSensor) REFERENCES leitura(fkSensor)
 );
+
