@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observer</title>
+    <link rel="stylesheet" href="css/cadEmpresa.css">
+</head>
+<body>
+		<header class="linha-cima"></header>
+		<div class="containerAll">
+			<div class="container-login">
+				<h1 class="titulo">CADASTRO DA EMPRESA</h1>
+				<span class="linha-fina"></span>
+                <label for="iptNomeEmpresa" class="label label-NomeEmpresa">Nome da Empresa</label>
+				<input type="text" class="input cadEmpresa" id="iptNomeEmpresa" />
+				<label class="label label-cnpj" for="iptCnpj">CNPJ da Empresa</label>
+				<input type="text" class="input login-cnpj" id="iptCnpj" placeholder="XX.XXX.XXX/0001-XX" />
+				<label for="iptTelContato" class="label label-telefone">Telefone de Contato</label>
+				<input type="tel" class="input cad-tel" id="iptTelContato" placeholder="" /> <br />
+                <label for="iptCodigoEmpresa" class="label label-codigo">Código de Acesso da Empresa</label>
+				<input type="tel" class="input cad-cod" id="iptCodigoEmpresa" placeholder="" /> <br />
+
+				<button class="botao botao-cadastro">Cadastrar Empresa</button>
+				<div class="errorDiv" id="errorDiv">
+					<p class="errorMsg" id="errorMsg"></p>
+				</div>
+				<br />
+			</div>
+		</div>
+		<footer class="linha-baixo"></footer>
+	</body>
+</html>
