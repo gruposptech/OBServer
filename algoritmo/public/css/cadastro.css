@@ -12,21 +12,30 @@
 body {
   font-family: "Outfit", sans-serif;
   background-color: var(--cor_decoration_escuro);
-  
+
+}
+
+.cadastro{
+  width: 100%;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .container_cadastro {
-  margin-left: auto;
-  margin-right: auto;
   width: 60%;
   height: auto;
   background: var(--cor_branco);
   border-radius: 15px;
   padding: 10px 20px;
-  display: flex;
+    display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
+
 
 .titulo {
   color: var(--cor_decoration_escuro);
@@ -81,7 +90,8 @@ form {
   margin: auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;}
+  gap: 10px;
+}
 
 
 .input {
@@ -193,4 +203,6 @@ form {
 
 .linha-baixo {
   margin-top: 30px;
+position: fixed;
+bottom: 0;
 }
