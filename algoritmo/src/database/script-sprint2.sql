@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS empresa (
 	idEmpresa INT PRIMARY KEY AUTO_INCREMENT,
     nomeEmpresa VARCHAR(100) NOT NULL,             
     cnpjEmpresa CHAR(14) NOT NULL UNIQUE,            
-    emailEmpresa VARCHAR(100) NOT NULL,                                   
+    telefoneEmpresa CHAR(11) NOT NULL,                                   
     codigoCadastro CHAR(5) NOT NULL UNIQUE
 );
 

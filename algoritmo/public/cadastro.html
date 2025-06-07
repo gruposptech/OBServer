@@ -195,7 +195,6 @@
 									},
 								})
 									.then((respota) => {
-										console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 										if (resposta.ok) {
 											console.log('PARÂMETROS ATUALIZADOS COM SUCESSO');
 										} else {
@@ -205,9 +204,6 @@
 									.catch((erro) => {
 										console.log('ERRO NO FETCH DO ATUALIZAR PARAMETROS: ', erro);
 									});
-
-
-									console.log('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
 								avancar();
 							} else {
 								throw 'Houve um erro ao realizar o cadastro dos parâmetros';
