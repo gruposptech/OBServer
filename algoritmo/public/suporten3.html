@@ -33,7 +33,7 @@
                 </a>
             </div>
 
-            <button class="botao-sair" onclick="sair()">Sair</button>
+            <button class="botao-sair-n3" onclick="sair()">Sair</button>
         </div>
 
         <div class="conteudo-principal">
@@ -41,42 +41,33 @@
                 <h2>Painel de Suporte ao Cliente - N3<span id="nome-sala-titulo"></span></h2>
                 <div class="data-hora" id="data-hora"></div>
             </div>
-
-            <div id="data-center">
-                <img src="./img/data.jpg" alt="DataCenter">
-            </div>
-
-        </div>
-        <div class="secao-alertas">
-
-            <div class="bob">
-                <img src="./img/bob_logo.png" alt="BobIA">
-            </div>
             <div class="botao-bob">
-                <h1>BobIA</h1>
-                <h2>Suporte técnico inteligente com a IA Gemini</h2>
+                <div class="bob">
+                    <div class="bob-texto">
+                        <h1>BobIA</h1>
+                        <h2>Suporte técnico inteligente com a IA Gemini</h2>
+                    </div>
+                    <img src="./img/bob_logo.png" alt="BobIA">
+                </div>
+
                 <div class="container-itens-niveis">
-                    <div id="container">
-                        <br>
+                    <div class="campo-pergunta">
                         <textarea id="pergunta" class="pergunta" placeholder="Digite a pergunta..."></textarea>
-                        <div class="geraresposta">
-                            <button onclick="gerarResposta()">Gerar Resposta</button>
-                        </div>
-                        <div>
-                            <textarea id="resposta" class="pergunta" placeholder="A resposta da IA aparecerá aqui..."
-                                readonly></textarea>
-                            <div class="copiar-container">
-                                <button class="botao-copiar" onclick="copiarResposta()" title="Copiar resposta">
-                                    Copiar</button>
-                            </div>
-                        </div>
+                        <button class="btn-dentro" onclick="gerarResposta()">Gerar</button>
+                    </div>
 
-
+                    <div class="campo-resposta">
+                        <textarea id="resposta" class="pergunta" placeholder="A resposta da IA aparecerá aqui..."
+                            readonly></textarea>
+                        <button class="btn-dentro copiar" onclick="copiarResposta()">Copiar</button>
                     </div>
                 </div>
             </div>
-
         </div>
+    </div>
+    <div class="secao-alertas">
+
+    </div>
     </div>
 </body>
 

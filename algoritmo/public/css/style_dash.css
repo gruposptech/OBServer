@@ -4,7 +4,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-  font-family: "Outfit", sans-serif;
+    font-family: "Outfit", sans-serif;
 }
 
 /* Main Layout */
@@ -91,11 +91,44 @@
     border-radius: 4px;
     cursor: pointer;
     transition: transform 0.3s ease;
-    margin-top: 230%;
+    margin-top: 170%;
 }
 
 .botao-sair:hover {
     background-color: red;
+    transform: scale(1.03);
+}
+
+.botao-sair-n3 {
+    background-color: #0cc0df;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    margin-top: 120%;
+}
+
+.botao-sair-n3:hover {
+    background-color: red;
+    transform: scale(1.03);
+}
+
+.botaon3{
+    background-color: #0cc0df;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    margin-top: 10%;
+}
+
+.botaon3:hover {
+    background-color: yellow;
+    color: black;
     transform: scale(1.03);
 }
 
@@ -110,15 +143,16 @@
 }
 
 .cabecalho {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
+    flex-direction: column;
+    text-align: center;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
 }
 
-.cabecalho h1 {
-    font-size: 20px;
-    color: #333;
+.cabecalho h2 {
+    font-size: 24px;
+    color: #0f1a2f;
 }
 
 .data-hora {
@@ -175,7 +209,7 @@
     padding: 5px;
     position: absolute;
     z-index: 1;
-    top: 125%; 
+    top: 125%;
     left: 50%;
     transform: translateX(-50%);
     opacity: 0;
@@ -214,10 +248,10 @@
     background-color: white;
     padding: 12px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    min-height: 0;  
+    min-height: 0;
 }
 
 .grafico-wrapper h2 {
@@ -323,10 +357,8 @@
 }
 
 .container-itens-niveis {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    gap: 10px;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .item-nivel {
@@ -391,142 +423,134 @@
 }
 
 .botao-historico h1 {
-   text-align: center;
+    text-align: center;
 }
 
 .botao-historico:hover {
     background-color: #0cc0df;
 }
-
 .botao-bob {
     width: 100%;
-    padding: 4%;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 30px;
     background-color: #0cc0df;
     color: white;
-    border: none;
-    border-radius: 4px;
-    margin-top: 10%;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.botao-bob h1 {
-   text-align: center;
-}
-
-.botao-bob:hover {
-    background-color: #0cc0df;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
 }
 
 .bob {
     display: flex;
-    text-align: center;
-    justify-content: center;
     align-items: center;
-    height: 350px;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.bob-texto {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 500px;
+}
+
+.bob-texto h1 {
+    font-size: 26px;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.bob-texto h2 {
+    font-size: 18px;
+    font-weight: 400;
 }
 
 .bob img {
-    margin-top: 80%;
     width: 100px;
     height: 100px;
     object-fit: contain;
-    display: block;
+    transition: transform 0.3s ease;
+}
+
+.bob img:hover {
+    transform: scale(1.05);
+}
+
+.container-itens-niveis {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.campo-pergunta,
+.campo-resposta {
+    position: relative;
+    width: 100%;
 }
 
 .pergunta {
     width: 100%;
-    height: 100px;
-    padding: 12px;
+    min-height: 120px;
+    padding: 18px 100px 18px 18px;
     font-size: 16px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     background-color: #22344e;
     color: white;
-    resize: none;
+    resize: vertical;
     box-sizing: border-box;
+    box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease;
 }
 
-.geraresposta {
-    display: flex;
-    justify-content: center;
-    margin-top: 16px;
-    margin-bottom: 20px;
+.pergunta:focus {
+    outline: none;
+    box-shadow: 0 0 5px 2px #0cc0df;
 }
 
-.geraresposta button {
-    background-color: grey;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.geraresposta button:hover {
-    transform: scale(1.03);
-    background-color: yellow;
-    color: black;
-}
-
-.botaon3 {
-    background-color: #0cc0df;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.botaon3:hover {
-    background-color: yellow;
-    color: black;
-    transform: scale(1.03);
-}
-
-#data-center {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-}
-
-#data-center img {
+.btn-dentro {
     position: absolute;
     top: 50%;
-    left: 50%;
-    min-width: 100%;
-    min-height: 100%;
-    transform: translate(-50%, -50%);
-    object-fit: cover;
-}
-
-.copiar-container {
-    text-align: right;
-    margin-top: 5px;
-}
-
-.botao-copiar {
-    background-color: grey;
+    right: 20px;
+    transform: translateY(-50%);
+    background-color: #444;
     color: white;
     border: none;
-    padding: 10px;
-    border-radius: 4px;
+    padding: 10px 20px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-.botao-copiar:hover {
-    background-color: yellow;
-    color: black;
-    transform: scale(1.03);
+.btn-dentro:hover {
+    background-color: #fff;
+    color: #22344e;
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 0 8px #0cc0df;
 }
 
-/* Icons */
-.icone-status {
-    width: 14px;
-    height: 14px;
+.btn-dentro.copiar {
+    top: unset;
+    bottom: 15px;
+    right: 20px;
+    transform: none;
+}
+
+.btn-dentro.copiar:hover {
+    background-color: #fff;
+    color: #22344e;
+    transform: scale(1.05);
+    box-shadow: 0 0 8px #0cc0df;
+}
+
+#resposta {
+    min-height: 200px;
+    height: auto;
 }
