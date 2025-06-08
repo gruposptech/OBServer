@@ -639,7 +639,7 @@
 	}
 
 	function alertar(resposta, idRack) {
-		console.log('RESPOSTA RECEBIDA PELO ALERTA: ', resposta)
+		console.log('RESPOSTA RECEBIDA PELO ALERTA: ', resposta);
 		var temp = resposta[0].temperatura;
 		var umid = resposta[0].umidade;
 		var hora = resposta[0].data_grafico;
@@ -672,11 +672,9 @@
 				body: JSON.stringify({
 					idLeituraServer: idLeitura,
 					idSensorServer: idSensor,
-					tipoAlertaServer: `Alerta de ${alerta.join(' e ')}`
+					tipoAlertaServer: `Alerta de ${alerta.join(' e ')}`,
 				}),
-			}).then((res)=> {
-
-			})
+			}).then((res) => {});
 
 			exibirAlerta(`Alerta de ${alerta.join(' e ')}`, temp, umid, hora);
 		}

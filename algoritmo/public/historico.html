@@ -1,222 +1,234 @@
 <!DOCTYPE html>
 <html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Histórico de Sensores - Observer</title>
-    <link rel="stylesheet" href="./css/historico.css">
-</head>
-<body>
-    <div class="container-painel">
-        <div class="barra-lateral">
-            <div class="secao-logo">
-                <img src="./img/logo.png" alt="Logo Observer" class="logo">
-            </div>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Histórico de Sensores - Observer</title>
+		<link rel="stylesheet" href="./css/historico.css" />
+	</head>
+	<body>
+		<div class="container-painel">
+			<div class="barra-lateral">
+				<div class="secao-logo">
+					<img src="./img/logo.png" alt="Logo Observer" class="logo" />
+				</div>
 
-            <div class="secao-usuario">
-                <h2 class="nome-usuario">João Silva</h2>
-                <p class="cargo-usuario">Analista de Infraestrutura</p>
-                <p class="email-usuario">joao.silva@empresa.com</p>
-            </div>
+				<div class="secao-usuario">
+					<h2 class="nome-usuario" id="nomeUsuario"></h2>
+					<p class="cargo-usuario"><span id="cargoUsuario"></span> - <span id="empresaUsuario"></span></p>
+					<p class="email-usuario" id="emailUsuario"></p>
+				</div>
 
-            <div class="secao-filtro">
-                <h3 class="titulo-filtro">Período de Análise:</h3>
-                <div class="opcao-filtro">
-                    <input type="checkbox" id="ultima-hora" name="ultima-hora">
-                    <label for="ultima-hora">Dados Recentes</label>
-                </div>
-                <div class="opcao-filtro">
-                    <input type="checkbox" id="24-horas" name="24-horas" checked>
-                    <label for="24-horas">24 horas</label>
-                </div>
-                <div class="opcao-filtro">
-                    <input type="checkbox" id="7-dias" name="7-dias">
-                    <label for="7-dias">7 dias</label>
-                </div>
-                <div class="opcao-filtro">
-                    <input type="checkbox" id="30-dias" name="30-dias">
-                    <label for="30-dias">30 dias</label>
-                </div>
-            </div>
+				<div class="botoes-navegacao">
+					<button class="botao-voltar" onclick="window.location.href='dashboard.html'">Voltar ao Monitor</button>
+					<button class="botao-sair" onclick="sair()">Sair</button>
+				</div>
+			</div>
 
-            <div class="secao-filtro">
-                <h3 class="titulo-filtro">Localização:</h3>
-                <div class="opcao-filtro">
-                    <input type="checkbox" id="datacenter" name="datacenter" checked>
-                    <label for="datacenter">Datacenter Principal</label>
-                </div>
-                <div class="opcao-filtro">
-                    <input type="checkbox" id="backup" name="backup">
-                    <label for="backup">Sala de Backup</label>
-                </div>
-                <div class="opcao-filtro">
-                    <input type="checkbox" id="servidores" name="servidores">
-                    <label for="servidores">Sala de Servidores A</label>
-                </div>
-            </div>
+			<div class="conteudo-principal">
+				<div class="cabecalho">
+					<h1>Histórico de Alertas</h1>
+					<div class="data-hora"></div>
+				</div>
 
-            <div class="botoes-navegacao">
-                <button class="botao-voltar" onclick="window.location.href='index.html'">Voltar ao Monitor</button>
-                <button class="botao-sair">Sair</button>
-            </div>
-        </div>
+				<div class="grid-sensores" id="gridSensores"></div>
+			</div>
+			<div class="secao-detalhes">
+				<h2>PARÂMETROS</h2>
+				<div class="secao-niveis">
+					<h2>NÍVEIS DE MONITORAMENTO</h2>
+					<div class="container-itens-niveis">
+						<div class="item-nivel">
+							<div class="item-nivel-icone-titulo">
+								<img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="Normal" class="icone-status" />
+								<p class="item-nivel-titulo">Normal</p>
+							</div>
+							<p class="item-nivel-descricao">
+								T: <span id="temp-min-ideal"></span>°C a <span id="temp-max-ideal"></span>°C<br /><br />U: <span id="umid-min-ideal"></span>% a
+								<span id="umid-max-ideal"></span>%
+							</p>
+						</div>
+						<div class="item-nivel">
+							<div class="item-nivel-icone-titulo">
+								<img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Atenção" class="icone-status" />
+								<p class="item-nivel-titulo">Atenção</p>
+							</div>
+							<p class="item-nivel-descricao">
+								T: &lt;<span id="temp-min-alerta"></span>°C ou &gt;<span id="temp-max-alerta"></span>°C <br /><br />
+								U: &lt;<span id="umid-min-alerta"></span>% ou &gt;<span id="umid-max-alerta"></span>%
+							</p>
+						</div>
+					</div>
+				</div>
+                <div class="secao-niveis secao-classes-alertas">
+					<h2>STATUS DOS ALERTAS</h2>
+					<div class="container-itens-niveis">
+						<div class="item-nivel item-nivel-alertas">
+							<div class="item-nivel-icone-titulo">
+								<h3><span class="status-critico">●</span></h3>
+								<p class="item-nivel-titulo">Pendente</p>
+							</div>
+                            <div class="item-nivel-icone-titulo">
+								<h3><span class="status-ativo">●</span></h3>
+								<p class="item-nivel-titulo">Resolvido</p>
+							</div>
+							
+						</div>
+						
+					</div>
+				</div>
+			</div>
+            
+		</div>
 
-        <div class="conteudo-principal">
-            <div class="cabecalho">
-                <h1>Histórico de Sensores - Datacenter Principal</h1>
-                <div class="data-hora">22/04/2025 - 18:00</div>
-            </div>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	</body>
+	<script>
+		function sair() {
+			sessionStorage.clear();
+			window.location.href = 'inicial.html';
+		}
 
-            <div class="grid-sensores">
-                <div class="sensor-card">
-                    <div class="sensor-header">
-                        <h3>Sensor T01 <span class="status-ativo">●</span></h3>
-                        <span class="info-icon" title="Sensor de temperatura localizado próximo ao rack principal">ⓘ</span>
-                    </div>
-                    <div class="sensor-info">
-                        <p class="localizacao">Rack Principal - Corredor Frio</p>
-                        <p class="tipo">Temperatura</p>
-                        <p class="valor">23.5°C</p>
-                        <p class="status">Funcionando normalmente</p>
-                        <p class="ultima-leitura">Última leitura: 2 min atrás</p>
-                    </div>
-                </div>
+		function updateTime() {
+			// selecionadno a div que exibe a data e a hora na dashboard pelo ID
+			var divDataHora = document.querySelector('.data-hora');
 
-                <div class="sensor-card">
-                    <div class="sensor-header">
-                        <h3>Sensor U01 <span class="status-ativo">●</span></h3>
-                        <span class="info-icon" title="Sensor de umidade localizado próximo ao rack principal">ⓘ</span>
-                    </div>
-                    <div class="sensor-info">
-                        <p class="localizacao">Rack Principal - Corredor Frio</p>
-                        <p class="tipo">Umidade</p>
-                        <p class="valor">45%</p>
-                        <p class="status">Funcionando normalmente</p>
-                        <p class="ultima-leitura">Última leitura: 1 min atrás</p>
-                    </div>
-                </div>
+			// atualizando a hora a cada 1 minuto
+			setInterval(() => {
+				// pegando a data atual e colocando em uma variável
+				var data = new Date();
 
-                <div class="sensor-card alerta">
-                    <div class="sensor-header">
-                        <h3>Sensor T02 <span class="status-alerta">●</span></h3>
-                        <span class="info-icon" title="Sensor de temperatura localizado no corredor quente">ⓘ</span>
-                    </div>
-                    <div class="sensor-info">
-                        <p class="localizacao">Rack 02 - Corredor Quente</p>
-                        <p class="tipo">Temperatura</p>
-                        <p class="valor">28.7°C</p>
-                        <p class="status">Atenção - Temperatura elevada</p>
-                        <p class="ultima-leitura">Última leitura: 30 seg atrás</p>
-                    </div>
-                </div>
+				// inserindo a data e hora formatadas para o nosso local (pt-BR) na div que selecionei
+				divDataHora.innerHTML = `${data.toLocaleDateString('pt-BR')} - ${data.toLocaleTimeString('pt-BR')}`;
+			}, 1000);
+		}
 
-                <div class="sensor-card">
-                    <div class="sensor-header">
-                        <h3>Sensor U02 <span class="status-ativo">●</span></h3>
-                        <span class="info-icon" title="Sensor de umidade localizado no corredor quente">ⓘ</span>
-                    </div>
-                    <div class="sensor-info">
-                        <p class="localizacao">Rack 02 - Corredor Quente</p>
-                        <p class="tipo">Umidade</p>
-                        <p class="valor">43%</p>
-                        <p class="status">Funcionando normalmente</p>
-                        <p class="ultima-leitura">Última leitura: 1 min atrás</p>
-                    </div>
-                </div>
+		function pegarHistoricoAlertas() {
+			fetch(`/alertas/historicoAlertas/${sessionStorage.ID_EMPRESA}`, { cache: 'no-store' })
+				.then((resposta) => {
+					if (resposta.ok) {
+						resposta.json().then((response) => {
+							console.log('ALERTAS RECEBIDOS: ', response);
+							plotarAlertas(response);
+						});
+					} else {
+						console.log('RESPOSTA DO HISTORICO NAO VEIO OK');
+					}
+				})
+				.catch((erro) => {
+					console.log('ERRO NO FETCH DE PEGAR O HISTORICO DE ALERTAS: ', erro);
+				});
+		}
 
-                <div class="sensor-card inativo">
-                    <div class="sensor-header">
-                        <h3>Sensor T03 <span class="status-inativo">●</span></h3>
-                        <span class="info-icon" title="Sensor de temperatura localizado próximo ao ar condicionado">ⓘ</span>
-                    </div>
-                    <div class="sensor-info">
-                        <p class="localizacao">Rack 03 - Próximo AC</p>
-                        <p class="tipo">Temperatura</p>
-                        <p class="valor">--°C</p>
-                        <p class="status">Sensor Inativo</p>
-                        <p class="ultima-leitura">Última leitura: 2h atrás</p>
-                    </div>
-                </div>
+		function plotarAlertas(resposta) {
+			resposta.forEach((item) => {
+				var data = item.dataHoraLeitura;
+				var date = new Date(data);
+				var dataFormatada = date.toLocaleString('pt-BR', {
+					day: '2-digit',
+					month: '2-digit',
+					year: 'numeric',
+					hour: '2-digit',
+					minute: '2-digit',
+					second: '2-digit',
+				});
 
-                <div class="sensor-card critico">
-                    <div class="sensor-header">
-                        <h3>Sensor U03 <span class="status-critico">●</span></h3>
-                        <span class="info-icon" title="Sensor de umidade localizado próximo ao ar condicionado">ⓘ</span>
-                    </div>
-                    <div class="sensor-info">
-                        <p class="localizacao">Rack 03 - Próximo AC</p>
-                        <p class="tipo">Umidade</p>
-                        <p class="valor">35%</p>
-                        <p class="status">Crítico - Umidade baixa</p>
-                        <p class="ultima-leitura">Última leitura: 1 min atrás</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+				if (item.statusAlerta == 'Pendente') {
+					document.getElementById('gridSensores').innerHTML += `
+                        <div class="sensor-card">
+                            <div class="sensor-header">
+                                <h3>${item.nomeSensor}<span class="status-critico" id="status-${item.idAlerta}">●</span></h3>
+                            </div>
+                            <div class="sensor-info">
+                                <p class="localizacao">${item.descricao}</p>
+                                <p class="tipo">${item.tipoAlerta}</p>
+                                <p class="valor">${item.Medida}</p>
+                                <p class="status">${dataFormatada}</p>
+                                <button class="botao-status" onclick="alterarStatus(this, ${item.idAlerta})">Alterar status</button>
+                            </div>
+                        </div>
+                    `;
+				} else {
+					document.getElementById('gridSensores').innerHTML += `
+                        <div class="sensor-card">
+                            <div class="sensor-header">
+                                <h3>${item.nomeSensor}<span class="status-ativo" id="status-${item.idAlerta}">●</span></h3>
+                            </div>
+                            <div class="sensor-info">
+                                <p class="localizacao">${item.descricao}</p>
+                                <p class="tipo">${item.tipoAlerta}</p>
+                                <p class="valor">${item.Medida}</p>
+                                <p class="status">${dataFormatada}</p>
+                                <button class="botao-status" onclick="alterarStatus(this, ${item.idAlerta})">Alterar status</button>
+                            </div>
+                        </div>
+                    `;
+				}
+			});
+		}
 
-        <div class="secao-detalhes">
-            <h2>DETALHES DO SENSOR</h2>
-            <div class="grafico-historico">
-                <canvas id="grafico-sensor"></canvas>
-            </div>
-            <div class="info-sensor-detalhado">
-                <h3>Informações Detalhadas</h3>
-                <p><strong>ID do Sensor:</strong> T01</p>
-                <p><strong>Tipo:</strong> Temperatura</p>
-                <p><strong>Localização:</strong> Rack Principal - Corredor Frio</p>
-                <p><strong>Última Manutenção:</strong> 15/03/2025</p>
-                <p><strong>Próxima Manutenção:</strong> 15/06/2025</p>
-                <p><strong>Fabricante:</strong>Arduino</p>
-                <p><strong>Modelo:</strong>DHT11</p>
-                <p><strong>Precisão:</strong> ±0.5°C</p>
-            </div>
-            <button class="botao-exportar">Exportar Dados</button>
-            <button class="botao-manutencao">Agendar Manutenção</button>
-        </div>
-    </div>
+		function alterarStatus(botao, idAlerta) {
+			var spanStatus = document.getElementById(`status-${idAlerta}`);
+			var novoStatus;
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const ctx = document.getElementById('grafico-sensor');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['14h', '15h', '16h', '17h', '18h'],
-                    datasets: [{
-                        label: 'Temperatura °C',
-                        data: [22, 23, 23.5, 24, 23.5],
-                        borderColor: '#4BACC6',
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Histórico das Últimas 5 Horas'
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: false
-                        }
-                    }
-                }
-            });
-        });
+			if (spanStatus.classList.contains('status-critico')) {
+				spanStatus.classList.remove('status-critico');
+				spanStatus.classList.add('status-ativo');
+				novoStatus = 'Resolvido';
+			} else {
+				spanStatus.classList.remove('status-ativo');
+				spanStatus.classList.add('status-critico');
+				novoStatus = 'Pendente';
+			}
 
-        function updateTime() {
-            const now = new Date();
-            const formattedDate = now.toLocaleDateString('pt-BR');
-            const formattedTime = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-            document.querySelector('.data-hora').textContent = `${formattedDate} - ${formattedTime}`;
-        }
+			fetch('/alertas/atualizarAlerta', {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					idAlerta: idAlerta,
+					status: novoStatus,
+				}),
+			})
+				.then((resposta) => {
+					if (resposta.ok) {
+						resposta.json().then((response) => {
+							console.log(`Status do alerta ${idAlerta} atualizado para ${novoStatus} com sucesso!`);
+						});
+					} else {
+						console.log('Erro ao atualizar o alerta!');
+					}
+				})
+				.catch((erro) => {
+					console.log('Erro no fetch para atualizar alerta: ', erro);
+				});
+		}
 
-        setInterval(updateTime, 1000);
-        updateTime();
-    </script>
-</body>
+		document.addEventListener('DOMContentLoaded', function () {
+			pegarHistoricoAlertas();
+			var nomeUsuario = sessionStorage.NOME_FUNCIONARIO;
+			var cargoUsuario = sessionStorage.CARGO_FUNCIONARIO;
+			var emailUsuario = sessionStorage.EMAIL_FUNCIONARIO;
+			var empresaUsuario = sessionStorage.NOME_EMPRESA;
+			var tempMin = sessionStorage.TEMP_MIN_IDEAL;
+			var tempMax = sessionStorage.TEMP_MAX_IDEAL;
+			var umidMin = sessionStorage.UMID_MIN_IDEAL;
+			var umidMax = sessionStorage.UMID_MAX_IDEAL;
+			document.getElementById('temp-min-ideal').innerHTML = tempMin;
+			document.getElementById('temp-max-ideal').innerHTML = tempMax;
+			document.getElementById('umid-min-ideal').innerHTML = umidMin;
+			document.getElementById('umid-max-ideal').innerHTML = umidMax;
+			document.getElementById('temp-min-alerta').innerHTML = tempMin;
+			document.getElementById('temp-max-alerta').innerHTML = tempMax;
+			document.getElementById('umid-min-alerta').innerHTML = umidMin;
+			document.getElementById('umid-max-alerta').innerHTML = umidMax;
+			document.getElementById('nomeUsuario').innerHTML = nomeUsuario[0].toUpperCase() + nomeUsuario.substr(1);
+			document.getElementById('cargoUsuario').innerHTML = cargoUsuario[0].toUpperCase() + cargoUsuario.substr(1);
+			document.getElementById('emailUsuario').innerHTML = emailUsuario;
+			document.getElementById('empresaUsuario').innerHTML = empresaUsuario[0].toUpperCase() + empresaUsuario.substr(1);
+
+			updateTime();
+		});
+	</script>
 </html>
