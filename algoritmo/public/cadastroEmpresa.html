@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Observer</title>
-    <link rel="stylesheet" href="css/cadEmpresa.css">
-</head>
-<body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Observer</title>
+		<link rel="stylesheet" href="css/cadEmpresa.css" />
+	</head>
+	<body>
 		<header class="linha-cima"></header>
 		<div class="containerAll">
 			<div class="container-login">
 				<h1 class="titulo">CADASTRO DA EMPRESA</h1>
 				<span class="linha-fina"></span>
-                <label for="iptNomeEmpresa" class="label label-NomeEmpresa">Nome da Empresa</label>
+				<label for="iptNomeEmpresa" class="label label-NomeEmpresa">Nome da Empresa</label>
 				<input type="text" class="input cadEmpresa" id="iptNomeEmpresa" />
 				<label class="label label-cnpj" for="iptCnpj">CNPJ da Empresa</label>
 				<input type="text" class="input login-cnpj" id="iptCnpj" placeholder="XX.XXX.XXX/0001-XX" />
 				<label for="iptTelContato" class="label label-telefone">Telefone de Contato</label>
 				<input type="tel" class="input cad-tel" id="iptTelContato" placeholder="" /> <br />
-                <label for="iptCodigoEmpresa" class="label label-codigo">Código de Acesso da Empresa</label>
+				<label for="iptCodigoEmpresa" class="label label-codigo">Código de Acesso da Empresa</label>
 				<input type="tel" class="input cad-cod" id="iptCodigoEmpresa" placeholder="" /> <br />
 
-				<button class="botao botao-cadastro">Cadastrar Empresa</button>
+				<button class="botao botao-cadastro" onclick="cadastrarEmpresa()">Cadastrar Empresa</button>
 				<div class="errorDiv" id="errorDiv">
 					<p class="errorMsg" id="errorMsg"></p>
 				</div>
@@ -31,3 +31,75 @@
 		<footer class="linha-baixo"></footer>
 	</body>
 </html>
+<script>
+	function mostrarErro(msg) {
+		errorMsg.innerHTML = '';
+		errorDiv.style.display = 'flex';
+		errorMsg.innerHTML = msg;
+	}
+
+	function cadastrarEmpresa() {
+		var nome = iptNomeEmpresa.value.toLowerCase();
+		var cnpj = iptCnpj.value;
+		var telefone = iptTelContato.value;
+		var codigo = iptCodigoEmpresa.value.toLowerCase();
+		var todosIguais = true;
+		var empresa_valida = true;
+
+		if (nome == '' || cnpj == '' || telefone == '' || codigo == '') {
+			mostrarErro('Todos os campos devem ser preenchidos!');
+			empresa_valida = false;
+		} else if (cnpj.length != 14) {
+			mostrarErro('CNPJ inválido!');
+			empresa_valida = false;
+		} else if (telefone.length != 11) {
+			mostrarErro('Telefone inválido!');
+			empresa_valida = false;
+		} else if (codigo.length != 5) {
+			mostrarErro('Código inválido!');
+			empresa_valida = false;
+		} else if (todosIguais) {
+			for (var i = 0; i < cnpj.length; i++) {
+				if (cnpj[i] != cnpj[0]) {
+					todosIguais = false;
+					break;
+				}
+			}
+
+			if (todosIguais) {
+				mostrarErro('Todos os números do CNPJ não podem ser iguais!');
+				empresa_valida = false;
+			}
+		}
+
+		if (empresa_valida) {
+			fetch('/usuarios/cadastrar', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					nomeServer: nome,
+					cnpjServer: cnpj,
+					telefoneServer: telefone,
+					codigoServer: codigo,
+				}),
+			})
+				.then((resposta) => {
+					console.log('Resposta do cadastro: ', resposta);
+
+					if (resposta.ok) {
+						console.log('Cadastro da empresa realizado com sucesso!');
+						errorDiv.style.color = 'green'
+						mostrarErro('Cadastro realizado com sucesso!')
+					} else {
+						mostrarErro('Erro ao realizar cadastro! Verifique os campos e tente novamente.')
+						console.log('Erro no fetch de cadastrar a empresa!');
+					}
+				})
+				.catch((erro) => {
+					console.log('Erro no cadastro da empresa: ', erro);
+				});
+		}
+	}
+</script>
