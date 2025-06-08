@@ -158,6 +158,8 @@
 						sessionStorage.TEMP_MAX_IDEAL = resposta[0].tempMaxIdeal;
 						sessionStorage.UMID_MIN_IDEAL = resposta[0].umidadeMinIdeal;
 						sessionStorage.UMID_MAX_IDEAL = resposta[0].umidadeMaxIdeal;
+
+						mostrarParametros();
 					});
 				} else {
 					throw 'ERRO AO PEGAR OS PARÂMETROS DA EMPRESA';
@@ -211,8 +213,8 @@
 		var spanTitulo = document.getElementById('nome-sala-titulo');
 		// selecionando todas as checkbox
 		var checkBoxes = document.getElementsByClassName('checkbox-sala');
-		// criando uma variável para guardar o titulo da sala
 		var titulo = '';
+		// criando uma variável para guardar o titulo da sala
 
 		// laço for que percorre todas as checkboxes
 		for (var i = 0; i < checkBoxes.length; i++) {
@@ -265,6 +267,30 @@
 				graficoUmid.style.display = 'none';
 				clearTimeout(proximaAtualizacaoTemp);
 				clearTimeout(proximaAtualizacaoUmid);
+			} else if (checkBox.checked && checkBox.name == 'rack-2') {
+				racks.forEach((item) => {
+					if (checkBox.name == `rack-${item.idRack}`) {
+						nomeSala = item.descricao.charAt(0).toUpperCase() + item.descricao.slice(1).toLowerCase();
+					}
+				});
+				if (titulo != '') {
+					titulo += ', ';
+				}
+
+				// adicionando o nome da sala a variavel título
+				titulo += nomeSala;
+			} else if (checkBox.checked && checkBox.name == 'rack-3') {
+				racks.forEach((item) => {
+					if (checkBox.name == `rack-${item.idRack}`) {
+						nomeSala = item.descricao.charAt(0).toUpperCase() + item.descricao.slice(1).toLowerCase();
+					}
+				});
+				if (titulo != '') {
+					titulo += ', ';
+				}
+
+				// adicionando o nome da sala a variavel título
+				titulo += nomeSala;
 			} else if (checkBox.checked && checkBox.name == 'rack-4') {
 				racks.forEach((item) => {
 					if (checkBox.name == `rack-${item.idRack}`) {
@@ -852,22 +878,12 @@
 			});
 	}
 
-	window.onload = () => {
-		var nomeUsuario = sessionStorage.NOME_FUNCIONARIO;
-		var cargoUsuario = sessionStorage.CARGO_FUNCIONARIO;
-		var emailUsuario = sessionStorage.EMAIL_FUNCIONARIO;
-		var empresaUsuario = sessionStorage.NOME_EMPRESA;
-
+	function mostrarParametros() {
 		var tempMin = sessionStorage.TEMP_MIN_IDEAL;
 		var tempMax = sessionStorage.TEMP_MAX_IDEAL;
 
 		var umidMin = sessionStorage.UMID_MIN_IDEAL;
 		var umidMax = sessionStorage.UMID_MAX_IDEAL;
-
-		document.getElementById('nomeUsuario').innerHTML = nomeUsuario[0].toUpperCase() + nomeUsuario.substr(1);
-		document.getElementById('cargoUsuario').innerHTML = cargoUsuario[0].toUpperCase() + cargoUsuario.substr(1);
-		document.getElementById('emailUsuario').innerHTML = emailUsuario;
-		document.getElementById('empresaUsuario').innerHTML = empresaUsuario[0].toUpperCase() + empresaUsuario.substr(1);
 
 		document.getElementById('temp-min-ideal').innerHTML = tempMin;
 		document.getElementById('temp-max-ideal').innerHTML = tempMax;
@@ -877,6 +893,18 @@
 		document.getElementById('temp-max-alerta').innerHTML = tempMax;
 		document.getElementById('umid-min-alerta').innerHTML = umidMin;
 		document.getElementById('umid-max-alerta').innerHTML = umidMax;
+	}
+
+	window.onload = () => {
+		var nomeUsuario = sessionStorage.NOME_FUNCIONARIO;
+		var cargoUsuario = sessionStorage.CARGO_FUNCIONARIO;
+		var emailUsuario = sessionStorage.EMAIL_FUNCIONARIO;
+		var empresaUsuario = sessionStorage.NOME_EMPRESA;
+
+		document.getElementById('nomeUsuario').innerHTML = nomeUsuario[0].toUpperCase() + nomeUsuario.substr(1);
+		document.getElementById('cargoUsuario').innerHTML = cargoUsuario[0].toUpperCase() + cargoUsuario.substr(1);
+		document.getElementById('emailUsuario').innerHTML = emailUsuario;
+		document.getElementById('empresaUsuario').innerHTML = empresaUsuario[0].toUpperCase() + empresaUsuario.substr(1);
 
 		trocaTitulo();
 		pegarParametros();
