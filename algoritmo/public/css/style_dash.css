@@ -428,6 +428,7 @@
 
 .botao-historico:hover {
     background-color: #0cc0df;
+    transform: scale(1.05);
 }
 .botao-bob {
     width: 100%;

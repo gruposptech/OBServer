@@ -42,8 +42,7 @@
 							<span class="tooltip"
 								>ⓘ
 								<span class="tooltip-text"
-									>A temperatura média é calculada com base em leituras horárias dos sensores DHT11, considerando o intervalo das últimas 24 horas
-									para representar variações térmicas ambientais de forma contínua.</span
+									>A temperatura média média é obtida a partir da média aritmética das últimas 10 leituras exibidas no gráfico da dashboard.</span
 								>
 							</span>
 						</h3>
@@ -54,10 +53,7 @@
 							Umidade média
 							<span class="tooltip"
 								>ⓘ
-								<span class="tooltip-text"
-									>A umidade média é obtida a partir da média aritmética das leituras dos sensores instalados, desconsiderando valores extremos fora
-									da faixa aceitável para garantir maior confiabilidade na análise ambiental.</span
-								>
+								<span class="tooltip-text">A umidade média é obtida a partir da média aritmética das últimas 10 leituras exibidas no gráfico da dashboard.</span>
 							</span>
 						</h3>
 						<div class="valor" id="kpi-umidade"><span id="kpi-umidade-media"></span>%<span id="icone-umidade-media"></span></div>
@@ -99,7 +95,7 @@
 			<div class="secao-alertas">
 				<h2>ALERTAS ATIVOS</h2>
 				<div class="lista-alertas" id="lista-de-alertas"></div>
-				<button class="botao-historico" onclick="historico()" target="_blank">Histórico de Alertas</button>
+				<button class="botao-historico" onclick="historico()">Histórico de Alertas</button>
 				<div class="secao-niveis">
 					<h2>LEGENDA <br />NÍVEIS DE MONITORAMENTO</h2>
 					<div class="container-itens-niveis">
@@ -139,7 +135,7 @@
 	let graficoUmid;
 
 	function historico() {
-		window.location.href = 'historico.html';
+		window.open('historico.html', '_blank')
 	}
 
 	function sair() {
