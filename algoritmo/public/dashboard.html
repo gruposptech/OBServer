@@ -25,7 +25,9 @@
 					<h3 class="titulo-filtro">Localização:</h3>
 				</div>
 				<br />
-
+				<a href="https://observergrupo4.atlassian.net/jira/servicedesk/projects/GRUPO4/queues/custom/1" target="_blank" rel="noopener noreferrer">
+					<button class="botaon3">Clique para acessar a Central de Chamados</button>
+				</a>
 				<button class="botao-sair" onclick="sair()">Sair</button>
 			</div>
 
@@ -53,7 +55,9 @@
 							Umidade média
 							<span class="tooltip"
 								>ⓘ
-								<span class="tooltip-text">A umidade média é obtida a partir da média aritmética das últimas 10 leituras exibidas no gráfico da dashboard.</span>
+								<span class="tooltip-text"
+									>A umidade média é obtida a partir da média aritmética das últimas 10 leituras exibidas no gráfico da dashboard.</span
+								>
 							</span>
 						</h3>
 						<div class="valor" id="kpi-umidade"><span id="kpi-umidade-media"></span>%<span id="icone-umidade-media"></span></div>
@@ -135,7 +139,7 @@
 	let graficoUmid;
 
 	function historico() {
-		window.open('historico.html', '_blank')
+		window.open('historico.html', '_blank');
 	}
 
 	function sair() {
